@@ -6,11 +6,11 @@
             <v-col>
                 <v-card 
                     class="mx-auto"
-                    height="450"
+                    max-height="550"
                     max-width="450">
                     <v-img
-                        contain="true"
-                        height="550"
+                        contain=true
+                        height="450"
                         src="https://res.cloudinary.com/louise/image/upload/slides--86.jpg"
                     />
                     <v-card-actions>

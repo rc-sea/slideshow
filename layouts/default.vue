@@ -25,7 +25,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      :clipped-left="clipped"
+      :collapse-on-scroll="true"
       fixed
       app
     >
@@ -80,7 +80,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-footer
-      :fixed="fixed"
       app
     >
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -110,6 +109,11 @@ export default {
           icon: 'mdi-camera',
           title: 'Photo Browse',
           to: '/photo-browse'
+        },
+        {
+          icon: 'mdi-camera',
+          title: 'Photo Detail',
+          to: '/photo-detail'
         }
       ],
       miniVariant: false,
