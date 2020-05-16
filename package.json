@@ -13,11 +13,13 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
+    "cloudinary-cli": "^1.1.1",
     "cloudinary-vue": "^1.0.0",
     "cross-env": "^5.2.0",
     "current-script-polyfill": "^1.0.0",
     "express": "^4.16.4",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "vue-cli": "^2.9.6"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",
