@@ -9,7 +9,7 @@
                     max-height="550"
                     max-width="450">
                     <v-img
-                        contain=true
+                        :contain=true
                         height="450"
                         src="https://res.cloudinary.com/louise/image/upload/slides--86.jpg"
                     />
@@ -24,7 +24,11 @@
                         </v-avatar>
                         louise
                         </v-chip>
-                        <v-chip>travel</v-chip>
+                        <v-chip>
+                        <v-avatar left>
+                            <v-icon>mdi-camera</v-icon>
+                        </v-avatar>
+                        travel</v-chip>
                     </v-card-actions>
                 </v-card>
             </v-col>

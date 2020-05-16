@@ -25,9 +25,10 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      :collapse-on-scroll="true"
+      :hide-on-scroll="true"
       fixed
       app
+      color="indigo"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-btn
@@ -42,20 +43,8 @@
       >
         <v-icon>mdi-application</v-icon>
       </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
     </v-app-bar>
     <v-content>
       <v-container>
@@ -79,11 +68,35 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer
-      app
+  <v-footer
+    dark
+    padless
+  >
+    <v-card
+      class="flex"
+      flat
+      tile
     >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+      <v-card-title>
+        <v-spacer></v-spacer>
+
+        <v-btn
+          v-for="icon in icons"
+          :key="icon"
+          class="mx-4"
+          dark
+          icon
+        >
+          <v-icon size="24px">{{ icon }}</v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
+      </v-card-title>
+
+      <v-card-text class="py-2 white--text text-center">
+        {{ new Date().getFullYear() }} — <strong>Rememberbing Louise</strong>
+      </v-card-text>
+    </v-card>
+  </v-footer>
   </v-app>
 </template>
 
@@ -116,10 +129,16 @@ export default {
           to: '/photo-detail'
         }
       ],
+      icons: [
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram',
+      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'Remembering Louise'
     }
   }
 }

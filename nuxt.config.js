@@ -30,6 +30,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    {src: '~/plugins/webFontLoader.js', ssr: false}
   ],
   /*
   ** Nuxt.js dev-modules
@@ -45,6 +46,7 @@ module.exports = {
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    'nuxt-webfontloader'
   ],
   /*
   ** Axios module configuration
@@ -61,16 +63,15 @@ module.exports = {
     theme: {
       dark: true,
       themes: {
-        dark:
-          {
-            primary: colors.indigo.base,
-            secondary: colors.light-blue.base,
-            accent: colors.orange.base,
-            error: colors.red.base,
-            warning: colors.yellow.base,
-            info: colors.blue-grey.base,
-            success: colors.lime.base
-          }       
+        dark: {
+          primary: colors.indigo.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3
+        }
       }
     }
   },
