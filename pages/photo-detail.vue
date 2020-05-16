@@ -24,7 +24,9 @@
                         </v-avatar>
                         louise
                         </v-chip>
-                        <v-chip>
+                        <v-chip
+                        class="ma-2"
+                        color="green">
                         <v-avatar left>
                             <v-icon>mdi-camera</v-icon>
                         </v-avatar>
