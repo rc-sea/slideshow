@@ -14,7 +14,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: '/favicon.icohttps://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' }
     ]
   },
   /*
@@ -25,6 +26,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '~/assets/styles.css'
   ],
   /*
   ** Plugins to load before mounting the App
