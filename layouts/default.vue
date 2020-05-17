@@ -33,6 +33,15 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" class="new-headline"/>
       <v-spacer />
+      <v-btn large color="purple lighten-4">
+        <nuxt-link to="/photo-browse">Launch app</nuxt-link> 
+      </v-btn>
+      <v-spacer />
+      <v-card-actions>
+      <nuxt-link to="/service">
+      <v-btn text>Service</v-btn></nuxt-link>
+      <nuxt-link to="/about"><v-btn text>About</v-btn></nuxt-link>
+      </v-card-actions>
     </v-app-bar>
     <v-content>
       <v-container>
@@ -49,7 +58,7 @@
       tile
     >
       <v-card-text class="py-2 white--text text-center">
-        {{ new Date().getFullYear() }} — <strong>Rememberbing Louise</strong>
+        {{ new Date().getFullYear() }} — <strong>Remembering Louise</strong>
       </v-card-text>
     </v-card>
   </v-footer>
@@ -106,6 +115,9 @@ export default {
 <style scoped>
 .new-headline {
   font-family: 'Pinyon Script', cursive;
-  font-size: 48px;
+  font-size:48px;
+}
+a {
+  text-decoration: none;
 }
 </style>
