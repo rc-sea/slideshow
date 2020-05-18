@@ -39,7 +39,7 @@
       <v-spacer />
       <v-card-actions>
       <nuxt-link to="/service">
-      <v-btn text>Service</v-btn></nuxt-link>
+      <v-btn text>Funeral Service</v-btn></nuxt-link>
       <nuxt-link to="/about"><v-btn text>About</v-btn></nuxt-link>
       </v-card-actions>
     </v-app-bar>
