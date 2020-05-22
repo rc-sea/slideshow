@@ -4,9 +4,36 @@
     max-width="1500"
   >
     <v-container fluid>
+      <v-row dense justify="end"> 
+        <v-btn small @click="changeType">{{typeText}}</v-btn>
+        <span class="brown total-number">{{ totalNumber }} </span>
+      </v-row>
       <v-row dense>
+        <v-chip-group 
+          v-model="selectedTags"
+          active-class="primary"
+          @change="onSelectTags"
+          multiple>
+          <v-chip v-for="tag in tags" :key="tag">
+            {{ tag }}
+          </v-chip>
+        </v-chip-group>
+      </v-row>
+      <v-row 
+        v-if="loading"
+        justify="center" 
+        class="loading-row"
+        align="center">
+          <v-progress-circular
+            :size="200"
+            :width="20"
+            color="gray"
+            indeterminate
+          ></v-progress-circular>
+      </v-row>
+      <v-row v-else dense>
         <v-col
-          v-for="resource in data.resources"
+          v-for="resource in resources"
           :key="resource.public_id"
           :cols="4"
         >
@@ -39,41 +66,115 @@
 
 <script>
 import Vue from 'vue';
+import { mapState, mapGetters } from 'vuex';
 import Cloudinary from 'cloudinary-vue';
-
 Vue.use(Cloudinary, {
     configuration: { cloudName: 'louise' }
 })
 
-const api_key = process.env.VUE_APP_CLOUDINARY_KEY
-const api_secret = process.env.VUE_APP_CLOUDINARY_SECRET
-const token = Buffer.from(`${api_key}:${api_secret}`, 'utf8').toString('base64')
+let app;
 export default {
   head() {
     return {
       title: 'Photo Listing'
     }
   },
-  async asyncData({ $axios, error }) {
-    return await $axios
-      .get('https://api.cloudinary.com/v1_1/louise/resources/image/tags/best', {
-              headers: {
-          'Authorization': `Basic ${token}`,
-          'Access-Control-Allow-Origin': 'https://localhost:3000',
-          'Content-Type': 'application/json'
+  data () {
+    return {
+      selectedTags: [], 
+      searchType: 0, 
+      loading: true 
+    }
+  },
+  async asyncData({ $axios, store, error }) {
+  },
+  computed: {
+      ...mapState({
+        tags: state => state.tags.tags,
+        resources: state => state.resources.resources
+      }),
+      ...mapGetters({
+        totalNumber: 'resources/totalNumber'
+      }),
+      typeText: function() {
+        return this.searchType === 0 ? "Any Tag Matches" : "All Tags Match";
+      }
+    },
+  methods: {
+    async init() {
+      app = this;
+      this.setloading(true);
+      await this.$store.dispatch("tags/inittags");
+      var { search, type } = this.$route.query;
+      if (search) {
+        this.searchType = type | 0;
+        search.split('-').forEach(tag => {
+          var index = this.tags.indexOf(tag);
+          if (this.selectedTags.indexOf(index) === -1) {
+            this.selectedTags.push(index);
+          }
+        });
+
+        await this.$store.dispatch("resources/search", {
+          searchtag : search,
+          type : type
+        });
+      } else {
+        await this.$store.dispatch("resources/initresources");
+      }
+      this.setloading(false);
+    },
+    onSelectTags: async function() {
+      var searchtag = '';
+      console.log(this.selectedTags);
+      console.log("onSelected!");
+      this.setloading(true);
+      if (this.selectedTags.length) {
+        searchtag = this.tags[this.selectedTags[0]];
+        for (var i = 1; i < this.selectedTags.length; i ++) {
+          searchtag += "-" + this.tags[this.selectedTags[i]];
         }
-      })
-      .then(response => {
-        return {
-          data: response.data
-        }
-      })
-      .catch(e => {
-        error({
-          statusCode: 503,
-          message: 'Unable to fetch events at this time. Please try again.'
-        })
-      })
+        this.$router.replace({ path:`/photo-browse?search=${searchtag}&type=${this.searchType}` });
+        await this.$store.dispatch("resources/search", {
+          searchtag : searchtag,
+          type : this.searchType
+        });
+      } else {
+        await this.$store.dispatch("resources/initresources");
+      }
+      this.setloading(false);
+    },
+    changeType: async function() {
+      this.searchType = 1 - this.searchType;
+      if (this.selectedTags.length > 1) {
+        await this.onSelectTags();
+      }
+    },
+    setloading(flag) {
+      this.loading = flag;
+    }
+  },
+  created() {
+    console.log(this.$route.params);
+    console.log(this.$route.query);
+    this.init();
   }
+  // async fetch() {
+  //   await this.$store.dispatch("tags/inittags");
+  //   await this.$store.dispatch("resources/initresources");
+  // }
 }
 </script>
+
+<style lang="scss" scoped>
+  .loading-row {
+    height: 700px;
+  }
+  .total-number {
+    border-radius: 10px;
+    margin-left: 10px;
+    font-size: 15px;
+    line-height: 28px;
+    padding: 0 14px;
+  }
+</style>
