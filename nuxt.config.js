@@ -86,5 +86,12 @@ module.exports = {
     */
     extend (config, ctx) {
     }
-  }
+  },
+  /*
+  ** Back-End APIs
+  */
+  serverMiddleware: [
+    { path: '/api/search', handler: '~/server/search.js'},
+    { path: '/api/tags', handler: '~/server/tags.js'}
+  ]
 }
