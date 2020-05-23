@@ -15,7 +15,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: '/favicon.icohttps://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' }
     ]
   },
   /*
@@ -92,6 +92,7 @@ module.exports = {
   */
   serverMiddleware: [
     { path: '/api/search', handler: '~/server/search.js'},
-    { path: '/api/tags', handler: '~/server/tags.js'}
+    { path: '/api/tags', handler: '~/server/tags.js'},
+    { path: '/api/detail', handler: '~/server/detail.js'}
   ]
 }

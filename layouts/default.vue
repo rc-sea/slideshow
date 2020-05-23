@@ -98,7 +98,7 @@ export default {
         {
           icon: 'mdi-camera',
           title: 'Photo Detail',
-          to: '/photo-detail'
+          to: '/photo'
         }
       ],
       miniVariant: false,
