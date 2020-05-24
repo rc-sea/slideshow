@@ -8,7 +8,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-    init(state, data) {
+    parse(state, data) {
         state.resources = data.resources
         state.next_cursor = data.next_cursor
         state.total_count = data.total_count
@@ -20,10 +20,10 @@ export const mutations = {
 }
 
 export const actions = {
-    async initresources({ commit }) {
+    async getresources({ commit }) {
         try{
             var { data } = await axios.get(`${baseUrl}/api/search`);
-            commit('init', data)
+            commit('parse', data)
         } catch(error) {
             console.log(error);
         }
@@ -36,7 +36,7 @@ export const actions = {
                     type: params.type,
                 }
             });
-            commit('init', data)
+            commit('parse', data)
         } catch(error) {
             console.log(error);
         }

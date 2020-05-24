@@ -81,7 +81,7 @@ export default {
     async init() {
       app = this
       this.setloading(true)
-      await this.$store.dispatch('tags/inittags')
+      await this.$store.dispatch('tags/gettags')
       var { search, type } = this.$route.query
       if (search) {
         this.searchType = type | 0
@@ -97,7 +97,7 @@ export default {
           type: type
         })
       } else {
-        await this.$store.dispatch('resources/initresources')
+        await this.$store.dispatch('resources/getresources')
       }
       this.setloading(false)
     },
@@ -124,7 +124,7 @@ export default {
           type: this.searchType
         })
       } else {
-        await this.$store.dispatch('resources/initresources')
+        await this.$store.dispatch('resources/getresources')
       }
 
       this.setloading(false);
@@ -154,10 +154,6 @@ export default {
     console.log(this.$route.query)
     this.init()
   }
-  // async fetch() {
-  //   await this.$store.dispatch("tags/inittags");
-  //   await this.$store.dispatch("resources/initresources");
-  // }
 }
 </script>
 

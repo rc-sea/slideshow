@@ -93,6 +93,9 @@ module.exports = {
   serverMiddleware: [
     { path: '/api/search', handler: '~/server/search.js'},
     { path: '/api/tags', handler: '~/server/tags.js'},
-    { path: '/api/detail', handler: '~/server/detail.js'}
+    { path: '/api/detail', handler: '~/server/detail.js'},
+    { path: '/api/comments/topics', handler: '~/server/topics.js'},
+    { path: '/api/comments/posts', handler: '~/server/posts.js'},
+    { path: '/api/comment', handler: '~/server/comment.js'}
   ]
 }

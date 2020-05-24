@@ -1,0 +1,17 @@
+
+require('dotenv').config()
+const axios = require('axios');
+const api_key = process.env.DISCOURSE_API_KEY
+const api_username = process.env.DISCOURSE_API_USERNAME
+const photo_category = process.env.PHOTO_CATEGORY
+
+
+export default async function(req, res, next){
+    let { data }  = await axios.get(`https://chat.rememberinglouise.com/c/${photo_category}.json`, {
+        params: {
+            api_key: api_key,
+            api_username: api_username
+        }
+    })
+    res.json(data);
+}

@@ -7,16 +7,16 @@ export const state = () => ({
 })
 
 export const mutations = {
-    InitTags(state, sourceTags) {
+    parsetags(state, sourceTags) {
         state.tags = sourceTags
     }
 }
 
 export const actions = {
-    async inittags({ commit }) {
+    async gettags({ commit }) {
         try{
             var { data } = await axios.get(`${baseUrl}/api/tags`);
-            commit('InitTags', data.tags)
+            commit('parsetags', data.tags)
         } catch(error) {
             console.log(error);
         }
