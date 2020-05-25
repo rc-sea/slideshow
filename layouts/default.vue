@@ -50,7 +50,6 @@
     </v-content>
   <v-footer
     dark
-    padless
   >
     <v-card
       class="flex"

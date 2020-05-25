@@ -8,10 +8,10 @@
         <v-card 
             v-else
             class="mx-auto"
-            max-height="650"
-            max-width="450">
+            max-height="1000"
+            max-width="1000">
             <cld-image :publicId="resource.public_id" secure="true">
-              <cld-transformation gravity="faces" crop="fill" height="500" width="450" />
+              <cld-transformation gravity="faces" crop="fill" height="1000" width="1000" align="center"/>
             </cld-image>
             <v-card-actions>
               <v-chip-group active-class="primary" multiple>

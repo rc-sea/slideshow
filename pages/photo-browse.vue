@@ -18,18 +18,9 @@
           <v-card>
             <nuxt-link :to="{ path: `photo/${resource.public_id}`}">
               <cld-image :publicId="resource.public_id" secure="true">
-                <cld-transformation gravity="faces" crop="fill" height="250" width="250" />
+                <cld-transformation gravity="faces" crop="fill" height="350" width="350" />
               </cld-image>
             </nuxt-link>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn text>{{ resource.width }}</v-btn>
-              <v-btn text>{{ resource.width }}</v-btn>
-
-              <v-btn icon>
-                <v-icon>mdi-share-variant</v-icon>
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
