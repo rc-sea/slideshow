@@ -22,6 +22,9 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        <!-- <v-list-item v-if="$auth.loggedIn">
+          <v-btn @click="$auth.logout()">Log out</v-btn>
+        </v-list-item> -->
       </v-list>
     </v-navigation-drawer>
     <v-app-bar

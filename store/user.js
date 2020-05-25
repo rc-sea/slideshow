@@ -6,13 +6,23 @@ export const state = () => ({
 })
 
 export const mutations = {
-    init(state, data) {
+    SET_USER(state, data) {
         state.user = data
     }
 }
 
 export const actions = {
-    login({ commit }, data) {
-        commit('init', data.user);
+    async set_user({ commit }, payload) {
+        try{
+            var { data } = await axios.get(`${baseUrl}/api/user`, {
+                params: {
+                    user: payload.user
+                }
+            });
+            console.log(data);
+            commit('SET_USER', data);
+        } catch(error) {
+            console.log(error);
+        }
     }
 }

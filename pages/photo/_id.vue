@@ -110,7 +110,9 @@ export default {
       console.log(icon);
     },
     login() {
-      this.$store.dispatch('user/login', { user: 'admin' });
+      window.localStorage.setItem('redirect_url', window.location.pathname);
+      console.log(this.$auth);
+      this.$auth.loginWith('auth0');
     }
   },
   components: {

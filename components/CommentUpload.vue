@@ -39,7 +39,7 @@ export default {
         if (this.text.length) {
           const { data } = await axios.post(`${baseUrl}/api/comment`, {
             text: this.text,
-            user: this.user,
+            user: this.user.username,
             title: this.title,
             topic_id: this.topic_id
           });
