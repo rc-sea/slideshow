@@ -33,7 +33,7 @@ export const mutations = {
 export const actions = {
   async getTopics({ commit }) {
     try{
-        var { data } = await axios.get(`${baseUrl}/api/comments/topics`);
+        var { data } = await axios.get(`/api/comments/topics`);
         commit('parsetopics', data)
     } catch(error) {
         console.log(error);
@@ -41,7 +41,7 @@ export const actions = {
   },
   async getComments({ commit }, params) {
     try{
-        var { data } = await axios.get(`${baseUrl}/api/comments/posts`, {
+        var { data } = await axios.get(`/api/comments/posts`, {
           params: {
             topic_id: params.topic_id
           }

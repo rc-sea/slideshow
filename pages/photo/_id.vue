@@ -94,7 +94,7 @@ export default {
   async created() {
     this.loading = true;
     try {
-      let { data } = await axios.get(`${baseUrl}/api/detail`, {
+      let { data } = await axios.get(`/api/detail`, {
         params: { 
           public_id: this.public_id
         }

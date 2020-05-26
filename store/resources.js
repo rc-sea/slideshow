@@ -22,7 +22,7 @@ export const mutations = {
 export const actions = {
     async getresources({ commit }) {
         try{
-            var { data } = await axios.get(`${baseUrl}/api/search`);
+            var { data } = await axios.get(`/api/search`);
             commit('parse', data)
         } catch(error) {
             console.log(error);
@@ -30,7 +30,7 @@ export const actions = {
     },
     async search({ commit }, params) {
         try{
-            var { data } = await axios.get(`${baseUrl}/api/search`, {
+            var { data } = await axios.get(`/api/search`, {
                 params: {
                     searchtag: params.searchtag,
                     type: params.type,
@@ -44,7 +44,7 @@ export const actions = {
     async searchmore({ state, commit }, params) {
         if (!state.next_cursor || !state.next_cursor.length) return;
         try{
-            var { data } = await axios.get(`${baseUrl}/api/search`, {
+            var { data } = await axios.get(`/api/search`, {
                 params: {
                     searchtag: params.searchtag,
                     type: params.type,

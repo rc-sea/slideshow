@@ -37,7 +37,7 @@ export default {
     async onComment() {
       try {
         if (this.text.length) {
-          const { data } = await axios.post(`${baseUrl}/api/comment`, {
+          const { data } = await axios.post(`/api/comment`, {
             text: this.text,
             user: this.user.username,
             title: this.title,

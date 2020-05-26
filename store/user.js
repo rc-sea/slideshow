@@ -14,7 +14,7 @@ export const mutations = {
 export const actions = {
     async set_user({ commit }, payload) {
         try{
-            var { data } = await axios.get(`${baseUrl}/api/user`, {
+            var { data } = await axios.get(`/api/user`, {
                 params: {
                     user: payload.user
                 }

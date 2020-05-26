@@ -15,7 +15,7 @@ export const mutations = {
 export const actions = {
     async gettags({ commit }) {
         try{
-            var { data } = await axios.get(`${baseUrl}/api/tags`);
+            var { data } = await axios.get(`/api/tags`);
             commit('parsetags', data.tags)
         } catch(error) {
             console.log(error);
