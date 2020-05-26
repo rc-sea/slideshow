@@ -26,7 +26,8 @@
     "form-data": "^3.0.0",
     "nuxt": "^2.0.0",
     "nuxt-webfontloader": "^1.1.0",
-    "vue-cli": "^2.9.6"
+    "vue-cli": "^2.9.6",
+    "vue-flux": "^6.1.1"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",

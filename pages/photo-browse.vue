@@ -2,8 +2,9 @@
   <v-card class="mx-auto" max-width="1500">
     <v-container fluid>
       <v-row dense justify="end">
-        <v-btn small @click="changeType">{{typeText}}</v-btn>
-        <span class="brown total-number">{{ total_count }}</span>
+          <v-btn small class="btn-slide primary text-left" @click="dialog = true">View Slide Show</v-btn>
+          <v-btn small @click="changeType">{{typeText}}</v-btn>
+          <span class="brown total-number">{{ total_count }}</span>
       </v-row>
       <v-row dense>
         <v-chip-group v-model="selectedTags" active-class="primary" @change="onSelectTags" multiple>
@@ -31,6 +32,12 @@
         </v-btn>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="dialog"
+      max-width="1000"
+    >
+      <slide-show></slide-show>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -38,6 +45,7 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import Cloudinary from 'cloudinary-vue'
+import SlideShow from '~/components/SlideShow'
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' }
 })
@@ -54,7 +62,8 @@ export default {
       selectedTags: [],
       searchType: 0,
       loading: true,
-      moreloading: false
+      moreloading: false,
+      dialog: false
     }
   },
   async asyncData({ $axios, store, error }) {},
@@ -144,11 +153,18 @@ export default {
     console.log(this.$route.params)
     console.log(this.$route.query)
     this.init()
+  },
+  components: {
+    SlideShow
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.btn-slide {
+  position: absolute;
+  left: 50%;
+}
 .loading-row {
   height: 700px;
 }

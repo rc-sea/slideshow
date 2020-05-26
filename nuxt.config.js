@@ -34,6 +34,7 @@ module.exports = {
   */
   plugins: [
     {src: '~/plugins/webFontLoader.js', ssr: false},
+    // {src: '~/node_modules/vue-flux', ssr: false}
   ],
   /*
   ** Nuxt.js dev-modules
@@ -105,6 +106,7 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    // vendor: ['vue-flux'],
     extend (config, ctx) {
     }
   },
