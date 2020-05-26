@@ -60,5 +60,7 @@ export default async function(req, res, next){
             console.log("Creation Failed!");
         }
     }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.json(user);
 }

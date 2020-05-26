@@ -32,6 +32,8 @@ export default function(req, res, next){
                     'Api-Username': user
                 }
             });
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             res.json(data); 
         } catch(error) {
             console.log(error);
