@@ -6,7 +6,6 @@
         <v-card 
             v-else
             class="mx-auto"
-            max-height="1000"
             max-width="1000">
             <cld-image :publicId="resource.public_id" secure="true">
               <cld-transformation gravity="faces" crop="fill" height="1000" width="1000" align="center"/>
@@ -71,7 +70,6 @@ import CommentUpload from '~/components/CommentUpload'
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' }
 });
-const baseUrl = process.env.BASE_URL;
 
 export default {
   data () {

@@ -18,7 +18,6 @@
 <script>
 import { mapState } from 'vuex';
 import axios from 'axios';
-const baseUrl = process.env.BASE_URL;
 
 export default {
   data() {
@@ -43,7 +42,14 @@ export default {
             title: this.title,
             topic_id: this.topic_id
           });
-          await this.$store.dispatch('comments/getComments', { topic_id: data.topic_id });
+          if (data.topic_id) {
+            this.$store.commit('comments/pushpost', { 
+              name: this.user.name, 
+              username: this.user.username, 
+              avatar_template: this.user.avatar_template,
+              cooked: this.text
+            });  
+          }
           this.text = '';
         }
       } catch(error) {

@@ -1,5 +1,4 @@
 import axios from "axios";
-const baseUrl = process.env.BASE_URL;
 
 export const state = () => ({
     topics: [],
@@ -27,6 +26,9 @@ export const mutations = {
           break;
         }
       }
+    },
+    pushpost(state, data) {
+      state.posts.push(data);
     }
 }
 
