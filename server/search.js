@@ -6,6 +6,8 @@ export default function(req, res, next){
     const next_cursor = req.query.next_cursor;
     let tags;
     console.log(searchtag);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (searchtag) {
         tags = searchtag.split('-');
         let expression = `tags=${tags[0]}`;

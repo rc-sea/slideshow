@@ -11,6 +11,8 @@
     "start": "cross-env NODE_ENV=production node server/index.js"
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.8.1",
+    "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
     "cloudinary": "^1.21.0",
@@ -21,6 +23,7 @@
     "current-script-polyfill": "^1.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
+    "form-data": "^3.0.0",
     "nuxt": "^2.0.0",
     "nuxt-webfontloader": "^1.1.0",
     "vue-cli": "^2.9.6"

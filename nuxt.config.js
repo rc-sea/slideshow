@@ -1,3 +1,4 @@
+require('dotenv').config()
 const colors = require('vuetify/es5/util/colors').default
 
 module.exports = {
@@ -32,7 +33,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    {src: '~/plugins/webFontLoader.js', ssr: false}
+    {src: '~/plugins/webFontLoader.js', ssr: false},
   ],
   /*
   ** Nuxt.js dev-modules
@@ -46,15 +47,35 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     'nuxt-webfontloader'
   ],
+  auth: {
+    redirect: {
+      callback: '/auth-redirect',
+      home: '/auth-discourse'
+    },
+    strategies: {
+      // local: false,
+      auth0: {
+        domain: process.env.AUTH_DOMAIN,
+        client_id: process.env.AUTH_CLIENTID
+      }
+    }
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    proxy: true
+  },
+  proxy: {
+    '/api': {
+      target: process.env.BASE_URL,
+    }
   },
   /*
   ** vuetify module configuration
@@ -93,6 +114,10 @@ module.exports = {
   serverMiddleware: [
     { path: '/api/search', handler: '~/server/search.js'},
     { path: '/api/tags', handler: '~/server/tags.js'},
-    { path: '/api/detail', handler: '~/server/detail.js'}
+    { path: '/api/detail', handler: '~/server/detail.js'},
+    { path: '/api/user', handler: '~/server/user.js'},
+    { path: '/api/comments/topics', handler: '~/server/topics.js'},
+    { path: '/api/comments/posts', handler: '~/server/posts.js'},
+    { path: '/api/comment', handler: '~/server/comment.js'}
   ]
 }

@@ -1,5 +1,4 @@
 import axios from "axios";
-const baseUrl = process.env.BASE_URL;
 
 export const state = () => ({
     resources: [],
@@ -8,7 +7,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-    init(state, data) {
+    parse(state, data) {
         state.resources = data.resources
         state.next_cursor = data.next_cursor
         state.total_count = data.total_count
@@ -20,23 +19,23 @@ export const mutations = {
 }
 
 export const actions = {
-    async initresources({ commit }) {
+    async getresources({ commit }) {
         try{
-            var { data } = await axios.get(`${baseUrl}/api/search`);
-            commit('init', data)
+            var { data } = await axios.get(`/api/search`);
+            commit('parse', data)
         } catch(error) {
             console.log(error);
         }
     },
     async search({ commit }, params) {
         try{
-            var { data } = await axios.get(`${baseUrl}/api/search`, {
+            var { data } = await axios.get(`/api/search`, {
                 params: {
                     searchtag: params.searchtag,
                     type: params.type,
                 }
             });
-            commit('init', data)
+            commit('parse', data)
         } catch(error) {
             console.log(error);
         }
@@ -44,7 +43,7 @@ export const actions = {
     async searchmore({ state, commit }, params) {
         if (!state.next_cursor || !state.next_cursor.length) return;
         try{
-            var { data } = await axios.get(`${baseUrl}/api/search`, {
+            var { data } = await axios.get(`/api/search`, {
                 params: {
                     searchtag: params.searchtag,
                     type: params.type,
