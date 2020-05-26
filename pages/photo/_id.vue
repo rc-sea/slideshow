@@ -7,9 +7,10 @@
             v-else
             class="mx-auto"
             max-height="1000"
-            max-width="1000">
+            max-width="1000"
+            align="center">
             <cld-image :publicId="resource.public_id" secure="true">
-              <cld-transformation gravity="faces" crop="fill" height="1000" width="1000" align="center"/>
+              <cld-transformation crop="fit" height="850" width="1000"/>
             </cld-image>
             <v-card-actions>
               <v-row>
