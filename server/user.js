@@ -26,7 +26,7 @@ export default async function(req, res, next){
             }
         })
         user = data.user;
-        console.log("Existing User: ", user.username);
+        console.log("Existing User: ", user);
     } catch(error) {
         console.log("*****Creating a User******");
         let  res_data  = await axios.post(`https://chat.rememberinglouise.com/users`, 
@@ -55,7 +55,7 @@ export default async function(req, res, next){
                 }
             });
             user = user_data.data;
-            console.log("Created User", user.username);
+            console.log("Created User", user);
         } else {
             console.log("Creation Failed!");
         }
