@@ -94,7 +94,7 @@ export default {
         },
         {
           icon: 'mdi-camera',
-          title: 'Photo Browse',
+          title: 'View SlideShow',
           to: '/photo-browse'
         },
         {
