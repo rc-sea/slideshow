@@ -66,7 +66,9 @@ export default {
 
    data: () => ({
       vfOptions: {
-         autoplay: true
+         autoplay: true,
+         allowFullscreen: true,
+         aspectRatio: '16:16'
       },
       // vfImages: [],
       // vfTransitions: Transitions,

@@ -7,9 +7,15 @@
             v-else
             class="mx-auto"
             max-width="1000">
-            <cld-image :publicId="resource.public_id" secure="true">
-              <cld-transformation gravity="faces" crop="fill" height="1000" width="1000" align="center"/>
-            </cld-image>
+              <cld-image :publicId="resource.public_id" secure="true" class="photo-container">
+                <cld-transformation gravity="faces" crop="fill" height="1000" width="1000" align="center"/>
+                <v-btn @click="onPrev" class="prev-btn prev-next-btn">
+                  <v-icon x-large>mdi-chevron-left </v-icon>
+                </v-btn>
+                <v-btn @click="onNext" class="next-btn prev-next-btn">
+                  <v-icon x-large>mdi-chevron-right </v-icon>
+                </v-btn>
+              </cld-image>
             <v-card-actions>
               <v-row>
                 <v-col cols="8">
@@ -26,7 +32,7 @@
                   >
                   <template v-slot:activator="{ on }">
                     <v-btn
-                      color="mt-1 primary"
+                      color="primary"
                       dark
                       v-on="on"
                     >
@@ -46,6 +52,7 @@
                       </v-list-item>
                     </v-list>
                   </v-menu>
+                  <v-btn @click="onBack">Back</v-btn>
                 </v-col>
               </v-row>
             </v-card-actions>
@@ -86,7 +93,9 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.user.user
+      user: state => state.user.user,
+      resources: state => state.resources.resources,
+      detailsPage_url: state => state.detailsPage_url
     })
   },
   async created() {
@@ -111,6 +120,31 @@ export default {
       window.localStorage.setItem('redirect_url', window.location.pathname);
       console.log(this.$auth);
       this.$auth.loginWith('auth0');
+    },
+    onPrev() {
+      this.PrevNext(0);
+    },
+    onNext() {
+      this.PrevNext(1);
+    },
+    onBack() {
+      console.log(this.detailsPage_url);
+      this.$router.replace({path: this.detailsPage_url});
+    },
+    PrevNext(flag) {
+      for (let i = 0; i < this.resources.length; i ++) {
+        if (this.resources[i].public_id === this.public_id) {
+          if (flag === 0 && i > 0) {
+            this.$router.replace({
+              path: `/photo/${this.resources[i - 1].public_id}`
+            });
+          } else if (flag === 1 && i < this.resources.length) {
+            this.$router.replace({
+              path: `/photo/${this.resources[i + 1].public_id}`
+            });
+          }
+        }
+      }
     }
   },
   components: {
@@ -119,3 +153,22 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.photo-container {
+  position: relative;
+}
+.prev-next-btn {
+  position: absolute;
+  top: 45%;
+  background: none !important;
+  border: none;
+  padding: 0;
+  &.prev-btn {
+    left: 10px;
+  }
+  &.next-btn {
+    right: 10px;
+  }
+}
+</style>
