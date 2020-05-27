@@ -22,7 +22,7 @@ export default function(req, res, next){
         cloudinary.search
             .expression(expression)
             .next_cursor(next_cursor)
-            .max_results(24)
+            .max_results(48)
             .execute()
             .then( result => res.json(result) );
     } else {
