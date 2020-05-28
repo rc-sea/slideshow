@@ -19,9 +19,9 @@
         <flux-controls />
     </template>
 
-    <template v-slot:pagination>
+    <!-- <template v-slot:pagination>
         <flux-pagination />
-    </template>
+    </template> -->
 
     <!-- <template v-slot:index>
         <flux-index />
@@ -66,7 +66,9 @@ export default {
 
    data: () => ({
       vfOptions: {
-         autoplay: true
+         autoplay: true,
+         allowFullscreen: true,
+         aspectRatio: '16:12'
       },
       // vfImages: [],
       // vfTransitions: Transitions,
