@@ -82,7 +82,7 @@ export default {
     vfImages: function() {
       var images = [];
       this.resources.forEach(resource => {
-        images.push(resource.url);
+        images.push(`http://res.cloudinary.com/louise/image/upload/w_1600,h_1200,c_pad,b_black/${resource.public_id}.jpg`);
       });
       return images
     },
@@ -93,15 +93,6 @@ export default {
       });
       return captions
     }
-   },
-  //  created() {
-  //    this.vfImages = [];
-  //    this.vfCaptions = [];
-  //    this.resources.forEach(resource => {
-  //      this.vfImages.push(resource.url);
-  //      this.vfCaptions.push(resource.public_id);
-  //     //  this.vfTransitions.push(transitions[getRandomInt(0, 20)]);
-  //    });
-  //  }
+   }
 }
 </script>
