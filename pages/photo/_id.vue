@@ -1,5 +1,5 @@
 <template>
-    <v-container max-width="1000" class="mb-2" fluid>
+    <v-container max-width="1200" class="mb-2" fluid>
         <v-card v-if="loading" class="mx-auto d-flex justify-md-center align-center" height="600" max-width="450">
           <v-progress-circular :size="150" :width="15" color="gray" indeterminate></v-progress-circular>
         </v-card>
@@ -7,8 +7,8 @@
             v-else
             class="mx-auto"
             max-width="1000">
-              <cld-image :publicId="resource.public_id" secure="true" class="photo-container">
-                <cld-transformation gravity="faces" crop="fill" height="1000" width="1000" align="center"/>
+              <cld-image :publicId="resource.public_id" secure="true" align="center" class="photo-container">
+                <cld-transformation  height="700" crop="fit" width="800" />
                 <v-btn @click="onPrev" class="prev-btn prev-next-btn">
                   <v-icon x-large>mdi-chevron-left </v-icon>
                 </v-btn>

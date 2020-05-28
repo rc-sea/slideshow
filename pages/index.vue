@@ -1,33 +1,70 @@
 <template>
   <div>
-    <div class="content">
-      <h1>Hello, {{ $auth.loggedIn ? $auth.user.nickname : 'friend' }}!</h1>
-      <p>
-        This is a super simple example of how to use <a href="https://nuxtjs.org" target="_blank">Nuxt.js</a> and <a href="https://auth0.com" target="_blank">Auth0</a> together.
-      </p>
-      <p v-if="$auth.loggedIn">
-        Now that you're authenticated, maybe you should try going to our <nuxt-link to="/secret" class="link">super secret page</nuxt-link>!
-      </p>
-      <p v-else>
-        You're not authenticated yet. Maybe you want to <a @click="$auth.login()" class="link">sign in</a> and see what happens?
-      </p>
+    <v-card max-width="1500" class="mx-auto">
+      <v-container fluid>
+        <v-row>
+          <v-col
+           cols="12"
+           md="4">
+            <v-card>
+              <h2>Remembering Louise</h2>
+            </v-card>
+            <v-card>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card>
+              <v-carousel
+                cycle
+                height="400"
+                hide-delimiter-background
+                show-arrows-on-hover
+              >
+                <v-carousel-item
+                  v-for="(slide, i) in slides"
+                  :key="i"
+                >
+                  <v-sheet
+                    :color="colors[i]"
+                    height="100%"
+                  >
+                    <v-row
+                      class="fill-height"
+                      align="center"
+                      justify="center"
+                    >
+                      <div class="display-3">{{ slide }} Slide</div>
+                    </v-row>
+                  </v-sheet>
+                </v-carousel-item>
+              </v-carousel>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
     </div>
-  </div>
 </template>
 
 <script>
-
-export default {
-  mounted() {
-    console.log(this.$auth.user);
+  export default {
+    data () {
+      return {
+        colors: [
+          'indigo',
+          'warning',
+          'pink darken-2',
+          'red lighten-1',
+          'deep-purple accent-4',
+        ],
+        slides: [
+          'First',
+          'Second',
+          'Third',
+          'Fourth',
+          'Fifth',
+        ],
+      }
+    },
   }
-}
 </script>
-
-<style scoped>
-.content {
-  max-width: 750px;
-  margin: 0 auto;
-  text-align: center;
-}
-</style>

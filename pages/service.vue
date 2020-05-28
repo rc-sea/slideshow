@@ -3,17 +3,26 @@
     <v-card max-width="1500" class="mx-auto">
       <v-container fluid>
         <v-row>
-          <v-col>
-            <v-card>
-              <h2>Funeral Service and Events</h2>
-            </v-card>
-            <v-card>
-            </v-card>
-          </v-col>
           <v-col 
           cols="12"
           sm="6"
           lg="4">
+            <v-card>
+              <h2>Funeral Service and Events</h2>
+              <v-card-subtitle class="headline">
+                St. Theresa's Church, West Roxbury, MA<hr>June 3, 2020, 1 PM EDT
+              </v-card-subtitle>
+              <v-card-text class="title">
+                <p>Due to concerns about COVID and limited ability to travel, the service will be virtual via the Zoom meeting app. </p>
+                <p>If you are unfamiliar with Zoom calls, we will be holding a rehearsal meeting on Monday, June 1, at 1 PM EDT.</p>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn text href="assets/funeral.ics" download>Funeral</v-btn>
+                <v-btn text href="assets/rehearsal.ics" download>Rehearsal</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+          <v-col>
             <v-card>
               <v-carousel
                 cycle

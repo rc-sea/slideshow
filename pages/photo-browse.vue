@@ -2,7 +2,7 @@
   <v-card class="mx-auto" max-width="1500">
     <v-container fluid>
       <v-row dense justify="end">
-          <v-btn small class="btn-slide primary text-left" @click="onSlideShow">View Slide Show</v-btn>
+          <v-btn small class="btn-slide primary text-left" @click="dialog = true">View Slide Show</v-btn>
           <v-btn small @click="changeType">{{typeText}}</v-btn>
           <span class="brown total-number">{{ total_count }}</span>
       </v-row>
@@ -15,7 +15,7 @@
         <v-progress-circular :size="200" :width="20" color="gray" indeterminate></v-progress-circular>
       </v-row>
       <v-row v-else dense>
-        <v-col v-for="resource in resources" :key="resource.public_id" :cols="4">
+        <v-col v-for="resource in resources" :key="resource.public_id" :cols="12" sm="6" md="6" lg="4">
           <v-card>
             <nuxt-link :to="{ path: `photo/${resource.public_id}`}">
               <cld-image :publicId="resource.public_id" secure="true">
@@ -32,6 +32,12 @@
         </v-btn>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="dialog"
+      max-width="1000"
+    >
+      <slide-show></slide-show>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -39,10 +45,12 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import Cloudinary from 'cloudinary-vue'
+import SlideShow from '~/components/SlideShow'
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' }
 })
 
+let app
 export default {
   head() {
     return {
@@ -55,6 +63,7 @@ export default {
       searchType: 0,
       loading: true,
       moreloading: false,
+      dialog: false
     }
   },
   async asyncData({ $axios, store, error }) {},
@@ -62,8 +71,7 @@ export default {
     ...mapState({
       tags: state => state.tags.tags,
       resources: state => state.resources.resources,
-      total_count: state => state.resources.total_count,
-      detailsPage_url: state => state.detailsPage_url
+      total_count: state => state.resources.total_count
     }),
     typeText: function() {
       return this.searchType === 0 ? 'Any Tag Matches' : 'All Tags Match'
@@ -71,31 +79,27 @@ export default {
   },
   methods: {
     async init() {
-      if (this.detailsPage_url !== window.location.pathname + window.location.search) {
-        this.setloading(true)
-        await this.$store.dispatch('tags/gettags')
-        var { search, type } = this.$route.query
-        if (search) {
-          this.searchType = type | 0
-          search.split('-').forEach(tag => {
-            var index = this.tags.indexOf(tag)
-            if (this.selectedTags.indexOf(index) === -1) {
-              this.selectedTags.push(index)
-            }
-          })
+      app = this
+      this.setloading(true)
+      await this.$store.dispatch('tags/gettags')
+      var { search, type } = this.$route.query
+      if (search) {
+        this.searchType = type | 0
+        search.split('-').forEach(tag => {
+          var index = this.tags.indexOf(tag)
+          if (this.selectedTags.indexOf(index) === -1) {
+            this.selectedTags.push(index)
+          }
+        })
 
-          await this.$store.dispatch('resources/search', {
-            searchtag: search,
-            type: type
-          })
-        } else {
-          await this.$store.dispatch('resources/getresources')
-        }
-        this.setloading(false)
+        await this.$store.dispatch('resources/search', {
+          searchtag: search,
+          type: type
+        })
       } else {
-        this.setloading(false);
+        await this.$store.dispatch('resources/getresources')
       }
-      this.$store.commit('set_details_url', window.location.pathname + window.location.search);
+      this.setloading(false)
     },
     generateSearchTag() {
       let searchtag = this.tags[this.selectedTags[0]]
@@ -143,15 +147,15 @@ export default {
         type: type
       });
       this.moreloading = false;
-    },
-    onSlideShow() {
-      this.$router.replace({ path: `/slideshow`});
     }
   },
   created() {
     console.log(this.$route.params)
     console.log(this.$route.query)
     this.init()
+  },
+  components: {
+    SlideShow
   }
 }
 </script>

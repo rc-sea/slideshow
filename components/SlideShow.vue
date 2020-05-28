@@ -73,9 +73,7 @@ export default {
       // vfImages: [],
       // vfTransitions: Transitions,
       // vfCaptions: [],
-      vfTransitions: ['fade', 'kenburn', 'swipe', 'slide', 'waterfall','zip',
-                    'blinds2d','blocks1','blocks2','concentric','warp','camera','cube',
-                    'book','fall','wave','blinds3d','round1','round2','explode']
+      vfTransitions: ['kenburn']
    }),
    computed: {
       ...mapState({

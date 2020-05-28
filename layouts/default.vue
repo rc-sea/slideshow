@@ -36,7 +36,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" class="new-headline"/>
       <v-spacer />
-      <v-btn large color="purple lighten-4">
+      <v-btn color="purple lighten-4">
         <nuxt-link to="/photo-browse">Launch app</nuxt-link> 
       </v-btn>
       <v-spacer />
@@ -51,9 +51,7 @@
         <nuxt />
       </v-container>
     </v-content>
-  <v-footer
-    dark
-  >
+  <v-footer >
     <v-card
       class="flex"
       flat
@@ -117,7 +115,7 @@ export default {
 <style scoped>
 .new-headline {
   font-family: 'Pinyon Script', cursive;
-  font-size:48px;
+  font-size:36px;
 }
 a {
   text-decoration: none;
