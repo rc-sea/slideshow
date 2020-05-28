@@ -1,33 +1,82 @@
 <template>
   <div>
-    <div class="content">
-      <h1>Hello, {{ $auth.loggedIn ? $auth.user.nickname : 'friend' }}!</h1>
-      <p>
-        This is a super simple example of how to use <a href="https://nuxtjs.org" target="_blank">Nuxt.js</a> and <a href="https://auth0.com" target="_blank">Auth0</a> together.
-      </p>
-      <p v-if="$auth.loggedIn">
-        Now that you're authenticated, maybe you should try going to our <nuxt-link to="/secret" class="link">super secret page</nuxt-link>!
-      </p>
-      <p v-else>
-        You're not authenticated yet. Maybe you want to <a @click="$auth.login()" class="link">sign in</a> and see what happens?
-      </p>
+    <v-card 
+      max-width="1500" class="mx-auto">
+      <v-container fluid>
+        <v-row>
+          <v-col 
+          cols="12"
+          md="3"
+          lg="3">
+            <v-card>
+              <v-card-subtitle class="headline font-italic">
+                Dedicated to Louise Carter, photo archivist extraordinaire
+              </v-card-subtitle>
+              <v-card-text class="title">
+                This is an online photo gallery created from the lifetime of slides and photographs of Bob and Louise Carter.                
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card align="center">
+              <v-carousel
+                cycle
+                height="550"
+                hide-delimiters
+              >
+                <v-carousel-item
+                  v-for="(image, i) in images"
+                  :key="i"
+                >
+                  <v-sheet
+                    :color="black"
+                    height="100%"
+                  >
+                    <v-row
+                      class="fill-height"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-col
+                        md="12"
+                        align="center"
+                      >
+                        <cld-image :publicId="images[i]" secure="true">
+                          <cld-transformation crop="fill" gravity="faces" height="550" width="550" />
+                        </cld-image>
+                      </v-col>
+                    </v-row>
+                  </v-sheet>
+                </v-carousel-item>
+              </v-carousel>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
     </div>
-  </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import Cloudinary from 'cloudinary-vue'
+import SlideShow from '~/components/SlideShow'
+Vue.use(Cloudinary, {
+  configuration: { cloudName: 'louise' }
+})
 
-export default {
-  mounted() {
-    console.log(this.$auth.user);
+  export default {
+    data () {
+      return {
+        images: [
+          'Slide_scans_801_ylfkeu',
+          'Slide_scans_755_lx1mhv',
+          'photos--448',
+          'Slide_scans_801_fqbveb',
+          'slides--86',
+        ],
+      }
+    },
   }
-}
 </script>
-
-<style scoped>
-.content {
-  max-width: 750px;
-  margin: 0 auto;
-  text-align: center;
-}
-</style>
