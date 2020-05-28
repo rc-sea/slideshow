@@ -77,6 +77,7 @@ import CommentUpload from '~/components/CommentUpload'
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' }
 });
+const baseUrl = process.env.BASE_URL;
 
 export default {
   data () {
