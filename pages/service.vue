@@ -5,8 +5,8 @@
         <v-row>
           <v-col 
           cols="12"
-          sm="6"
-          lg="4">
+          sm="7"
+          lg="7">
             <v-card>
               <h2>Funeral Service and Events</h2>
               <v-card-subtitle class="headline">
@@ -17,8 +17,21 @@
                 <p>If you are unfamiliar with Zoom calls, we will be holding a rehearsal meeting on Monday, June 1, at 1 PM EDT.</p>
               </v-card-text>
               <v-card-actions>
-                <v-btn text href="assets/funeral.ics" download>Funeral</v-btn>
-                <v-btn text href="assets/rehearsal.ics" download>Rehearsal</v-btn>
+                <v-btn 
+                  text 
+                  href="./static/funeral.ics" 
+                  download>
+                    <v-icon large>mdi-calendar-star</v-icon>
+                    Funeral invite
+                </v-btn>
+                <v-spacer />
+                <v-btn 
+                  text 
+                  href="./static/rehearsal.ics" 
+                  download>                      
+                    <v-icon large>mdi-calendar-star</v-icon>
+                    Rehearsal invite
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -26,7 +39,7 @@
             <v-card>
               <v-carousel
                 cycle
-                height="400"
+                height="500"
                 hide-delimiter-background
                 show-arrows-on-hover
               >
