@@ -6,7 +6,7 @@
         <v-row>
           <v-col 
           cols="12"
-          sm="3"
+          md="3"
           lg="3">
             <v-card>
               <v-card-subtitle class="headline font-italic">
@@ -37,7 +37,10 @@
                       align="center"
                       justify="center"
                     >
-                      <v-col>
+                      <v-col
+                        md="12"
+                        align="center"
+                      >
                         <cld-image :publicId="images[i]" secure="true">
                           <cld-transformation crop="fill" gravity="faces" height="550" width="550" />
                         </cld-image>
