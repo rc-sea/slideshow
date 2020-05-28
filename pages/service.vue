@@ -87,6 +87,13 @@
           'Fourth',
           'Fifth',
         ],
+        images: [
+          'First',
+          'Second',
+          'Third',
+          'Fourth',
+          'Fifth',
+        ],
       }
     },
   }

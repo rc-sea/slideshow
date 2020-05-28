@@ -1,31 +1,35 @@
 <template>
   <div>
-    <v-card max-width="1500" class="mx-auto">
+    <v-card 
+      max-width="1500" class="mx-auto">
       <v-container fluid>
         <v-row>
-          <v-col
-           cols="12"
-           md="4">
+          <v-col 
+          cols="12"
+          sm="3"
+          lg="3">
             <v-card>
-              <h2>Remembering Louise</h2>
-            </v-card>
-            <v-card>
+              <v-card-subtitle class="headline font-italic">
+                Dedicated to Louise Carter, photo archivist extraordinaire
+              </v-card-subtitle>
+              <v-card-text class="title">
+                This is an online photo gallery created from the lifetime of slides and photographs of Bob and Louise Carter.                
+              </v-card-text>
             </v-card>
           </v-col>
           <v-col>
-            <v-card>
+            <v-card align="center">
               <v-carousel
                 cycle
-                height="400"
-                hide-delimiter-background
-                show-arrows-on-hover
+                height="550"
+                hide-delimiters
               >
                 <v-carousel-item
-                  v-for="(slide, i) in slides"
+                  v-for="(image, i) in images"
                   :key="i"
                 >
                   <v-sheet
-                    :color="colors[i]"
+                    :color="black"
                     height="100%"
                   >
                     <v-row
@@ -33,7 +37,11 @@
                       align="center"
                       justify="center"
                     >
-                      <div class="display-3">{{ slide }} Slide</div>
+                      <v-col>
+                        <cld-image :publicId="images[i]" secure="true">
+                          <cld-transformation crop="fill" gravity="faces" height="550" width="550" />
+                        </cld-image>
+                      </v-col>
                     </v-row>
                   </v-sheet>
                 </v-carousel-item>
@@ -47,22 +55,23 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { mapState } from 'vuex'
+import Cloudinary from 'cloudinary-vue'
+import SlideShow from '~/components/SlideShow'
+Vue.use(Cloudinary, {
+  configuration: { cloudName: 'louise' }
+})
+
   export default {
     data () {
       return {
-        colors: [
-          'indigo',
-          'warning',
-          'pink darken-2',
-          'red lighten-1',
-          'deep-purple accent-4',
-        ],
-        slides: [
-          'First',
-          'Second',
-          'Third',
-          'Fourth',
-          'Fifth',
+        images: [
+          'Slide_scans_801_ylfkeu',
+          'Slide_scans_755_lx1mhv',
+          'photos--448',
+          'Slide_scans_801_fqbveb',
+          'slides--86',
         ],
       }
     },
