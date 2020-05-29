@@ -29,7 +29,7 @@
                   :key="i"
                 >
                   <v-sheet
-                    :color="black"
+                    color="black"
                     height="100%"
                   >
                     <v-row
