@@ -41,9 +41,24 @@
       </v-btn>
       <v-spacer />
       <v-card-actions>
-      <nuxt-link to="/service">
-      <v-btn text>Funeral Service</v-btn></nuxt-link>
-      <nuxt-link to="/about"><v-btn text>About</v-btn></nuxt-link>
+        <nuxt-link to="/service">
+        <v-btn text>Funeral Service</v-btn></nuxt-link>
+        <nuxt-link to="/about"><v-btn text>About</v-btn></nuxt-link>
+        <v-menu offset-y v-if="user && $auth.user">
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" text fab>
+              <v-avatar :size="35">
+                <v-img :src="$auth.user.picture" alt="$auth.user.name"></v-img>
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="onLogout">
+              <v-list-item-title>Log Out</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-btn v-else @click="login" text>Log in</v-btn>
       </v-card-actions>
     </v-app-bar>
     <v-content>
@@ -66,8 +81,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-    head () {
+  computed: {
+    ...mapState({
+      user: state => state.user.user
+    })
+  },
+  head () {
     return {
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' }
@@ -106,6 +127,16 @@ export default {
       rightDrawer: false,
       title: 'Remembering Louise'
     }
+  },
+  methods: {
+    onLogout() {
+      this.$auth.logout();
+      this.$store.commit("user/SET_USER", null);
+    },
+    login() {
+      window.localStorage.setItem('redirect_url', window.location.pathname);
+      this.$auth.loginWith('auth0');
+    },
   }
 }
 
