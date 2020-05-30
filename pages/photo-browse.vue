@@ -1,38 +1,45 @@
 <template>
-  <v-card class="mx-auto" max-width="1500">
-    <v-container fluid>
-      <v-row dense justify="end">
-          <v-btn small class="btn-slide primary text-left" @click="slideshow">View Slide Show</v-btn>
-          <v-btn small @click="changeType">{{typeText}}</v-btn>
-          <span class="brown total-number">{{ total_count }}</span>
-      </v-row>
-      <v-row dense>
-        <v-chip-group v-model="selectedTags" active-class="primary" @change="onSelectTags" multiple>
-          <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
-        </v-chip-group>
-      </v-row>
-      <v-row v-if="loading" justify="center" class="loading-row" align="center">
-        <v-progress-circular :size="200" :width="20" color="gray" indeterminate></v-progress-circular>
-      </v-row>
-      <v-row v-else dense>
-        <v-col v-for="resource in resources" :key="resource.public_id" :cols="12" sm="6" md="6" lg="4">
-          <v-card>
-            <nuxt-link :to="{ path: `photo/${resource.public_id}`}">
-              <cld-image :publicId="resource.public_id" secure="true">
-                <cld-transformation gravity="faces" crop="fill" height="350" width="350" />
-              </cld-image>
-            </nuxt-link>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row justify="center" dense>
-        <v-btn normal @click="loadmore">
-          <v-progress-circular v-if="moreloading" :size="20" :width="2" color="gray" indeterminate></v-progress-circular>
-          <span v-else>Load More</span>
-        </v-btn>
-      </v-row>
-    </v-container>
-  </v-card>
+  <div>
+    <v-app-bar
+      color="light-green lighten-2">
+        <h2>Browse Photos</h2>
+        <v-spacer />
+        <v-btn color="indigo darken-3" @click="slideshow">View Slideshow</v-btn>
+        <v-btn color="indigo darken-3" text>{{ total_count }} photos</v-btn>
+        <v-spacer />
+        <v-btn small @click="changeType">{{typeText}}</v-btn>
+      <v-app-bar-nav-icon />
+    </v-app-bar>
+    <v-card class="mx-auto" max-width="1500">
+      <v-container fluid>
+        <v-row dense>
+          <v-chip-group v-model="selectedTags" active-class="primary" @change="onSelectTags" multiple>
+            <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
+          </v-chip-group>
+        </v-row>
+        <v-row v-if="loading" justify="center" class="loading-row" align="center">
+          <v-progress-circular :size="200" :width="20" color="gray" indeterminate></v-progress-circular>
+        </v-row>
+        <v-row v-else dense>
+          <v-col v-for="resource in resources" :key="resource.public_id" :cols="12" sm="6" md="6" lg="4">
+            <v-card>
+              <nuxt-link :to="{ path: `photo/${resource.public_id}`}">
+                <cld-image :publicId="resource.public_id" secure="true">
+                  <cld-transformation gravity="faces" crop="fill" height="350" width="350" />
+                </cld-image>
+              </nuxt-link>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row justify="center" dense>
+          <v-btn large @click="loadmore" color="orange">
+            <v-progress-circular v-if="moreloading" :size="20" :width="2" color="gray" indeterminate></v-progress-circular>
+            <span v-else>Load More</span>
+          </v-btn>
+        </v-row>
+      </v-container>
+    </v-card>
+  </div>
 </template>
 
 <script>

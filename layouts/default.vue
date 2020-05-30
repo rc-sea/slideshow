@@ -37,7 +37,7 @@
       <v-toolbar-title v-text="title" class="new-headline"/>
       <v-spacer />
       <v-btn color="purple lighten-4">
-        <nuxt-link to="/photo-browse">Launch app</nuxt-link> 
+        <nuxt-link to="/photo-browse">View Photos</nuxt-link> 
       </v-btn>
       <v-spacer />
       <v-card-actions>
