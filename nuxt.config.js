@@ -120,6 +120,8 @@ module.exports = {
     { path: '/api/user', handler: '~/server/user.js'},
     { path: '/api/comments/topics', handler: '~/server/topics.js'},
     { path: '/api/comments/posts', handler: '~/server/posts.js'},
-    { path: '/api/comment', handler: '~/server/comment.js'}
+    { path: '/api/comment', handler: '~/server/comment.js'},
+    { path: '/api/role', handler: '~/server/role.js'},
+    { path: '/api/uploadtag', handler: '~/server/uploadtag.js'}
   ]
 }

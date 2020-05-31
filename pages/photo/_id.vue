@@ -28,7 +28,7 @@
                       <v-chip v-for="tag in resource.tags" :key="tag">{{ tag }}</v-chip>
                     </v-chip-group>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col cols="4">
                     <v-menu
                       :open-on-hover="true"
                       :close-on-click="true"
@@ -57,6 +57,7 @@
                         </v-list-item>
                       </v-list>
                     </v-menu>
+                    <v-btn v-if="editor_role" @click="dialog = true" color="primary">Add Tags</v-btn>
                     <v-btn @click="onBack">Back</v-btn>
                   </v-col>
                 </v-row>
@@ -69,6 +70,16 @@
             </template>
         </v-skeleton-loader>
       </v-card>
+
+      <v-dialog v-model="dialog" max-width="500">
+        <v-card>
+          <v-card-title class="headline">Add tag for this photo</v-card-title>
+          <v-card-text>
+            <v-text-field label="Input Tag Name" outlined v-model="tag_name" dark></v-text-field>
+            <v-btn @click="onAddTag" color="primary" class="btn-full">Add Tag</v-btn>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
 </template>
 
@@ -91,7 +102,9 @@ export default {
     return {
       resource: null,
       loading: true,
+      dialog: false,
       public_id: this.$route.params.id,
+      tag_name: '',
       icons: [
         'mdi-facebook',
         'mdi-twitter',
@@ -102,6 +115,7 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user.user,
+      editor_role: state => state.user.editor_role,
       resources: state => state.resources.resources,
       detailsPage_url: state => state.detailsPage_url
     })
@@ -137,6 +151,22 @@ export default {
     onBack() {
       console.log(this.detailsPage_url);
       this.$router.replace({path: this.detailsPage_url});
+    },
+    async onAddTag() {
+      if (this.tag_name.length) {
+        this.resource.tags.push(this.tag_name);
+        this.dialog = false;
+        try {
+          let { data } = await axios.get(`/api/uploadtag`, {
+            params: { 
+              public_id: this.public_id,
+              tag: this.tag_name
+            }
+          })
+        }  catch(error) {
+          console.log(error);
+        }
+      }
     },
     PrevNext(flag) {
       for (let i = 0; i < this.resources.length; i ++) {
@@ -178,5 +208,8 @@ export default {
   &.next-btn {
     right: 10px;
   }
+}
+.btn-full {
+  width: 100%;
 }
 </style>
