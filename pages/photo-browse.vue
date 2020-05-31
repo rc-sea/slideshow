@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-app-bar
-      color="light-green lighten-2">
+      dark>
         <h2>Browse Photos</h2>
         <v-spacer />
-        <v-btn color="indigo darken-3" @click="slideshow">View Slideshow</v-btn>
-        <v-btn color="indigo darken-3" text>{{ total_count }} photos</v-btn>
+        <v-btn color="green lighten-1" @click="slideshow">View Slideshow
+          <v-icon class="mr-2" color="white" left >mdi-photo-album</v-icon>
+        </v-btn>
+        <v-btn text>{{ total_count }} photos</v-btn>
         <v-spacer />
         <v-btn small @click="changeType">{{typeText}}</v-btn>
       <v-app-bar-nav-icon />

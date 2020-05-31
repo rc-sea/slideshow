@@ -146,9 +146,6 @@ export default {
 <style scoped>
 .new-headline {
   font-family: 'Pinyon Script', cursive;
-  font-size:36px;
-}
-a {
-  text-decoration: none;
+  font-size:48px;
 }
 </style>
