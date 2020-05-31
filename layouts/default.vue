@@ -134,7 +134,7 @@ export default {
     login() {
       window.localStorage.setItem('redirect_url', window.location.pathname);
       this.$auth.loginWith('auth0');
-    },
+    }
   }
 }
 

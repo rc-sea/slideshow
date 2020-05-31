@@ -16,7 +16,6 @@ function generate_random(length) {
 
 export default async function(req, res, next){
     const { name, email, nickname } = JSON.parse(req.query.user);
-    console.log("*****Getting Exisitng User******");
     let user;
     try {
         let { data }  = await axios.get(`https://chat.rememberinglouise.com/users/${nickname}.json`, {
@@ -26,9 +25,7 @@ export default async function(req, res, next){
             }
         })
         user = data.user;
-        console.log("Existing User: ", user);
     } catch(error) {
-        console.log("*****Creating a User******");
         let  res_data  = await axios.post(`https://chat.rememberinglouise.com/users`, 
             {
                 name: name,
@@ -45,8 +42,6 @@ export default async function(req, res, next){
                     'Api-Username': api_username
             }
         });
-        console.log("Created User ID: ", res_data.data.user_id);
-        console.log("*****Getting User By ID******");
         if (res_data.data.user_id) {
             let user_data  = await axios.get(`https://chat.rememberinglouise.com/admin/users/${res_data.data.user_id}.json`, {
                 params: {
@@ -55,7 +50,6 @@ export default async function(req, res, next){
                 }
             });
             user = user_data.data;
-            console.log("Created User", user);
         } else {
             console.log("Creation Failed!");
         }
