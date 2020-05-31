@@ -97,7 +97,7 @@ export default {
   },
   data () {
     return {
-      clipped: false,
+      clipped: true,
       drawer: false,
       fixed: false,
       items: [
@@ -123,8 +123,6 @@ export default {
         }
       ],
       miniVariant: false,
-      right: true,
-      rightDrawer: false,
       title: 'Remembering Louise'
     }
   },
@@ -147,5 +145,8 @@ export default {
 .new-headline {
   font-family: 'Pinyon Script', cursive;
   font-size:48px;
+}
+a {
+  text-decoration: none;
 }
 </style>

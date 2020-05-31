@@ -4,8 +4,12 @@
       dark>
         <h2>Browse Photos</h2>
         <v-spacer />
-        <v-btn color="green lighten-1" @click="slideshow">View Slideshow
-          <v-icon class="mr-2" color="white" left >mdi-photo-album</v-icon>
+        <v-btn color="green lighten-1" @click="slideshow">
+          <v-icon left>
+              mdi-image-multiple-outline
+              large
+          </v-icon>
+          View Slideshow
         </v-btn>
         <v-btn text>{{ total_count }} photos</v-btn>
         <v-spacer />
