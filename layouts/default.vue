@@ -43,7 +43,6 @@
       <v-card-actions>
         <nuxt-link to="/service">
         <v-btn text>Funeral Service</v-btn></nuxt-link>
-        <nuxt-link to="/about"><v-btn text>About</v-btn></nuxt-link>
         <v-menu offset-y v-if="user && $auth.user">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" text fab>
