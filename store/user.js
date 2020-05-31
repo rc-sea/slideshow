@@ -9,7 +9,9 @@ export const state = () => ({
 export const mutations = {
     SET_USER(state, data) {
         state.user = data
-        if (data.roles && data.roles.length) {
+        if (!data) {
+            state.editor_role = false;
+        } else if (data.roles && data.roles.length) {
             data.roles.forEach(role => {
                 if (role.name === "tag-editor") {
                     state.editor_role = true;
