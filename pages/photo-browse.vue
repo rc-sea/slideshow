@@ -1,16 +1,30 @@
 <template>
-  <v-card class="mx-auto" max-width="1500">
+  <v-card class="mx-auto" max-width="1500" id="browse-card">
+    <v-speed-dial v-model="fab" top right direction="bottom" transition="slide-y-reverse-transition" open-on-hover>
+      <template v-slot:activator>
+        <v-btn v-model="fab" color="blue darken-2" dark fab>
+          <v-icon v-if="fab">mdi-close</v-icon>
+          <v-icon v-else>mdi-plus</v-icon>
+        </v-btn>
+      </template>
+      <v-tooltip bottom v-if="total_count">
+        <template v-slot:activator="{ on }">
+          <v-btn fab dark small color="green" v-on="on" @click="slideshow">
+            <v-icon>mdi-play-box-outline</v-icon>
+          </v-btn>
+        </template>
+        <span>Start Slide Show</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn fab dark small color="indigo" v-on="on" @click="onTagNav">
+            <v-icon>mdi-label</v-icon>
+          </v-btn>
+        </template>
+        <span>Filter with Tags</span>
+      </v-tooltip>
+    </v-speed-dial>
     <v-container fluid>
-      <v-row dense justify="end">
-          <v-btn small class="btn-slide primary text-left" @click="slideshow">View Slide Show</v-btn>
-          <v-btn small @click="changeType">{{typeText}}</v-btn>
-          <span class="brown total-number">{{ total_count }}</span>
-      </v-row>
-      <v-row dense>
-        <v-chip-group v-model="selectedTags" active-class="primary" @change="onSelectTags" multiple>
-          <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
-        </v-chip-group>
-      </v-row>
       <v-row v-if="loading" justify="center" class="loading-row" align="center">
         <v-progress-circular :size="200" :width="20" color="gray" indeterminate></v-progress-circular>
       </v-row>
@@ -52,10 +66,8 @@ export default {
   },
   data() {
     return {
-      selectedTags: [],
-      searchType: 0,
-      loading: true,
       moreloading: false,
+      fab: false,
     }
   },
   async asyncData({ $axios, store, error }) {},
@@ -64,28 +76,18 @@ export default {
       tags: state => state.tags.tags,
       resources: state => state.resources.resources,
       total_count: state => state.resources.total_count,
-      detailsPage_url: state => state.resources.detailsPage_url
+      detailsPage_url: state => state.resources.detailsPage_url,
+      tag_nav: state => state.tag_nav,
+      loading: state => state.browse_loading
     }),
-    typeText: function() {
-      return this.searchType === 0 ? 'Any Tag Matches' : 'All Tags Match'
-    }
   },
   methods: {
     async init() {
       if (this.detailsPage_url !== window.location.pathname + '?' + window.location.search)
       {
         this.setloading(true)
-        await this.$store.dispatch('tags/gettags')
         var { search, type } = this.$route.query
         if (search) {
-          this.searchType = type | 0
-          search.split('-').forEach(tag => {
-            var index = this.tags.indexOf(tag)
-            if (this.selectedTags.indexOf(index) === -1) {
-              this.selectedTags.push(index)
-            }
-          })
-
           await this.$store.dispatch('resources/search', {
             searchtag: search,
             type: type
@@ -99,42 +101,12 @@ export default {
       }
       this.$store.commit('set_details_url', window.location.pathname + '?' + window.location.search);      
     },
-    generateSearchTag() {
-      let searchtag = this.tags[this.selectedTags[0]]
-      for (var i = 1; i < this.selectedTags.length; i++) {
-        searchtag += '-' + this.tags[this.selectedTags[i]]
-      }
-      return searchtag;
-    },
-    async onSelectTags() {
-      console.log(this.selectedTags)
-      this.setloading(true);
-
-      if (this.selectedTags.length) {
-        
-        let searchtag = this.generateSearchTag();
-        this.$router.replace({
-          path: `/photo-browse?search=${searchtag}&type=${this.searchType}`
-        })
-
-        await this.$store.dispatch('resources/search', {
-          searchtag: searchtag,
-          type: this.searchType
-        })
-      } else {
-        await this.$store.dispatch('resources/getresources')
-      }
-
-      this.setloading(false);
-    },
-    async changeType() {
-      this.searchType = 1 - this.searchType
-      if (this.selectedTags.length > 1) {
-        await this.onSelectTags()
-      }
+    onTagNav() {
+      this.$store.commit('set_tag_nav', true);
+      console.log(this.tag_nav);
     },
     setloading(flag) {
-      this.loading = flag
+      this.$store.commit('set_browse_loading', flag);
     },
     async loadmore() {
       let { search, type } = this.$route.query;
@@ -168,11 +140,13 @@ export default {
 .loading-row {
   height: 700px;
 }
-.total-number {
-  border-radius: 10px;
-  margin-left: 10px;
-  font-size: 15px;
-  line-height: 28px;
-  padding: 0 14px;
+
+#browse-card {
+  .v-speed-dial {
+    position: absolute;
+  }
+  .v-btn--floating {
+    position: relative;
+  }
 }
 </style>
