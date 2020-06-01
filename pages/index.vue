@@ -10,7 +10,7 @@
           lg="3">
             <v-card>
               <v-card-subtitle class="headline font-italic">
-                Dedicated to Louise Carter, photo archivist extraordinaire
+                Dedicated to Louise Carter, amazing mom, wife, friend, and photo archivist
               </v-card-subtitle>
               <v-card-text class="title">
                 This is an online photo gallery created from the lifetime of slides and photographs of Bob and Louise Carter.                

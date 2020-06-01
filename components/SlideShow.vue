@@ -4,15 +4,10 @@
     :options="vfOptions"
     :images="vfImages"
     :transitions="vfTransitions"
-    :captions="vfCaptions"
     ref="slider">
 
     <template v-slot:preloader>
         <flux-preloader />
-    </template>
-
-    <template v-slot:caption>
-        <flux-caption />
     </template>
 
     <template v-slot:controls>
@@ -57,7 +52,6 @@ import { mapState } from 'vuex'
 export default {
    components: {
       VueFlux,
-      FluxCaption,
       FluxControls,
       FluxIndex,
       FluxPagination,
@@ -85,13 +79,6 @@ export default {
         images.push(`http://res.cloudinary.com/louise/image/upload/w_1600,h_1200,c_pad,b_black/${resource.public_id}.jpg`);
       });
       return images
-    },
-    vfCaptions: function() {
-      var captions = [];
-      this.resources.forEach(resource => {
-        captions.push(resource.public_id);
-      });
-      return captions
     }
    }
 }

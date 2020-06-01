@@ -37,13 +37,12 @@
       <v-toolbar-title v-text="title" class="new-headline"/>
       <v-spacer />
       <v-btn color="purple lighten-4">
-        <nuxt-link to="/photo-browse">Launch app</nuxt-link> 
+        <nuxt-link to="/photo-browse">View Photos</nuxt-link> 
       </v-btn>
       <v-spacer />
       <v-card-actions>
         <nuxt-link to="/service">
         <v-btn text>Funeral Service</v-btn></nuxt-link>
-        <nuxt-link to="/about"><v-btn text>About</v-btn></nuxt-link>
         <v-menu offset-y v-if="user && $auth.user">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" text fab>
@@ -152,7 +151,7 @@ export default {
   data () {
     return {
       searchType: 0,
-      clipped: false,
+      clipped: true,
       drawer: false,
       fixed: false,
       items: [
@@ -318,7 +317,7 @@ export default {
 <style lang="scss" scoped>
 .new-headline {
   font-family: 'Pinyon Script', cursive;
-  font-size:36px;
+  font-size:48px;
 }
 .content-navigation-wrapper {
   display: flex;
