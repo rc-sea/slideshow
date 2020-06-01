@@ -24,7 +24,10 @@
               <v-card-actions>
                 <v-row>
                   <v-col cols="8">
-                    <v-chip-group>
+                    <v-chip-group v-if="editor_role">
+                      <v-chip v-for="tag in resource.tags" :key="tag" close @click:close="onClose(tag)">{{ tag }}</v-chip>
+                    </v-chip-group>
+                    <v-chip-group v-else>
                       <v-chip v-for="tag in resource.tags" :key="tag">{{ tag }}</v-chip>
                     </v-chip-group>
                   </v-col>
@@ -151,6 +154,20 @@ export default {
     onBack() {
       console.log(this.detailsPage_url);
       this.$router.replace({path: this.detailsPage_url});
+    },
+    async onClose(tag) {
+      console.log(tag);
+      this.resource.tags = this.resource.tags.filter(function(value, index, arr) { return value != tag });
+      try {
+        let { data } = await axios.get(`/api/removetag`, {
+          params: { 
+            public_id: this.public_id,
+            tag: tag
+          }
+        })
+      }  catch(error) {
+        console.log(error);
+      }
     },
     async onAddTag() {
       if (this.tag_name.length) {

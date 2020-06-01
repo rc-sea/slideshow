@@ -122,6 +122,7 @@ module.exports = {
     { path: '/api/comments/posts', handler: '~/server/posts.js'},
     { path: '/api/comment', handler: '~/server/comment.js'},
     { path: '/api/role', handler: '~/server/role.js'},
-    { path: '/api/uploadtag', handler: '~/server/uploadtag.js'}
+    { path: '/api/uploadtag', handler: '~/server/uploadtag.js'},
+    { path: '/api/removetag', handler: '~/server/removetag.js'}
   ]
 }
