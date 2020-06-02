@@ -305,7 +305,7 @@ export default {
     async changeType() {
       var { search, type } = this.$route.query;
       this.searchType = 1 - type;
-      this.$router.push({
+      this.$router.go({
         path: `/photo-browse?search=${search}&type=${this.searchType}`
       })
       if (search) {

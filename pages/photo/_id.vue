@@ -127,6 +127,8 @@ export default {
       editor_role: state => state.user.editor_role,
       resources: state => state.resources.resources,
       detailsPage_url: state => state.detailsPage_url,
+      search_tag: state => state.search_tag,
+      search_type: state => state.search_type,
       comments: state => state.comments.posts
     })
   },
@@ -206,17 +208,29 @@ export default {
         }
       }
     },
-    PrevNext(flag) {
+    async PrevNext(flag) {
       for (let i = 0; i < this.resources.length; i ++) {
         if (this.resources[i].public_id === this.public_id) {
           if (flag === 0 && i > 0) {
             this.$router.replace({
               path: `/photo/${this.resources[i - 1].public_id}`
             });
-          } else if (flag === 1 && i < this.resources.length) {
-            this.$router.replace({
-              path: `/photo/${this.resources[i + 1].public_id}`
-            });
+          } else if (flag === 1) {
+            if (i < this.resources.length - 1) {
+              this.$router.replace({
+                path: `/photo/${this.resources[i + 1].public_id}`
+              });
+            } else {
+              await this.$store.dispatch('resources/searchmore', {
+                searchtag: this.search_tag,
+                type: this.search_type
+              });
+              if (i < this.resources.length - 1) {
+                this.$router.replace({
+                  path: `/photo/${this.resources[i + 1].public_id}`
+                });
+              }
+            }
           }
         }
       }

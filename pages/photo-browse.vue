@@ -76,17 +76,17 @@ export default {
       tags: state => state.tags.tags,
       resources: state => state.resources.resources,
       total_count: state => state.resources.total_count,
-      detailsPage_url: state => state.resources.detailsPage_url,
+      detailsPage_url: state => state.detailsPage_url,
       tag_nav: state => state.tag_nav,
       loading: state => state.browse_loading
     }),
   },
   methods: {
     async init() {
+      var { search, type } = this.$route.query;
       if (this.detailsPage_url !== this.$route.fullPath)
       {
         this.setloading(true)
-        var { search, type } = this.$route.query
         if (search) {
           await this.$store.dispatch('resources/search', {
             searchtag: search,
@@ -99,7 +99,11 @@ export default {
       } else {
         this.setloading(false)
       }
-      this.$store.commit('set_details_url', this.$route.fullPath);      
+      this.$store.commit('set_details_state', { 
+        detailsPage_url: this.$route.fullPath,
+        search_tag: search,
+        search_type: type
+      });      
     },
     onTagNav() {
       this.$store.commit('set_tag_nav', true);
@@ -125,7 +129,7 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.params)
+    console.log(this.$route.fullPath)
     console.log(this.$route.query)
     this.init()
   }
