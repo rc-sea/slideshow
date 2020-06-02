@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     async init() {
-      if (this.detailsPage_url !== window.location.pathname + '?' + window.location.search)
+      if (this.detailsPage_url !== this.$route.fullPath)
       {
         this.setloading(true)
         var { search, type } = this.$route.query
@@ -99,7 +99,7 @@ export default {
       } else {
         this.setloading(false)
       }
-      this.$store.commit('set_details_url', window.location.pathname + '?' + window.location.search);      
+      this.$store.commit('set_details_url', this.$route.fullPath);      
     },
     onTagNav() {
       this.$store.commit('set_tag_nav', true);

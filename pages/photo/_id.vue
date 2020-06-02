@@ -142,7 +142,7 @@ export default {
       console.log(icon);
     },
     login() {
-      window.localStorage.setItem('redirect_url', window.location.pathname);
+      window.localStorage.setItem('redirect_url', this.$route.fullPath);
       this.$auth.loginWith('auth0');
     },
     onPrev() {
