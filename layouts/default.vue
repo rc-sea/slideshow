@@ -43,6 +43,8 @@
       <v-card-actions>
         <nuxt-link to="/service">
         <v-btn text>Funeral Service</v-btn></nuxt-link>
+        <nuxt-link to="/remembrances">
+        <v-btn text>Remembrances</v-btn></nuxt-link>
         <v-menu offset-y v-if="user && $auth.user">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" text fab>
@@ -108,14 +110,18 @@
         </v-navigation-drawer>
       </div>
     </v-content>
-  <v-footer >
-    <v-card
+  <v-footer 
+    color="indigo darken-2">
+    <v-card color="indigo darken-2"
       class="flex"
-      flat
-      tile
     >
-      <v-card-text class="py-2 white--text text-center">
-        {{ new Date().getFullYear() }} — <strong>Remembering Louise</strong>
+      <v-card-title class="py-2 white--text text-center">
+        {{ new Date().getFullYear() }} — Eclectic Company
+      </v-card-title>
+      <v-card-text><nuxt-link to="/privacy">
+      <v-btn text>Privacy Policy</v-btn></nuxt-link>
+      <nuxt-link to="/terms">
+       <v-btn text>Terms of use</v-btn></nuxt-link>
       </v-card-text>
     </v-card>
   </v-footer>

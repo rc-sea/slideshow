@@ -2,11 +2,11 @@
   <v-list three-line v-if="comments">
     <v-list-item v-for="comment in comments" :key="comment.id">
       <v-list-item-avatar>
-        <v-img :src="discourse_URL + comment.avatar_template"></v-img>
+        <v-img large :src="discourse_URL + comment.avatar_template"></v-img>
       </v-list-item-avatar>
       <v-list-item-content>
-        <v-list-item-title v-html="comment.name || comment.username"></v-list-item-title>
-        <v-list-item-subtitle v-html="comment.cooked"></v-list-item-subtitle>
+        <v-list-item-title class="title" v-html="comment.name || comment.username"></v-list-item-title>
+        <v-list-item-subtitle class="body-1" v-html="comment.cooked"></v-list-item-subtitle>
         <v-divider></v-divider>
       </v-list-item-content>
     </v-list-item>
