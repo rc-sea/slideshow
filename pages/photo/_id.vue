@@ -20,6 +20,11 @@
                 <v-btn @click="onNext" class="next-btn prev-next-btn">
                   <v-icon x-large>mdi-chevron-right </v-icon>
                 </v-btn>
+                <v-btn top right absolute icon @click="onCommentIcon">
+                  <v-badge bordered color="green" :value="comments.length" :content="comments.length"  @click.prevent="$vuetify.goTo('#comment_show')" overlap>
+                    <v-icon >mdi-comment-text-outline</v-icon>
+                  </v-badge>
+                </v-btn>
               </cld-image>
               <v-card-actions>
                 <v-row>
@@ -68,8 +73,8 @@
               <v-row v-if="!user" dense align="center" justify="center"> 
                 <v-btn normal color="primary" class="mb-3" @click="login">Login To Comment</v-btn>
               </v-row>
-              <comments :title="public_id"></comments>
-              <comment-upload :title="public_id"></comment-upload>
+              <comments :title="public_id" id="comment_show"></comments>
+              <comment-upload :title="public_id" id="comment_upload"></comment-upload>
             </template>
         </v-skeleton-loader>
       </v-card>
@@ -120,7 +125,8 @@ export default {
       user: state => state.user.user,
       editor_role: state => state.user.editor_role,
       resources: state => state.resources.resources,
-      detailsPage_url: state => state.detailsPage_url
+      detailsPage_url: state => state.detailsPage_url,
+      comments: state => state.comments.posts
     })
   },
   async created() {
@@ -144,6 +150,17 @@ export default {
     login() {
       window.localStorage.setItem('redirect_url', this.$route.fullPath);
       this.$auth.loginWith('auth0');
+    },
+    onCommentIcon() {
+      if (this.comments.length) {
+        this.$vuetify.goTo('#comment_show');
+      } else {
+        if (!this.user) {
+          this.login();
+        } else {
+          this.$vuetify.goTo('#comment_upload');
+        }
+      }
     },
     onPrev() {
       this.PrevNext(0);
