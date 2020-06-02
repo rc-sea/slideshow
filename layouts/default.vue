@@ -68,7 +68,7 @@
         <v-navigation-drawer
           v-if="isAllowedTagNav"
           right
-          width="290"
+          width="300"
         >
           <v-container v-if="!tags" justify="center" class="loading-row" align="center">
             <v-progress-circular :size="100" :width="10" color="gray" indeterminate></v-progress-circular>

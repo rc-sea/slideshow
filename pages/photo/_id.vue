@@ -20,13 +20,8 @@
                 <v-btn @click="onNext" class="next-btn prev-next-btn">
                   <v-icon x-large>mdi-chevron-right </v-icon>
                 </v-btn>
-                <v-btn v-if="!user" top right absolute icon @click="login">
+                <v-btn top right absolute icon @click="onCommentIcon">
                   <v-badge bordered color="green" :value="comments.length" :content="comments.length"  @click.prevent="$vuetify.goTo('#comment_show')" overlap>
-                    <v-icon >mdi-comment-text-outline</v-icon>
-                  </v-badge>
-                </v-btn>
-                <v-btn v-else icon top right absolute @click="$vuetify.goTo('#comment_upload')">
-                  <v-badge bordered color="green" :value="comments.length" :content="comments.length" @click.prevent="$vuetify.goTo('#comment_show')" overlap>
                     <v-icon >mdi-comment-text-outline</v-icon>
                   </v-badge>
                 </v-btn>
@@ -75,6 +70,9 @@
                   </v-col>
                 </v-row>
               </v-card-actions>
+              <v-row v-if="!user" dense align="center" justify="center"> 
+                <v-btn normal color="primary" class="mb-3" @click="login">Login To Comment</v-btn>
+              </v-row>
               <comments :title="public_id" id="comment_show"></comments>
               <comment-upload :title="public_id" id="comment_upload"></comment-upload>
             </template>
@@ -152,6 +150,17 @@ export default {
     login() {
       window.localStorage.setItem('redirect_url', this.$route.fullPath);
       this.$auth.loginWith('auth0');
+    },
+    onCommentIcon() {
+      if (this.comments.length) {
+        this.$vuetify.goTo('#comment_show');
+      } else {
+        if (!this.user) {
+          this.login();
+        } else {
+          this.$vuetify.goTo('#comment_upload');
+        }
+      }
     },
     onPrev() {
       this.PrevNext(0);
