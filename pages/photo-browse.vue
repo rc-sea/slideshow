@@ -129,6 +129,8 @@ export default {
     }
   },
   created() {
+    console.log(this.$route.fullPath)
+    console.log(this.$route.query)
     this.init()
   }
 }
