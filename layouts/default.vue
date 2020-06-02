@@ -133,7 +133,7 @@ export default {
       total_count: state => state.resources.total_count,
     }),
     isAllowedTagNav: function() {
-      if (this.$nuxt.$route.name !== "photo-browse")
+      if (this.$route.name !== "photo-browse")
         return false;
       return this.tag_nav;
     },
@@ -262,7 +262,7 @@ export default {
       this.$store.commit("user/SET_USER", null);
     },
     login() {
-      window.localStorage.setItem('redirect_url', this.$nuxt.$route.path);
+      window.localStorage.setItem('redirect_url', this.$route.fullPath);
       this.$auth.loginWith('auth0');
     },
     generateSearchTag(tag_group) {

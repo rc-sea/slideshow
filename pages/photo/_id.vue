@@ -142,7 +142,7 @@ export default {
       console.log(icon);
     },
     login() {
-      window.localStorage.setItem('redirect_url', window.location.pathname);
+      window.localStorage.setItem('redirect_url', this.$route.fullPath);
       this.$auth.loginWith('auth0');
     },
     onPrev() {
@@ -171,6 +171,9 @@ export default {
     },
     async onAddTag() {
       if (this.tag_name.length) {
+        if (!this.resource.tags) {
+          this.resource.tags = []; 
+        }
         this.resource.tags.push(this.tag_name);
         this.dialog = false;
         try {
