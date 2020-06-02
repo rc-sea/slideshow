@@ -171,6 +171,11 @@ export default {
           to: '/photo-browse'
         },
         {
+          icon: 'mdi-comment-text',
+          title: 'Remembrances',
+          to: '/remembrances'
+        },
+        {
           icon: 'mdi-camera',
           title: 'Photo Detail',
           to: '/photo'
