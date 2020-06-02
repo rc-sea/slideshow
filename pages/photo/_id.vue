@@ -171,6 +171,9 @@ export default {
     },
     async onAddTag() {
       if (this.tag_name.length) {
+        if (!this.resource.tags) {
+          this.resource.tags = []; 
+        }
         this.resource.tags.push(this.tag_name);
         this.dialog = false;
         try {
