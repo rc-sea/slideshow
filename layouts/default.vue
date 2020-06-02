@@ -34,17 +34,26 @@
       color="indigo"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <div class="d-none d-lg-block">
       <v-toolbar-title v-text="title" class="new-headline"/>
+      </div>
+      <div class="md-and-down">
+        <v-toolbar-title v-text="title" class="md-headline"/>
+      </div>
       <v-spacer />
-      <v-btn color="purple lighten-4">
-        <nuxt-link to="/photo-browse">View Photos</nuxt-link> 
-      </v-btn>
+      <div class="d-none d-lg-block">
+        <v-btn color="purple lighten-4">
+          <nuxt-link to="/photo-browse">View Photos</nuxt-link> 
+        </v-btn>
+      </div>
       <v-spacer />
       <v-card-actions>
+        <div class="d-none d-lg-block">
         <nuxt-link to="/service">
         <v-btn text>Funeral Service</v-btn></nuxt-link>
         <nuxt-link to="/remembrances">
         <v-btn text>Remembrances</v-btn></nuxt-link>
+        </div>
         <v-menu offset-y v-if="user && $auth.user">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" text fab>
@@ -367,6 +376,10 @@ export default {
 .new-headline {
   font-family: 'Pinyon Script', cursive;
   font-size:48px;
+}
+.md-headline  {
+  font-family: 'Pinyon Script', cursive;
+  font-size:30px;
 }
 .content-navigation-wrapper {
   display: flex;
