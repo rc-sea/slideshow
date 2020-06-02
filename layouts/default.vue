@@ -187,6 +187,10 @@ export default {
             value: "louise"
           },
           { 
+            label:"Bob",
+            value: "bob"
+          },
+          { 
             label:"Best",
             value: "best"
           }
@@ -204,11 +208,50 @@ export default {
             label:"Bob and Louise",
             value: "bob_louise"
           }
+        ],
+        "Other Folk": [
+          {
+            label:"Robert C",
+            value: "robert_c"
+          },
+          {
+            label:"John",
+            value:"john"
+          },
+          {
+            label:"Brian",
+            value:"brian"
+          },
+          {
+            label:"Ellen",
+            value:"ellen"
+          },
+          {
+            label:"Paul",
+            value:"paul"
+          },
+          {
+            label:"Robert D",
+            value:"robert_d"
+          },
+          {
+            label:"Jane",
+            value:"jane"
+          },
+          {
+            label:"Susan",
+            value:"susan"
+          },
+          {
+            label:"Janet",
+            value:"janet"
+          }
         ]
       },
       selectedTags: {
         "Favorites": [],
         "Couples": [],
+        "Other Folk": [],
         "All": []
       },
     }
