@@ -34,21 +34,21 @@
       color="indigo"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <div class="d-none d-lg-block">
-      <v-toolbar-title v-text="title" class="new-headline"/>
+      <div class="hidden-sm-and-down">
+        <v-toolbar-title v-text="title" class="new-headline"/>
       </div>
-      <div class="md-and-down">
+      <div class="hidden-md-and-up">
         <v-toolbar-title v-text="title" class="md-headline"/>
       </div>
       <v-spacer />
-      <div class="d-none d-lg-block">
+      <div class="hidden-sm-and-down">
         <v-btn color="purple lighten-4">
           <nuxt-link to="/photo-browse">View Photos</nuxt-link> 
         </v-btn>
       </div>
       <v-spacer />
       <v-card-actions>
-        <div class="d-none d-lg-block">
+        <div class="hidden-md-and-down">
         <nuxt-link to="/service">
         <v-btn text>Funeral Service</v-btn></nuxt-link>
         <nuxt-link to="/remembrances">
