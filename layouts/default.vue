@@ -163,17 +163,12 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          title: 'Home',
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        },
-        {
           icon: 'mdi-camera',
-          title: 'View SlideShow',
+          title: 'View Photos',
           to: '/photo-browse'
         },
         {
@@ -183,8 +178,8 @@ export default {
         },
         {
           icon: 'mdi-camera',
-          title: 'Photo Detail',
-          to: '/photo'
+          title: 'Funeral Service',
+          to: '/service'
         }
       ],
       miniVariant: false,
