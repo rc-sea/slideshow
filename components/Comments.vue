@@ -6,7 +6,8 @@
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title class="title" v-html="comment.name || comment.username"></v-list-item-title>
-        <v-list-item-subtitle class="body-1" v-html="comment.cooked"></v-list-item-subtitle>
+        <!-- <v-list-item-subtitle class="body-1" v-html="comment.cooked"></v-list-item-subtitle> -->
+        <div class="list-subtitle" v-html="comment.cooked"></div>
         <v-divider></v-divider>
       </v-list-item-content>
     </v-list-item>
@@ -41,3 +42,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.list-subtitle {
+  color: hsla(0,0%,100%,.7);
+}
+</style>
