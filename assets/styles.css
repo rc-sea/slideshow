@@ -1,4 +1,7 @@
 
+html {
+    overflow-y: auto !important;
+}
 .emoji {
     height: 14px;
 }

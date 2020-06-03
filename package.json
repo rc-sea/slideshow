@@ -27,7 +27,8 @@
     "nuxt": "^2.0.0",
     "nuxt-webfontloader": "^1.1.0",
     "vue-cli": "^2.9.6",
-    "vue-flux": "^6.1.1"
+    "vue-flux": "^6.1.1",
+    "webpack-cdn-plugin": "^3.3.1"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",

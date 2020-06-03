@@ -63,6 +63,9 @@
             </v-btn>
           </template>
           <v-list>
+            <v-list-item v-if="user && editor_role" to="photo-upload">
+              <v-list-item-title>Photo Upload</v-list-item-title>
+            </v-list-item>
             <v-list-item @click="onLogout">
               <v-list-item-title>Log Out</v-list-item-title>
             </v-list-item>
@@ -73,9 +76,7 @@
     </v-app-bar>
     <v-content>
       <div class="content-navigation-wrapper">
-        <v-container>
-          <nuxt />
-        </v-container>
+        <nuxt />
         <v-navigation-drawer
           v-if="isAllowedTagNav"
           right
@@ -143,6 +144,7 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user.user,
+      editor_role: state => state.user.editor_role,
       tag_nav: state => state.tag_nav,
       tags: state => state.tags.tags,
       total_count: state => state.resources.total_count,
