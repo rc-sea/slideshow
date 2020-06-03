@@ -76,9 +76,7 @@
     </v-app-bar>
     <v-content>
       <div class="content-navigation-wrapper">
-        <v-container>
-          <nuxt />
-        </v-container>
+        <nuxt />
         <v-navigation-drawer
           v-if="isAllowedTagNav"
           right

@@ -1,4 +1,5 @@
 <template>
+  <v-container>
     <v-container max-width="1200" class="mb-2" fluid>
       <v-card 
         class="mx-auto"
@@ -90,6 +91,7 @@
         </v-card>
       </v-dialog>
     </v-container>
+  </v-container>
 </template>
 
 

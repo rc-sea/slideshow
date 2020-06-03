@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-card 
       max-width="1500" class="mx-auto">
       <v-container fluid>
@@ -55,7 +55,7 @@
         </v-row>
       </v-container>
     </v-card>
-    </div>
+  </v-container>
 </template>
 
 <script>

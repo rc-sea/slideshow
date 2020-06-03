@@ -1,9 +1,11 @@
 <template>
-  <v-container fluid >
-    <v-row dense justify="end">
-      <v-btn @click="onBack" primary class="mr-1 mb-2">Back</v-btn>
-    </v-row>
-    <slide-show></slide-show>
+  <v-container>
+    <v-container fluid >
+      <v-row dense justify="end">
+        <v-btn @click="onBack" primary class="mr-1 mb-2">Back</v-btn>
+      </v-row>
+      <slide-show></slide-show>
+    </v-container>
   </v-container>
 </template>
 
