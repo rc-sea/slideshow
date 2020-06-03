@@ -22,7 +22,7 @@
                 </v-btn>
                 <v-btn top right absolute icon @click="onCommentIcon">
                   <v-badge bordered color="green" :value="comments.length" :content="comments.length"  @click.prevent="$vuetify.goTo('#comment_show')" overlap>
-                    <v-icon >mdi-comment-text-outline</v-icon>
+                    <v-icon x-large>mdi-comment-text-outline</v-icon>
                   </v-badge>
                 </v-btn>
               </cld-image>
@@ -66,7 +66,8 @@
                       </v-list>
                     </v-menu>
                     <v-btn v-if="editor_role" @click="dialog = true" color="primary">Add Tags</v-btn>
-                    <v-btn @click="onBack">Back</v-btn>
+                    <v-spacer />
+                    <v-btn color="orange darken-2" @click="onBack">Return to Browse</v-btn>
                   </v-col>
                 </v-row>
               </v-card-actions>

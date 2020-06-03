@@ -34,15 +34,26 @@
       color="indigo"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" class="new-headline"/>
+      <div class="hidden-sm-and-down">
+        <v-toolbar-title v-text="title" class="new-headline"/>
+      </div>
+      <div class="hidden-md-and-up">
+        <v-toolbar-title v-text="title" class="md-headline"/>
+      </div>
       <v-spacer />
-      <v-btn color="purple lighten-4">
-        <nuxt-link to="/photo-browse">View Photos</nuxt-link> 
-      </v-btn>
+      <div class="hidden-sm-and-down">
+        <v-btn color="purple lighten-4">
+          <nuxt-link to="/photo-browse">View Photos</nuxt-link> 
+        </v-btn>
+      </div>
       <v-spacer />
       <v-card-actions>
+        <div class="hidden-md-and-down">
         <nuxt-link to="/service">
         <v-btn text>Funeral Service</v-btn></nuxt-link>
+        <nuxt-link to="/remembrances">
+        <v-btn text>Remembrances</v-btn></nuxt-link>
+        </div>
         <v-menu offset-y v-if="user && $auth.user">
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" text fab>
@@ -111,14 +122,18 @@
         </v-navigation-drawer>
       </div>
     </v-content>
-  <v-footer >
-    <v-card
+  <v-footer 
+    color="indigo darken-2">
+    <v-card color="indigo darken-2"
       class="flex"
-      flat
-      tile
     >
-      <v-card-text class="py-2 white--text text-center">
-        {{ new Date().getFullYear() }} — <strong>Remembering Louise</strong>
+      <v-card-title class="py-2 white--text text-center">
+        {{ new Date().getFullYear() }} — Eclectic Company
+      </v-card-title>
+      <v-card-text><nuxt-link to="/privacy">
+      <v-btn text>Privacy Policy</v-btn></nuxt-link>
+      <nuxt-link to="/terms">
+       <v-btn text>Terms of use</v-btn></nuxt-link>
       </v-card-text>
     </v-card>
   </v-footer>
@@ -161,17 +176,12 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          title: 'Home',
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        },
-        {
           icon: 'mdi-camera',
-          title: 'View SlideShow',
+          title: 'View Photos',
           to: '/photo-browse'
         },
         {
@@ -181,8 +191,8 @@ export default {
         },
         {
           icon: 'mdi-camera',
-          title: 'Photo Detail',
-          to: '/photo'
+          title: 'Funeral Service',
+          to: '/service'
         }
       ],
       miniVariant: false,
@@ -194,6 +204,10 @@ export default {
           {
             label:"Louise",
             value: "louise"
+          },
+          { 
+            label:"Bob",
+            value: "bob"
           },
           { 
             label:"Best",
@@ -213,11 +227,50 @@ export default {
             label:"Bob and Louise",
             value: "bob_louise"
           }
+        ],
+        "Other Folk": [
+          {
+            label:"Robert C",
+            value: "robert_c"
+          },
+          {
+            label:"John",
+            value:"john"
+          },
+          {
+            label:"Brian",
+            value:"brian"
+          },
+          {
+            label:"Ellen",
+            value:"ellen"
+          },
+          {
+            label:"Paul",
+            value:"paul"
+          },
+          {
+            label:"Robert D",
+            value:"robert_d"
+          },
+          {
+            label:"Jane",
+            value:"jane"
+          },
+          {
+            label:"Susan",
+            value:"susan"
+          },
+          {
+            label:"Janet",
+            value:"janet"
+          }
         ]
       },
       selectedTags: {
         "Favorites": [],
         "Couples": [],
+        "Other Folk": [],
         "All": []
       },
     }
@@ -327,6 +380,10 @@ export default {
 .new-headline {
   font-family: 'Pinyon Script', cursive;
   font-size:48px;
+}
+.md-headline  {
+  font-family: 'Pinyon Script', cursive;
+  font-size:30px;
 }
 .content-navigation-wrapper {
   display: flex;

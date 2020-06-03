@@ -6,14 +6,15 @@
         <v-row>
           <v-col 
           cols="12"
-          md="3"
-          lg="3">
+          md="4"
+          lg="4">
             <v-card>
               <v-card-subtitle class="headline font-italic">
                 Dedicated to Louise Carter, amazing mom, wife, friend, and photo archivist
               </v-card-subtitle>
+              <v-btn x-large color="green" href="https://us02web.zoom.us/j/85836340855">Join Funeral Service</v-btn>
               <v-card-text class="title">
-                This is an online photo gallery created from the lifetime of slides and photographs of Bob and Louise Carter.                
+                Please click the button above to join the virtual funeral we're holding for Louise today at 1 PM EDT.  
               </v-card-text>
             </v-card>
           </v-col>

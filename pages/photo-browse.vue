@@ -2,26 +2,26 @@
   <v-card class="mx-auto" max-width="1500" id="browse-card">
     <v-speed-dial v-model="fab" top right direction="bottom" transition="slide-y-reverse-transition" open-on-hover>
       <template v-slot:activator>
-        <v-btn v-model="fab" color="blue darken-2" dark fab>
+        <v-btn v-model="fab" color="orange darken-3" dark fab x-large>
           <v-icon v-if="fab">mdi-close</v-icon>
           <v-icon v-else>mdi-plus</v-icon>
         </v-btn>
       </template>
       <v-tooltip bottom v-if="total_count">
         <template v-slot:activator="{ on }">
-          <v-btn fab dark small color="green" v-on="on" @click="slideshow">
-            <v-icon>mdi-play-box-outline</v-icon>
+          <v-btn fab dark x-large color="green" v-on="on" @click="slideshow">
+            <v-icon x-large>mdi-movie-open-outline</v-icon>
           </v-btn>
         </template>
         <span>Start Slide Show</span>
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-btn fab dark small color="indigo" v-on="on" @click="onTagNav">
-            <v-icon>mdi-label</v-icon>
+          <v-btn fab dark x-large color="indigo" v-on="on" @click="onTagNav">
+            <v-icon x-large>mdi-image-search</v-icon>
           </v-btn>
         </template>
-        <span>Filter with Tags</span>
+        <span>Browse by People and Tags</span>
       </v-tooltip>
     </v-speed-dial>
     <v-container fluid>
