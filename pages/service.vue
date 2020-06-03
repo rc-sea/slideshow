@@ -23,14 +23,6 @@
                     <v-icon large>mdi-calendar-star</v-icon>
                   Funeral <br> June 3, 1 pm et
                 </v-btn>
-                <v-spacer />
-                <v-btn 
-                  text 
-                  href="https://us02web.zoom.us/j/89797457315" 
-                  download>                      
-                    <v-icon large>mdi-calendar-star</v-icon>
-                    Rehearsal <br> June 1, 1 pm et
-                </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
