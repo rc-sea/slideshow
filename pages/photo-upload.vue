@@ -4,7 +4,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState({
+      user: state => state.user.user,
+      editor_role: state => state.user.editor_role
+    }),
+  },
   data() {
     return {
       cloudinary: null
@@ -20,19 +27,23 @@ export default {
           callback: () => {
             console.log("CDN loaded");
             this.cloudinary = cloudinary;
-            cloudinary.openUploadWidget({
+            if (this.user && this.editor_role) {
+              cloudinary.openUploadWidget({
               cloudName: 'louise', 
               uploadPreset: 'pob2zoec'}, (error, result) => { 
                 if (!error && result && result.event === "success") { 
                   console.log('Done! Here is the image info: ', result.info); 
-                  this.$router.replace({ path: `/photo-browse` });
+                  this.$router.push({ path: `/photo-browse` });
                 } else if (!error && result && result.event === "close"){
-                  this.$router.replace({ path: `/photo-browse` });
+                  this.$router.push({ path: `/photo-browse` });
                 } else if (error) {
                   console.log(error); 
                 }
-              }
-            )
+              })
+            } else {
+              console.log('You are not allowed to upload a photo'); 
+              this.$router.push({ path: `/photo-browse` });
+            }
           }
         }
       ]
