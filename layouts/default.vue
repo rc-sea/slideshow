@@ -345,8 +345,12 @@ export default {
       this.$store.commit('set_browse_loading', false);
     }
   },
-  async created() {
+  async mounted() {
       var { search, type } = this.$route.query
+      //console.log(this.$auth.user)
+      if (this.$auth && this.$auth.user && !this.user) {
+        this.$store.commit("user/SET_USER", window.localStorage.getItem('rememberinglouise_user'));
+      }
       await this.$store.dispatch('tags/gettags')
       if (search) {
         this.searchType = type | 0
