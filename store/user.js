@@ -18,6 +18,7 @@ export const mutations = {
                 }
             });
         }
+        window.localStorage.setItem('rememberinglouise_user', data);
     }
 }
 
