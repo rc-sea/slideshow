@@ -349,7 +349,7 @@ export default {
       var { search, type } = this.$route.query
       //console.log(this.$auth.user)
       if (this.$auth && this.$auth.user && !this.user) {
-        await this.$store.commit("user/SET_USER", JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
+        this.$store.commit("user/SET_USER", window.localStorage.getItem('rememberinglouise_user'));
       }
       await this.$store.dispatch('tags/gettags')
       if (search) {
