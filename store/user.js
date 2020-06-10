@@ -18,7 +18,7 @@ export const mutations = {
                 }
             });
         }
-        window.localStorage.setItem('rememberinglouise_user', data);
+        window.localStorage.setItem('rememberinglouise_user', JSON.stringify(data));
     }
 }
 
@@ -35,7 +35,9 @@ export const actions = {
                     email: payload.user.email
                 }
             })
-            data.roles = roles;
+            if (data) {
+                data.roles = roles;
+            }
             commit('SET_USER', data);
         } catch(error) {
             console.log(error);
