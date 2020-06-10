@@ -78,6 +78,7 @@ module.exports = {
       target: process.env.BASE_URL,
     }
   },
+  baseURL: process.env.BASE_URL,
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module

@@ -12,25 +12,36 @@ function generate_random(length) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
- }
+}
+function generate_id(nickname, sub) {
+    var str = nickname + '-' + sub.substr(sub.length - 4);
+    return str.replace(/[^a-zA-Z0-9_.-]/g,'');
+}
 
 export default async function(req, res, next){
-    const { name, email, nickname } = JSON.parse(req.query.user);
+    const { name, email, nickname, sub } = JSON.parse(req.query.user);
+    const id = generate_id(nickname, sub);
     let user;
+    let g_email = email ? email : (id + '@tw.hudl.us');
     try {
-        let { data }  = await axios.get(`https://chat.rememberinglouise.com/users/${nickname}.json`, {
+        console.log("Trying to get user by id:", id);
+        let { data }  = await axios.get(`https://chat.rememberinglouise.com/users/${id}.json`, {
             params: {
                 api_key: api_key,
                 api_username: api_username
             }
         })
         user = data.user;
+        console.log("Found user with username: ", user.username);
     } catch(error) {
-        let  res_data  = await axios.post(`https://chat.rememberinglouise.com/users`, 
+        let res_data;
+        try {
+            console.log("Couldn't find user, trying to create a user");
+            res_data  = await axios.post(`https://chat.rememberinglouise.com/users`, 
             {
                 name: name,
-                email: email,
-                username: nickname,
+                email: g_email,
+                username: id,
                 active: true,
                 approved: true,
                 password: generate_random(15)
@@ -42,7 +53,12 @@ export default async function(req, res, next){
                     'Api-Username': api_username
             }
         });
-        if (res_data.data.user_id) {
+        } catch(err) {
+            console.log(err);
+        }
+        if (res_data && res_data.data && !res_data.data.success) {
+            console.log(res_data.data.message);
+        } else if (res_data && res_data.data && res_data.data.user_id) {
             let user_data  = await axios.get(`https://chat.rememberinglouise.com/admin/users/${res_data.data.user_id}.json`, {
                 params: {
                     api_key: api_key,
@@ -50,8 +66,10 @@ export default async function(req, res, next){
                 }
             });
             user = user_data.data;
+            console.log("Created a user with username: ", user.username);
         } else {
             console.log("Creation Failed!");
+            console.log(JSON.parse(req.query.user));
         }
     }
     res.header("Access-Control-Allow-Origin", "*");
