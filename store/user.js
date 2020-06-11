@@ -1,5 +1,4 @@
 import axios from "axios";
-const baseUrl = process.env.BASE_URL;
 
 export const state = () => ({
     user: null,
@@ -35,7 +34,9 @@ export const actions = {
                     id: payload.user.sub
                 }
             })
-            data.roles = roles;
+            if (data) {
+                data.roles = roles;
+            }
             commit('SET_USER', data);
         } catch(error) {
             console.log(error);
