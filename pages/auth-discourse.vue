@@ -20,6 +20,7 @@ export default {
   async mounted() {
     console.log(this.$auth.user);
     await this.$store.dispatch('user/set_user', { user: this.$auth.user });
+    this.$store.commit('set_just_login', true);
     console.log(this.user);
     if(process.browser){
       this.$router.replace({

@@ -5,6 +5,7 @@ export const state = () => ({
   browse_loading: true,
   search_tag: null,
   search_type: null,
+  just_login: false
 })
 export const mutations = {
   set_details_state(state, page) {
@@ -17,5 +18,8 @@ export const mutations = {
   },
   set_browse_loading(state, flag) {
     state.browse_loading = flag
+  },
+  set_just_login(state, flag) {
+    state.just_login = flag
   }
 }
