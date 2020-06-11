@@ -71,7 +71,8 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    proxy: true
+    proxy: true,
+    BaseURL: process.env.BASE_URL
   },
   proxy: {
     '/api': {
