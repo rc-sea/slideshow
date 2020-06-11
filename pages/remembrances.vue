@@ -30,12 +30,22 @@ import CommentUpload from '~/components/CommentUpload'
 export default {
   computed: {
     ...mapState({
-      user: state => state.user.user
+      user: state => state.user.user,
+      resources_wrap: state => state.resources,
+      search_tag: state => state.search_tag,
+      search_type: state => state.search_type,
+      detailsPage_url: state => state.detailsPage_url,
     })
   },
   methods: {
     login() {
       window.localStorage.setItem('redirect_url', this.$route.fullPath);
+      window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
+      window.localStorage.setItem('state', JSON.stringify({
+        search_tag: this.search_tag,
+        search_type: this.search_type,
+        detailsPage_url: this.detailsPage_url
+      }));
       this.$auth.loginWith('auth0');
     }
   },

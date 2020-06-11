@@ -145,6 +145,10 @@ export default {
     ...mapState({
       user: state => state.user.user,
       editor_role: state => state.user.editor_role,
+      resources_wrap: state => state.resources,
+      search_tag: state => state.search_tag,
+      search_type: state => state.search_type,
+      detailsPage_url: state => state.detailsPage_url,
       tag_nav: state => state.tag_nav,
       tags: state => state.tags.tags,
       total_count: state => state.resources.total_count,
@@ -163,6 +167,122 @@ export default {
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' }
       ]
+    }
+  },
+  methods: {
+    onLogout() {
+      this.$auth.logout();
+      this.$store.commit("user/SET_USER", null);
+    },
+    login() {
+      window.localStorage.setItem('redirect_url', this.$route.fullPath);
+      window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
+      window.localStorage.setItem('state', JSON.stringify({
+        search_tag: this.search_tag,
+        search_type: this.search_type,
+        detailsPage_url: this.detailsPage_url
+      }));
+      this.$auth.loginWith('auth0');
+    },
+    generateSearchTag(tag_group) {
+      let searchtag;
+
+      if (tag_group === "All") {
+        searchtag = this.tags[this.selectedTags['All'][0]]
+        for (var i = 1; i < this.selectedTags['All'].length; i++) {
+          searchtag += '-' + this.tags[this.selectedTags['All'][i]]
+        }
+      } else {
+        searchtag = this.initial_tags[tag_group][this.selectedTags[tag_group][0]].value
+        for (var i = 1; i < this.selectedTags[tag_group].length; i++) {
+          searchtag += '-' + this.initial_tags[tag_group][this.selectedTags[tag_group][i]].value
+        }
+      }
+      for (let group in this.selectedTags) {
+        if (group !== tag_group) {
+          this.selectedTags[group] = [];
+          
+        }
+      }
+      return searchtag;
+    },
+    onHideNav() {
+      this.$store.commit('set_tag_nav', false);
+      console.log(this.tag_nav);
+    },
+    async changeType() {
+      var { search, type } = this.$route.query;
+      this.searchType = 1 - type;
+      this.$router.go({
+        path: `/photo-browse?search=${search}&type=${this.searchType}`
+      })
+      if (search) {
+        await this.$store.dispatch('resources/search', {
+          searchtag: search,
+          type: this.searchType
+        });
+      } else {
+        await this.$store.dispatch('resources/getresources');
+      }
+    },
+    async onSelectTags(tag_group) {
+      console.log(this.selectedTags[tag_group])
+      this.$store.commit('set_browse_loading', true);
+
+      if (this.selectedTags[tag_group].length) {
+        
+        let searchtag = this.generateSearchTag(tag_group);
+        this.$store.commit('set_details_state', {
+          detailsPage_url: `/photo-browse?search=${searchtag}&type=${this.searchType}`,
+          search_tag: searchtag,
+          search_type: this.searchType
+        });
+        this.$router.push({
+          path: `/photo-browse?search=${searchtag}&type=${this.searchType}`
+        })
+
+        await this.$store.dispatch('resources/search', {
+          searchtag: searchtag,
+          type: this.searchType
+        })
+      } else {
+        await this.$store.dispatch('resources/getresources')
+      }
+
+      this.$store.commit('set_browse_loading', false);
+    }
+  },
+  async mounted() {
+    if (this.$auth && this.$auth.user && !this.user) {
+      await this.$store.commit("user/SET_USER", JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
+    }
+    await this.$store.dispatch('tags/gettags')
+  },
+  beforeUpdate() {
+    var { search, type } = this.$route.query
+    if (search) {
+      this.searchType = type | 0
+      for (let group in this.selectedTags) {
+        search.split('-').forEach(tag => {
+          let index = -1;
+          if (group === "All")
+            index = this.tags.indexOf(tag);
+          else {
+            for (let i = 0; i < this.initial_tags[group].length; i ++) {
+              if (this.initial_tags[group][i].value === tag) {
+                index = i;
+              }
+            }
+          }
+          if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
+            this.selectedTags[group].push(index)
+          }
+        })
+      }
+    } else {
+      for (let group in this.selectedTags) {
+        this.selectedTags[group] = [];
+      }
     }
   },
   data () {
@@ -272,107 +392,6 @@ export default {
         "All": []
       },
     }
-  },
-  methods: {
-    onLogout() {
-      this.$auth.logout();
-      this.$store.commit("user/SET_USER", null);
-    },
-    login() {
-      window.localStorage.setItem('redirect_url', this.$route.fullPath);
-      this.$auth.loginWith('auth0');
-    },
-    generateSearchTag(tag_group) {
-      let searchtag;
-
-      if (tag_group === "All") {
-        searchtag = this.tags[this.selectedTags['All'][0]]
-        for (var i = 1; i < this.selectedTags['All'].length; i++) {
-          searchtag += '-' + this.tags[this.selectedTags['All'][i]]
-        }
-      } else {
-        searchtag = this.initial_tags[tag_group][this.selectedTags[tag_group][0]].value
-        for (var i = 1; i < this.selectedTags[tag_group].length; i++) {
-          searchtag += '-' + this.initial_tags[tag_group][this.selectedTags[tag_group][i]].value
-        }
-      }
-      for (let group in this.selectedTags) {
-        if (group !== tag_group) {
-          this.selectedTags[group] = [];
-          
-        }
-      }
-      return searchtag;
-    },
-    onHideNav() {
-      this.$store.commit('set_tag_nav', false);
-      console.log(this.tag_nav);
-    },
-    async changeType() {
-      var { search, type } = this.$route.query;
-      this.searchType = 1 - type;
-      this.$router.go({
-        path: `/photo-browse?search=${search}&type=${this.searchType}`
-      })
-      if (search) {
-        await this.$store.dispatch('resources/search', {
-          searchtag: search,
-          type: this.searchType
-        });
-      } else {
-        await this.$store.dispatch('resources/getresources');
-      }
-    },
-    async onSelectTags(tag_group) {
-      console.log(this.selectedTags[tag_group])
-      this.$store.commit('set_browse_loading', true);
-
-      if (this.selectedTags[tag_group].length) {
-        
-        let searchtag = this.generateSearchTag(tag_group);
-        this.$router.push({
-          path: `/photo-browse?search=${searchtag}&type=${this.searchType}`
-        })
-
-        await this.$store.dispatch('resources/search', {
-          searchtag: searchtag,
-          type: this.searchType
-        })
-      } else {
-        await this.$store.dispatch('resources/getresources')
-      }
-
-      this.$store.commit('set_browse_loading', false);
-    }
-  },
-  async mounted() {
-      var { search, type } = this.$route.query
-      //console.log(this.$auth.user)
-      if (this.$auth && this.$auth.user && !this.user) {
-        this.$store.commit("user/SET_USER", window.localStorage.getItem('rememberinglouise_user'));
-      }
-      await this.$store.dispatch('tags/gettags')
-      if (search) {
-        this.searchType = type | 0
-        for (let group in this.selectedTags) {
-          search.split('-').forEach(tag => {
-            let index = -1;
-            if (group === "All")
-              index = this.tags.indexOf(tag);
-            else {
-              for (let i = 0; i < this.initial_tags[group].length; i ++) {
-                if (this.initial_tags[group][i].value === tag) {
-                  index = i;
-                }
-              }
-            }
-            if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
-              this.selectedTags[group].push(index)
-            }
-          })
-        }
-      }
-    },
 }
 
 

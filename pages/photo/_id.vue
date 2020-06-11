@@ -128,13 +128,15 @@ export default {
       user: state => state.user.user,
       editor_role: state => state.user.editor_role,
       resources: state => state.resources.resources,
+      resources_wrap: state => state.resources,
       detailsPage_url: state => state.detailsPage_url,
       search_tag: state => state.search_tag,
       search_type: state => state.search_type,
+      just_login: state => state.just_login,
       comments: state => state.comments.posts
     })
   },
-  async created() {
+  async mounted() {
     this.loading = true;
     try {
       let { data } = await axios.get(`/api/detail`, {
@@ -146,6 +148,13 @@ export default {
     }  catch(error) {
       console.log(error);
     }
+    if (this.just_login) {
+      this.$store.commit('set_just_login', false);
+      let local_state = JSON.parse(window.localStorage.getItem('state'));
+      let local_resources = JSON.parse(window.localStorage.getItem('resources'));
+      this.$store.commit('set_details_state', local_state);
+      this.$store.commit('resources/parse', local_resources);
+    }
     this.loading = false;
   },
   methods: {
@@ -154,6 +163,12 @@ export default {
     },
     login() {
       window.localStorage.setItem('redirect_url', this.$route.fullPath);
+      window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
+      window.localStorage.setItem('state', JSON.stringify({
+        search_tag: this.search_tag,
+        search_type: this.search_type,
+        detailsPage_url: this.detailsPage_url
+      }));
       this.$auth.loginWith('auth0');
     },
     onCommentIcon() {

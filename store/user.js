@@ -32,7 +32,7 @@ export const actions = {
             });
             var { data: roles} = await axios.get('/api/role', {
                 params: {
-                    email: payload.user.email
+                    id: payload.user.sub
                 }
             })
             data.roles = roles;

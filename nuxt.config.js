@@ -71,13 +71,15 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    proxy: true
+    proxy: true,
+    BaseURL: process.env.BASE_URL
   },
   proxy: {
     '/api': {
       target: process.env.BASE_URL,
     }
   },
+  baseURL: process.env.BASE_URL,
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module

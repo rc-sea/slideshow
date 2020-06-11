@@ -5,7 +5,7 @@ export default function(req, res, next){
     const type = req.query.type | 0;
     const next_cursor = req.query.next_cursor;
     let tags;
-    console.log(searchtag);
+    console.log("SearchTag: ", searchtag);
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (searchtag) {

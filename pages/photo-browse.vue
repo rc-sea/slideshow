@@ -105,7 +105,7 @@ export default {
         detailsPage_url: this.$route.fullPath,
         search_tag: search,
         search_type: type
-      });      
+      });  
     },
     onTagNav() {
       this.$store.commit('set_tag_nav', true);
@@ -130,10 +130,12 @@ export default {
       })
     }
   },
-  created() {
-    console.log(this.$route.fullPath)
-    console.log(this.$route.query)
-    this.init()
+  async created() {
+    if(process.browser){
+      console.log(this.$route.fullPath)
+      console.log(this.$route.query)
+      await this.init()
+    }
   }
 }
 </script>
