@@ -253,34 +253,39 @@ export default {
     }
   },
   async mounted() {
-      var { search, type } = this.$route.query
-      //console.log(this.$auth.user)
-      if (this.$auth && this.$auth.user && !this.user) {
-        await this.$store.commit("user/SET_USER", JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
-      }
-      await this.$store.dispatch('tags/gettags')
-      if (search) {
-        this.searchType = type | 0
-        for (let group in this.selectedTags) {
-          search.split('-').forEach(tag => {
-            let index = -1;
-            if (group === "All")
-              index = this.tags.indexOf(tag);
-            else {
-              for (let i = 0; i < this.initial_tags[group].length; i ++) {
-                if (this.initial_tags[group][i].value === tag) {
-                  index = i;
-                }
+    if (this.$auth && this.$auth.user && !this.user) {
+      await this.$store.commit("user/SET_USER", JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
+    }
+    await this.$store.dispatch('tags/gettags')
+  },
+  beforeUpdate() {
+    var { search, type } = this.$route.query
+    if (search) {
+      this.searchType = type | 0
+      for (let group in this.selectedTags) {
+        search.split('-').forEach(tag => {
+          let index = -1;
+          if (group === "All")
+            index = this.tags.indexOf(tag);
+          else {
+            for (let i = 0; i < this.initial_tags[group].length; i ++) {
+              if (this.initial_tags[group][i].value === tag) {
+                index = i;
               }
             }
-            if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
-              this.selectedTags[group].push(index)
-            }
-          })
-        }
+          }
+          if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
+            this.selectedTags[group].push(index)
+          }
+        })
       }
-    },
-    data () {
+    } else {
+      for (let group in this.selectedTags) {
+        this.selectedTags[group] = [];
+      }
+    }
+  },
+  data () {
     return {
       searchType: 0,
       clipped: true,
