@@ -390,8 +390,9 @@ export default {
         "Couples": [],
         "Other Folk": [],
         "All": []
-      },
+      }
     }
+  }
 }
 
 
