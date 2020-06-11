@@ -11,6 +11,11 @@ export default async function(req, res, next){
         params: {
             api_key: api_key,
             api_username: api_username
+        },
+        headers: {
+            'Content-Type': 'application/json',
+            'Api-Key': api_key,
+            'Api-Username': api_username
         }
     })
     res.header("Access-Control-Allow-Origin", "*");
