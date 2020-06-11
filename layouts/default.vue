@@ -392,7 +392,6 @@ export default {
         "All": []
       },
     }
-  }
 }
 
 
