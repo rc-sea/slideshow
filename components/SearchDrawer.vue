@@ -17,29 +17,17 @@
         <span class="brown total-number">{{ total_count }}</span>
       </v-row>
       <v-row>
-        <v-expansion-panels accordion>
-          <v-expansion-panel v-for="(tag_group, tag_type) in initial_tags" :key="tag_type">
-            <v-expansion-panel-header>{{tag_type}}</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-list>
-                <v-list-item-group v-model="selectedTags[tag_type]" active-class="primary" @change="onSelectTags(tag_type)" multiple>
-                  <v-list-item v-for="custom_tag in tag_group" :key="custom_tag">{{ capitalizeTag(custom_tag) }}</v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-
-          <v-expansion-panel key="all">
-            <v-expansion-panel-header>All Tags</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-list>
-                <v-list-item-group v-model="selectedTags['All']" active-class="primary" @change="onSelectTags('All')" multiple>
-                  <v-list-item v-for="tag in tags" :key="tag">{{ capitalizeTag(tag) }}</v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <v-col cols="12">
+          <v-text-field v-model="tagFilter" clearable solo-inverted label="Filter tags" autocomplete="off" />
+          <template v-for="(tag_group, tag_type) in selectedTags">
+            <div v-if="filteredTags[tag_type].length" :key="tag_type" class="mb-4">
+              <v-subheader class="overline">{{ tag_type }}</v-subheader>
+              <v-chip-group  v-model="selectedTags[tag_type]" active-class="success--text text--lighten-2" multiple class="mx-4" column @change="onSelectTags(tag_type)">
+                <v-chip v-for="tag in filteredTags[tag_type]" filter :key="tag">{{ capitalizeTag(tag) }} </v-chip>
+              </v-chip-group>
+            </div>
+          </template>
+        </v-col>
       </v-row>
     </v-container>
   </v-navigation-drawer>
@@ -51,6 +39,7 @@ export default {
   data () {
     return {
       searchType: 0,
+      tagFilter: '',
       initial_tags: {
         "Favorites": ["louise", "bob", "best"],
         "Couples": ["frank_mary", "eleanor_bill", "bob_louise"],
@@ -77,6 +66,16 @@ export default {
     typeText: function() {
       return this.searchType === 0 ? 'Any Tag Matches' : 'All Tags Match'
     },
+    filteredTags: function() {
+      const filteredTags = {};
+
+      for (let group in this.initial_tags) {
+        filteredTags[group] = this.filterTags(this.initial_tags[group]);
+      }
+      filteredTags["All"] = this.filterTags(this.tags);
+
+      return filteredTags;
+    },
   },
 
   watch: {
@@ -89,7 +88,6 @@ export default {
         if (search) {
           this.searchType = type | 0
           for (let group in this.selectedTags) {
-            console.log('ja', group, this.selectedTags[group]);
             searchTags.forEach(tag => {
               const index = group === "All"
                   ? this.tags.indexOf(tag)
@@ -118,8 +116,12 @@ export default {
       const [first, second] = capitalized.split(' ')
       return `${first} and ${second}`;
     },
+    filterTags (tags) {
+      const filterLowercased = (this.tagFilter || '').toLowerCase();
+
+      return tags.filter(tag => tag.toLowerCase().includes(filterLowercased));
+    },
     async onSelectTags(tag_group) {
-      console.log(this.selectedTags[tag_group])
       this.$store.commit('set_browse_loading', true);
 
       if (this.selectedTags[tag_group].length) {
@@ -145,8 +147,9 @@ export default {
       this.$store.commit('set_browse_loading', false);
     },
     generateSearchTag(tag_group) {
-      const groupTags = this.selectedTags[tag_group];
-      const searchTagsArray = groupTags.map(index => this.initial_tags[tag_group][index])
+      const groupTags = tag_group === "All" ? this.tags : this.initial_tags[tag_group];
+      const selectedIndices = this.selectedTags[tag_group];
+      const searchTagsArray = selectedIndices.map(index => groupTags[index])
 
       for (let group in this.selectedTags) {
         if (group !== tag_group) {
