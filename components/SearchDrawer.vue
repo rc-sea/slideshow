@@ -23,7 +23,7 @@
             <v-expansion-panel-content>
               <v-list>
                 <v-list-item-group v-model="selectedTags[tag_type]" active-class="primary" @change="onSelectTags(tag_type)" multiple>
-                  <v-list-item v-for="custom_tag in tag_group" :key="custom_tag.label">{{ custom_tag.label }}</v-list-item>
+                  <v-list-item v-for="custom_tag in tag_group" :key="custom_tag">{{ capitalizeTag(custom_tag) }}</v-list-item>
                 </v-list-item-group>
               </v-list>
             </v-expansion-panel-content>
@@ -34,7 +34,7 @@
             <v-expansion-panel-content>
               <v-list>
                 <v-list-item-group v-model="selectedTags['All']" active-class="primary" @change="onSelectTags('All')" multiple>
-                  <v-list-item v-for="tag in tags" :key="tag">{{ tag }}</v-list-item>
+                  <v-list-item v-for="tag in tags" :key="tag">{{ capitalizeTag(tag) }}</v-list-item>
                 </v-list-item-group>
               </v-list>
             </v-expansion-panel-content>
@@ -52,72 +52,9 @@ export default {
     return {
       searchType: 0,
       initial_tags: {
-        "Favorites": [
-          {
-            label:"Louise",
-            value: "louise"
-          },
-          {
-            label:"Bob",
-            value: "bob"
-          },
-          {
-            label:"Best",
-            value: "best"
-          }
-        ],
-        "Couples": [
-          {
-            label:"Frank and Mary",
-            value: "frank_mary"
-          },
-          {
-            label:"Eleanor and Bill",
-            value:"eleanor_bill"
-          },
-          {
-            label:"Bob and Louise",
-            value: "bob_louise"
-          }
-        ],
-        "Other Folk": [
-          {
-            label:"Robert C",
-            value: "robert_c"
-          },
-          {
-            label:"John",
-            value:"john"
-          },
-          {
-            label:"Brian",
-            value:"brian"
-          },
-          {
-            label:"Ellen",
-            value:"ellen"
-          },
-          {
-            label:"Paul",
-            value:"paul"
-          },
-          {
-            label:"Robert D",
-            value:"robert_d"
-          },
-          {
-            label:"Jane",
-            value:"jane"
-          },
-          {
-            label:"Susan",
-            value:"susan"
-          },
-          {
-            label:"Janet",
-            value:"janet"
-          }
-        ]
+        "Favorites": ["louise", "bob", "best"],
+        "Couples": ["frank_mary", "eleanor_bill", "bob_louise"],
+        "Other Folk": ["robert_c", "john", "brian", "ellen", "paul", "robert_d", "jane", "susan", "janet"]
       },
       selectedTags: {
         "Favorites": [],
@@ -142,35 +79,45 @@ export default {
     },
   },
 
-  beforeUpdate() {
-    var { search, type } = this.$route.query
-    if (search) {
-      this.searchType = type | 0
-      for (let group in this.selectedTags) {
-        search.split('-').forEach(tag => {
-          let index = -1;
-          if (group === "All")
-            index = this.tags.indexOf(tag);
-          else {
-            for (let i = 0; i < this.initial_tags[group].length; i ++) {
-              if (this.initial_tags[group][i].value === tag) {
-                index = i;
+  watch: {
+    '$route.query': {
+      immediate: true,
+      handler (query) {
+        const { search, type } = query || {};
+        const searchTags = (search || '').split('-')
+
+        if (search) {
+          this.searchType = type | 0
+          for (let group in this.selectedTags) {
+            console.log('ja', group, this.selectedTags[group]);
+            searchTags.forEach(tag => {
+              const index = group === "All"
+                  ? this.tags.indexOf(tag)
+                  : this.initial_tags[group].indexOf(tag);
+
+              if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
+                this.selectedTags[group].push(index)
               }
-            }
+            })
           }
-          if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
-            this.selectedTags[group].push(index)
+        } else {
+          for (let group in this.selectedTags) {
+            this.selectedTags[group] = [];
           }
-        })
+        }
       }
-    } else {
-      for (let group in this.selectedTags) {
-        this.selectedTags[group] = [];
-      }
-    }
+    },
   },
 
   methods: {
+    capitalizeTag (tag) {
+      const capitalized = tag.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, key => key.toUpperCase());
+
+      if (!this.initial_tags.Couples.includes(tag)) return capitalized;
+
+      const [first, second] = capitalized.split(' ')
+      return `${first} and ${second}`;
+    },
     async onSelectTags(tag_group) {
       console.log(this.selectedTags[tag_group])
       this.$store.commit('set_browse_loading', true);
@@ -198,26 +145,16 @@ export default {
       this.$store.commit('set_browse_loading', false);
     },
     generateSearchTag(tag_group) {
-      let searchtag;
+      const groupTags = this.selectedTags[tag_group];
+      const searchTagsArray = groupTags.map(index => this.initial_tags[tag_group][index])
 
-      if (tag_group === "All") {
-        searchtag = this.tags[this.selectedTags['All'][0]]
-        for (var i = 1; i < this.selectedTags['All'].length; i++) {
-          searchtag += '-' + this.tags[this.selectedTags['All'][i]]
-        }
-      } else {
-        searchtag = this.initial_tags[tag_group][this.selectedTags[tag_group][0]].value
-        for (var i = 1; i < this.selectedTags[tag_group].length; i++) {
-          searchtag += '-' + this.initial_tags[tag_group][this.selectedTags[tag_group][i]].value
-        }
-      }
       for (let group in this.selectedTags) {
         if (group !== tag_group) {
           this.selectedTags[group] = [];
-
         }
       }
-      return searchtag;
+
+      return searchTagsArray.join('-');
     },
     onHideNav() {
       this.$store.commit('set_tag_nav', false);
