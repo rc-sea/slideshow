@@ -4,22 +4,22 @@
       absolute
       color="#fcb69f"
       dark
+      scroll-target="#scrolling-techniques-2"
       shrink-on-scroll
       src="https://picsum.photos/1920/1080?random"
-      scroll-target="#scrolling-techniques-2"
     >
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
           gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
-        ></v-img>
+        />
       </template>
 
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon />
 
       <v-toolbar-title>Remembering Louise</v-toolbar-title>
 
-      <v-spacer></v-spacer>
+      <v-spacer />
 
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
@@ -38,7 +38,7 @@
       class="overflow-y-auto"
       max-height="600"
     >
-      <v-container style="height: 1000px;"></v-container>
+      <v-container style="height: 1000px;" />
     </v-sheet>
   </v-card>
 </template>
@@ -48,11 +48,11 @@ export default {
   head () {
     return {
       link: [
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto&display=swap' }
-      ]
-    }
-  }
-}
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto&display=swap' },
+      ],
+    };
+  },
+};
 </script>
 
 <style scoped>

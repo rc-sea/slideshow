@@ -1,16 +1,16 @@
 <template>
   <v-list v-if="user">
-    <v-list-item >
+    <v-list-item>
       <v-textarea
         v-model="text"
         label="Comment"
-        outlined
         no-resize
+        outlined
         row-height="15"
-      ></v-textarea>
+      />
     </v-list-item>
     <v-list-item>
-      <v-btn color="primary" class="col-12" @click="onComment">Comment</v-btn>
+      <v-btn class="col-12" color="primary" @click="onComment">Comment</v-btn>
     </v-list-item>
   </v-list>
 </template>
@@ -18,38 +18,42 @@
 <script>
 import { mapState } from 'vuex';
 import axios from 'axios';
-const baseUrl = process.env.BASE_URL;
+
+// const baseUrl = process.env.BASE_URL;
 
 export default {
-  data() {
+  props: {
+    title: String,
+  },
+  data () {
     return {
-      text: ''
-    }
+      text: '',
+    };
   },
   computed: {
     ...mapState({
       topic_id: state => state.comments.topic_id,
-      user: state => state.user.user
-    })
+      user: state => state.user.user,
+    }),
   },
-  props: ['title'],
   methods: {
-    async onComment() {
+    async onComment () {
       try {
         if (this.text.length) {
-          const { data } = await axios.post(`/api/comment`, {
+          const { data } = await axios.post('/api/comment', {
             text: this.text,
             user: this.user.username,
             title: this.title,
-            topic_id: this.topic_id
+            topic_id: this.topic_id,
           });
+
           await this.$store.dispatch('comments/getComments', { topic_id: data.topic_id });
           this.text = '';
         }
-      } catch(error) {
+      } catch (error) {
         console.log(error);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

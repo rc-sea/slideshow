@@ -1,12 +1,15 @@
 <template>
-    <iframe name="iframe" id="iframe" :src="url"></iframe>
+  <iframe id="iframe" name="iframe" :src="url" />
 </template>
 
 <script>
 export default {
-  props: ['url']
-}
+  props: {
+    url: String,
+  },
+};
 </script>
+
 <style lang="scss" scoped>
 #iframe {
   width: 100%;

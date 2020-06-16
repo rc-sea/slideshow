@@ -2,18 +2,18 @@
   <v-app dark>
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
+      app
       clipped
       fixed
-      app
+      :mini-variant="miniVariant"
     >
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
-          :to="item.to"
-          router
           exact
+          router
+          :to="item.to"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -28,19 +28,19 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      :hide-on-scroll="true"
-      fixed
       app
-      color="indigo"
       clipped-left
       clipped-right
+      color="indigo"
+      fixed
+      :hide-on-scroll="true"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <div class="hidden-sm-and-down">
-        <v-toolbar-title v-text="title" class="new-headline"/>
+        <v-toolbar-title class="new-headline" v-text="title" />
       </div>
       <div class="hidden-md-and-up">
-        <v-toolbar-title v-text="title" class="md-headline"/>
+        <v-toolbar-title class="md-headline" v-text="title" />
       </div>
       <v-spacer />
       <div class="hidden-sm-and-down">
@@ -51,16 +51,16 @@
       <v-spacer />
       <v-card-actions>
         <div class="hidden-md-and-down">
-        <nuxt-link to="/service">
-        <v-btn text>Funeral Service</v-btn></nuxt-link>
-        <nuxt-link to="/remembrances">
-        <v-btn text>Remembrances</v-btn></nuxt-link>
+          <nuxt-link to="/service">
+            <v-btn text>Funeral Service</v-btn></nuxt-link>
+          <nuxt-link to="/remembrances">
+            <v-btn text>Remembrances</v-btn></nuxt-link>
         </div>
-        <v-menu offset-y v-if="user && $auth.user">
+        <v-menu v-if="user && $auth.user" offset-y>
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text fab>
+            <v-btn fab text v-on="on">
               <v-avatar :size="35">
-                <v-img :src="$auth.user.picture" alt="$auth.user.name"></v-img>
+                <v-img alt="$auth.user.name" :src="$auth.user.picture" />
               </v-avatar>
             </v-btn>
           </template>
@@ -73,40 +73,40 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <v-btn v-else @click="login" text>Log in</v-btn>
+        <v-btn v-else text @click="login">Log in</v-btn>
       </v-card-actions>
     </v-app-bar>
     <v-content>
       <nuxt />
       <v-navigation-drawer
         v-if="hasSearchDrawer"
-        right
         app
         clipped
         fixed
-        :width="tagNavWidth"
         :mobile-break-point="0"
+        right
+        :width="tagNavWidth"
       >
         <search-drawer />
       </v-navigation-drawer>
     </v-content>
-  <v-footer
-    app
-    color="indigo darken-2"
-  >
-    <v-card color="indigo darken-2"
-      class="flex"
+    <v-footer
+      app
+      color="indigo darken-2"
     >
-      <v-card-title class="py-2 white--text text-center">
-        {{ new Date().getFullYear() }} — Eclectic Company
-      </v-card-title>
-      <v-card-text><nuxt-link to="/privacy">
-      <v-btn text>Privacy Policy</v-btn></nuxt-link>
-      <nuxt-link to="/terms">
-       <v-btn text>Terms of use</v-btn></nuxt-link>
-      </v-card-text>
-    </v-card>
-  </v-footer>
+      <v-card class="flex"
+              color="indigo darken-2"
+      >
+        <v-card-title class="py-2 white--text text-center">
+          {{ new Date().getFullYear() }} — Eclectic Company
+        </v-card-title>
+        <v-card-text><nuxt-link to="/privacy">
+                       <v-btn text>Privacy Policy</v-btn></nuxt-link>
+          <nuxt-link to="/terms">
+            <v-btn text>Terms of use</v-btn></nuxt-link>
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 
@@ -119,6 +119,36 @@ export default {
     SearchDrawer,
   },
 
+  data () {
+    return {
+      drawer: false,
+      items: [
+        {
+          icon: 'mdi-apps',
+          title: 'Home',
+          to: '/',
+        },
+        {
+          icon: 'mdi-camera',
+          title: 'View Photos',
+          to: '/photo-browse',
+        },
+        {
+          icon: 'mdi-comment-text',
+          title: 'Remembrances',
+          to: '/remembrances',
+        },
+        {
+          icon: 'mdi-camera',
+          title: 'Funeral Service',
+          to: '/service',
+        },
+      ],
+      miniVariant: false,
+      title: 'Remembering Louise',
+    };
+  },
+
   computed: {
     ...mapState({
       user: state => state.user.user,
@@ -129,72 +159,43 @@ export default {
       tag_nav: state => state.tag_nav,
       detailsPage_url: state => state.detailsPage_url,
     }),
-    hasSearchDrawer: function() {
-      return this.$route.name === "photo-browse" && this.tag_nav;
+    hasSearchDrawer: function () {
+      return this.$route.name === 'photo-browse' && this.tag_nav;
     },
     tagNavWidth: function () {
       return this.$vuetify.breakpoint.smAndDown ? 300 : 360;
     },
   },
-  head () {
-    return {
-      link: [
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' }
-      ]
+  async mounted () {
+    if (this.$auth && this.$auth.user && !this.user) {
+      await this.$store.commit('user/SET_USER', JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
     }
+    await this.$store.dispatch('tags/gettags');
   },
   methods: {
-    onLogout() {
+    onLogout () {
       this.$auth.logout();
-      this.$store.commit("user/SET_USER", null);
+      this.$store.commit('user/SET_USER', null);
     },
-    login() {
+    login () {
       window.localStorage.setItem('redirect_url', this.$route.fullPath);
       window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
       window.localStorage.setItem('state', JSON.stringify({
         search_tag: this.search_tag,
         search_type: this.search_type,
-        detailsPage_url: this.detailsPage_url
+        detailsPage_url: this.detailsPage_url,
       }));
       this.$auth.loginWith('auth0');
     },
   },
-  async mounted() {
-    if (this.$auth && this.$auth.user && !this.user) {
-      await this.$store.commit("user/SET_USER", JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
-    }
-    await this.$store.dispatch('tags/gettags')
-  },
-  data () {
+  head () {
     return {
-      drawer: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Home',
-          to: '/'
-        },
-        {
-          icon: 'mdi-camera',
-          title: 'View Photos',
-          to: '/photo-browse'
-        },
-        {
-          icon: 'mdi-comment-text',
-          title: 'Remembrances',
-          to: '/remembrances'
-        },
-        {
-          icon: 'mdi-camera',
-          title: 'Funeral Service',
-          to: '/service'
-        }
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' },
       ],
-      miniVariant: false,
-      title: 'Remembering Louise',
-    }
-  }
-}
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,18 +1,19 @@
 <template>
   <client-only>
     <vue-flux
-    :options="vfOptions"
-    :images="vfImages"
-    :transitions="vfTransitions"
-    ref="slider">
+      ref="slider"
+      :images="vfImages"
+      :options="vfOptions"
+      :transitions="vfTransitions"
+    >
 
-    <template v-slot:preloader>
+      <template v-slot:preloader>
         <flux-preloader />
-    </template>
+      </template>
 
-    <template v-slot:controls>
+      <template v-slot:controls>
         <flux-controls />
-    </template>
+      </template>
 
     <!-- <template v-slot:pagination>
         <flux-pagination />
@@ -27,16 +28,16 @@
 
 <script>
 import {
-   VueFlux,
-   FluxCaption,
-   FluxControls,
-   FluxIndex,
-   FluxPagination,
-   FluxPreloader,
+  VueFlux,
+  // FluxCaption,
+  FluxControls,
+  // FluxIndex,
+  // FluxPagination,
+  FluxPreloader,
   //  Transitions
 } from 'vue-flux/dist-ssr/vue-flux.umd.min.js';
 import 'vue-flux/dist-ssr/vue-flux.css';
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 // let VueFlux, FluxCaption, FluxControls, FluxIndex, FluxPagination, FluxPreloader;
 
 // if (process.browser) {
@@ -50,36 +51,37 @@ import { mapState } from 'vuex'
 // }
 
 export default {
-   components: {
-      VueFlux,
-      FluxControls,
-      FluxIndex,
-      FluxPagination,
-      FluxPreloader,
-   },
+  components: {
+    VueFlux,
+    FluxControls,
+    // FluxIndex,
+    // FluxPagination,
+    FluxPreloader,
+  },
 
-   data: () => ({
-      vfOptions: {
-         autoplay: true,
-         allowFullscreen: true,
-         aspectRatio: '16:12'
-      },
-      // vfImages: [],
-      // vfTransitions: Transitions,
-      // vfCaptions: [],
-      vfTransitions: ['kenburn']
-   }),
-   computed: {
-      ...mapState({
+  data: () => ({
+    vfOptions: {
+      autoplay: true,
+      allowFullscreen: true,
+      aspectRatio: '16:12',
+    },
+    // vfImages: [],
+    // vfTransitions: Transitions,
+    // vfCaptions: [],
+    vfTransitions: ['kenburn'],
+  }),
+  computed: {
+    ...mapState({
       resources: state => state.resources.resources,
     }),
-    vfImages: function() {
+    vfImages: function () {
       var images = [];
+
       this.resources.forEach(resource => {
         images.push(`http://res.cloudinary.com/louise/image/upload/w_1600,h_1200,c_pad,b_black/${resource.public_id}.jpg`);
       });
-      return images
-    }
-   }
-}
+      return images;
+    },
+  },
+};
 </script>

@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-container fluid >
-      <v-row justify="center" class="loading-row" align="center">
-        <v-progress-circular :size="200" :width="20" color="gray" indeterminate></v-progress-circular>
+    <v-container fluid>
+      <v-row align="center" class="loading-row" justify="center">
+        <v-progress-circular color="gray" indeterminate :size="200" :width="20" />
       </v-row>
     </v-container>
   </v-container>
