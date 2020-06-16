@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="mx-auto" max-width="1500" id="browse-card">
-      <v-speed-dial v-model="fab" top right direction="bottom" transition="slide-y-reverse-transition" open-on-hover>
+      <v-speed-dial v-model="fab" v-bind="speedDialProps" right transition="slide-y-reverse-transition">
         <template v-slot:activator>
           <v-btn v-model="fab" color="orange darken-3" dark fab x-large>
             <v-icon v-if="fab">mdi-close</v-icon>
@@ -41,10 +41,12 @@
           </v-col>
         </v-row>
         <v-row justify="center" dense>
-          <v-btn large @click="loadmore" color="orange">
-            <v-progress-circular v-if="moreloading" :size="20" :width="2" color="gray" indeterminate></v-progress-circular>
-            <span v-else>Load More</span>
-          </v-btn>
+          <div class="text-center my-12" v-intersect="loadmore">
+            <template v-if="moreloading">
+              Loading more...
+              <v-progress-circular indeterminate />
+            </template>
+          </div>
         </v-row>
       </v-container>
     </v-card>
@@ -82,6 +84,18 @@ export default {
       tag_nav: state => state.tag_nav,
       loading: state => state.browse_loading
     }),
+    speedDialProps () {
+      const mobile = this.$vuetify.breakpoint.smAndDown;
+
+      return {
+        top: !mobile,
+        bottom: mobile,
+        direction: mobile ? "top" : "bottom",
+        openOnHover: !mobile,
+        fixed: mobile,
+        absolute: !mobile,
+      };
+    },
   },
   methods: {
     async init() {
@@ -101,11 +115,11 @@ export default {
       } else {
         this.setloading(false)
       }
-      this.$store.commit('set_details_state', { 
+      this.$store.commit('set_details_state', {
         detailsPage_url: this.$route.fullPath,
         search_tag: search,
         search_type: type
-      });  
+      });
     },
     onTagNav() {
       this.$store.commit('set_tag_nav', true);
@@ -150,9 +164,6 @@ export default {
 }
 
 #browse-card {
-  .v-speed-dial {
-    position: absolute;
-  }
   .v-btn--floating {
     position: relative;
   }
