@@ -1,7 +1,7 @@
 <template>
   <img
-    class="VuetifyLogo"
     alt="Vuetify Logo"
+    class="VuetifyLogo"
     src="/vuetify-logo.svg"
   >
 </template>

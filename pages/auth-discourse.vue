@@ -1,35 +1,36 @@
 <template>
   <v-container>
-    <v-container fluid >
-      <v-row justify="center" class="loading-row" align="center">
-        <v-progress-circular :size="200" :width="20" color="gray" indeterminate></v-progress-circular>
+    <v-container fluid>
+      <v-row align="center" class="loading-row" justify="center">
+        <v-progress-circular color="gray" indeterminate :size="200" :width="20" />
       </v-row>
     </v-container>
   </v-container>
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapState } from 'vuex';
+
 export default {
   computed: {
     ...mapState({
-      user: state => state.user.user
-    })
+      user: state => state.user.user,
+    }),
   },
-  async mounted() {
+  async mounted () {
     console.log(this.$auth.user);
     await this.$store.dispatch('user/set_user', { user: this.$auth.user });
     this.$store.commit('set_just_login', true);
     console.log(this.user);
-    if(process.browser){
+    if (process.browser) {
       this.$router.replace({
-        path: window.localStorage.getItem('redirect_url')
+        path: window.localStorage.getItem('redirect_url'),
       });
     }
-  }
-}
+  },
+};
 </script>
+
 <style lang="scss" scoped>
 .loading-row {
   height: 700px;

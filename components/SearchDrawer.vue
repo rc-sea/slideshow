@@ -3,22 +3,22 @@
     <div class="ma-2">
       <v-row align="center" dense>
         <v-col>
-          <v-text-field v-model="tagFilter" autofocus hide-details solo-inverted label="Filter tags" autocomplete="off" />
+          <v-text-field v-model="tagFilter" autocomplete="off" autofocus hide-details label="Filter tags" solo-inverted />
         </v-col>
         <v-col cols="auto">
-          <v-btn icon @click="onHideNav" outlined><v-icon small>mdi-chevron-double-right</v-icon></v-btn>
+          <v-btn icon outlined @click="onHideNav"><v-icon small>mdi-chevron-double-right</v-icon></v-btn>
         </v-col>
       </v-row>
     </div>
 
     <v-divider class="my-2" />
 
-    <v-row dense align="center" class="mx-2">
-      <v-col cols="auto" class="overline">Match:</v-col>
+    <v-row align="center" class="mx-2" dense>
+      <v-col class="overline" cols="auto">Match:</v-col>
       <v-col>
-        <v-btn-toggle :value="searchType" class="mx-0 px-0" @change="changeSearchType" color="success">
-          <v-btn :value="0" small>any tags</v-btn>
-          <v-btn :value="1" small>all tags</v-btn>
+        <v-btn-toggle class="mx-0 px-0" color="success" :value="searchType" @change="changeSearchType">
+          <v-btn small :value="0">any tags</v-btn>
+          <v-btn small :value="1">all tags</v-btn>
         </v-btn-toggle>
       </v-col>
     </v-row>
@@ -29,8 +29,8 @@
           {{ tag_type }}
           <span v-if="selectedTags[tag_type].length" style="text-transform: none">&nbsp;({{ selectedTags[tag_type].length }}/{{ allTags[tag_type].length }} selected)</span>
         </v-subheader>
-        <v-chip-group  v-model="selectedTags[tag_type]" active-class="success--text text--lighten-2" multiple class="mx-4" column>
-          <v-chip v-for="tag in filteredTags[tag_type]" filter :key="tag">{{ capitalizeTag(tag) }} </v-chip>
+        <v-chip-group v-model="selectedTags[tag_type]" active-class="success--text text--lighten-2" class="mx-4" column multiple>
+          <v-chip v-for="tag in filteredTags[tag_type]" :key="tag" filter>{{ capitalizeTag(tag) }} </v-chip>
         </v-chip-group>
       </div>
     </template>
@@ -39,21 +39,22 @@
 
 <script>
 import { mapState } from 'vuex';
+
 export default {
   data () {
     return {
       tagFilter: '',
       initial_tags: {
-        "Favorites": ["louise", "bob", "best"],
-        "Couples": ["frank_mary", "eleanor_bill", "bob_louise"],
-        "Other Folk": ["robert_c", "john", "brian", "ellen", "paul", "robert_d", "jane", "susan", "janet"]
+        Favorites: ['louise', 'bob', 'best'],
+        Couples: ['frank_mary', 'eleanor_bill', 'bob_louise'],
+        'Other Folk': ['robert_c', 'john', 'brian', 'ellen', 'paul', 'robert_d', 'jane', 'susan', 'janet'],
       },
       selectedTags: {
-        "Favorites": [],
-        "Couples": [],
-        "Other Folk": [],
-        "All": []
-      }
+        Favorites: [],
+        Couples: [],
+        'Other Folk': [],
+        All: [],
+      },
     };
   },
 
@@ -70,9 +71,9 @@ export default {
         }),
       };
     },
-    filteredTags: function() {
+    filteredTags: function () {
       return Object.keys(this.allTags).reduce((filtered, group) => {
-        return Object.assign(filtered, { [group]: this.filterTags(this.allTags[group]) })
+        return Object.assign(filtered, { [group]: this.filterTags(this.allTags[group]) });
       }, {});
     },
     searchType () {
@@ -80,7 +81,7 @@ export default {
     },
     search () {
       return this.$route.query.search || '';
-    }
+    },
   },
 
   watch: {
@@ -88,39 +89,40 @@ export default {
       immediate: true,
       deep: true,
       async handler (query) {
-        const searchTags = this.search.split('-')
+        const searchTags = this.search.split('-');
 
         if (this.search) {
-          for (let group in this.selectedTags) {
+          for (const group in this.selectedTags) {
             searchTags.forEach(tag => {
               const index = this.allTags[group].indexOf(tag);
 
               if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
-                this.selectedTags[group].push(index)
+                this.selectedTags[group].push(index);
               }
-            })
+            });
           }
         } else {
-          for (let group in this.selectedTags) {
+          for (const group in this.selectedTags) {
             this.selectedTags[group] = [];
           }
         }
 
         await this.fetchPhotos();
-      }
+      },
     },
     selectedTags: {
       deep: true,
       handler () {
         const searchtag = this.generateSearchTag();
+
         this.$store.commit('set_details_state', {
           detailsPage_url: `/photo-browse?search=${searchtag}&type=${this.searchType}`,
           search_tag: searchtag,
-          search_type: this.searchType
+          search_type: this.searchType,
         });
         this.$router.push({
-          path: `/photo-browse?search=${searchtag}&type=${this.searchType}`
-        })
+          path: `/photo-browse?search=${searchtag}&type=${this.searchType}`,
+        });
       },
     },
   },
@@ -131,7 +133,8 @@ export default {
 
       if (!this.initial_tags.Couples.includes(tag)) return capitalized;
 
-      const [first, second] = capitalized.split(' ')
+      const [first, second] = capitalized.split(' ');
+
       return `${first} and ${second}`;
     },
     filterTags (tags) {
@@ -141,26 +144,26 @@ export default {
     },
     changeSearchType () {
       this.$router.push({
-        path: `/photo-browse?search=${this.search}&type=${1 - this.searchType}`
-      })
+        path: `/photo-browse?search=${this.search}&type=${1 - this.searchType}`,
+      });
     },
     async fetchPhotos () {
       this.$store.commit('set_browse_loading', true);
 
       try {
         if (this.search) {
-          await this.$store.dispatch('resources/search', { searchtag: this.search, type: this.searchType })
+          await this.$store.dispatch('resources/search', { searchtag: this.search, type: this.searchType });
         } else {
-          await this.$store.dispatch('resources/getresources')
+          await this.$store.dispatch('resources/getresources');
         }
       } finally {
         this.$store.commit('set_browse_loading', false);
       }
     },
-    generateSearchTag() {
+    generateSearchTag () {
       const searchTagsArray = [];
 
-      for (let group in this.selectedTags) {
+      for (const group in this.selectedTags) {
         const selectedIndices = this.selectedTags[group];
         const groupTags = this.allTags[group];
 
@@ -169,9 +172,9 @@ export default {
 
       return searchTagsArray.join('-');
     },
-    onHideNav() {
+    onHideNav () {
       this.$store.commit('set_tag_nav', false);
     },
   },
-}
+};
 </script>
