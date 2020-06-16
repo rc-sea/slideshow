@@ -77,13 +77,23 @@
       </v-card-actions>
     </v-app-bar>
     <v-content>
-      <div class="content-navigation-wrapper">
-        <nuxt />
+      <nuxt />
+      <v-navigation-drawer
+        v-if="hasSearchDrawer"
+        right
+        app
+        clipped
+        fixed
+        :width="tagNavWidth"
+        :mobile-break-point="0"
+      >
         <search-drawer />
-      </div>
+      </v-navigation-drawer>
     </v-content>
   <v-footer
-    color="indigo darken-2">
+    app
+    color="indigo darken-2"
+  >
     <v-card color="indigo darken-2"
       class="flex"
     >
@@ -116,8 +126,15 @@ export default {
       resources_wrap: state => state.resources,
       search_tag: state => state.search_tag,
       search_type: state => state.search_type,
+      tag_nav: state => state.tag_nav,
       detailsPage_url: state => state.detailsPage_url,
     }),
+    hasSearchDrawer: function() {
+      return this.$route.name === "photo-browse" && this.tag_nav;
+    },
+    tagNavWidth: function () {
+      return this.$vuetify.breakpoint.smAndDown ? 300 : 360;
+    },
   },
   head () {
     return {
@@ -188,13 +205,6 @@ export default {
 .md-headline  {
   font-family: 'Pinyon Script', cursive;
   font-size:30px;
-}
-.content-navigation-wrapper {
-  display: flex;
-  height: 100%;
-  .navigation-wrapper {
-    padding: 0 13px;
-  }
 }
 a {
   text-decoration: none;
