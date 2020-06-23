@@ -17,7 +17,7 @@
       <v-col class="overline" cols="auto">Match:</v-col>
       <v-col>
         <v-btn-toggle class="mx-0 px-0" color="success" :value="searchType" @change="changeSearchType">
-          <v-btn small :value="0">any tags</v-btn>
+          <v-btn small :value="0">any tag</v-btn>
           <v-btn small :value="1">all tags</v-btn>
         </v-btn-toggle>
       </v-col>

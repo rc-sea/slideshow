@@ -1,5 +1,42 @@
 <template>
-  <v-container>
+  <div>
+    <v-app-bar
+      color="blue-grey darken-4"
+    >
+      <v-btn
+        color="orange lighten-1"
+        rounded
+        @click="onBack">
+        <v-icon>mdi-arrow-left</v-icon>
+        Back
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="orange"
+        rounded
+        text
+      >
+        <v-icon >mdi-tag-plus-outline</v-icon>
+        <span class="mr-2">Add tag</span>
+      </v-btn>
+    <v-spacer></v-spacer>
+    <v-btn
+      color="green lighten-1"
+      rounded
+    >
+      <v-badge bordered color="red" :content="comments.length" overlap :value="comments.length" @click.prevent="$vuetify.goTo('#comment_show')">
+        <v-icon large>mdi-comment-multiple-outline</v-icon>
+      </v-badge>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="orange lighten-1 pa-2"
+        rounded
+      >
+        <v-icon>mdi-share-variant</v-icon>
+    </v-btn>
+
+    </v-app-bar>
     <v-container class="mb-2" fluid max-width="1200">
       <v-card
         class="mx-auto"
@@ -22,11 +59,6 @@
               </v-btn>
               <v-btn class="next-btn prev-next-btn" @click="onNext">
                 <v-icon x-large>mdi-chevron-right </v-icon>
-              </v-btn>
-              <v-btn absolute icon right top @click="onCommentIcon">
-                <v-badge bordered color="green" :content="comments.length" overlap :value="comments.length" @click.prevent="$vuetify.goTo('#comment_show')">
-                  <v-icon x-large>mdi-comment-text-outline</v-icon>
-                </v-badge>
               </v-btn>
             </cld-image>
             <v-card-actions>
@@ -70,7 +102,6 @@
                   </v-menu>
                   <v-btn v-if="editor_role" color="primary" @click="dialog = true">Add Tags</v-btn>
                   <v-spacer />
-                  <v-btn color="orange darken-2" @click="onBack">Return to Browse</v-btn>
                 </v-col>
               </v-row>
             </v-card-actions>
@@ -93,7 +124,7 @@
         </v-card>
       </v-dialog>
     </v-container>
-  </v-container>
+  </div>
 </template>
 
 <script>

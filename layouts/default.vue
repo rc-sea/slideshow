@@ -43,9 +43,14 @@
         <v-toolbar-title class="md-headline" v-text="title" />
       </div>
       <v-spacer />
-      <div class="hidden-sm-and-down">
-        <v-btn color="purple lighten-4">
-          <nuxt-link to="/photo-browse">View Photos</nuxt-link>
+      <div>
+        <v-btn
+          color="purple lighten-4"
+          rounded>
+          <nuxt-link to="/photo-browse">
+            <v-icon large>mdi-image-search</v-icon>
+            <span class="hidden-sm-and-down">View Photos</span>
+          </nuxt-link>
         </v-btn>
       </div>
       <v-spacer />
@@ -66,18 +71,24 @@
           </template>
           <v-list>
             <v-list-item v-if="user && editor_role" to="photo-upload">
-              <v-list-item-title>Photo Upload</v-list-item-title>
+              <v-icon class="pr-3" large>mdi-image-plus</v-icon>
+              <v-list-item-title>Upload photos</v-list-item-title>
             </v-list-item>
             <v-list-item @click="onLogout">
+               <v-icon class="pr-3" large>mdi-account-circle-outline</v-icon>
               <v-list-item-title>Log Out</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
-        <v-btn v-else text @click="login">Log in</v-btn>
+        <v-btn v-else color="green lighten-4"
+          rounded text @click="login">
+          <v-icon large>mdi-account-circle-outline</v-icon>
+          <span class="hidden-sm-and-down">Log in</span>
+        </v-btn>
       </v-card-actions>
     </v-app-bar>
     <v-content>
-      <nuxt />
+    <nuxt />
       <v-navigation-drawer
         v-if="hasSearchDrawer"
         app
@@ -91,22 +102,36 @@
       </v-navigation-drawer>
     </v-content>
     <v-footer
-      app
-      color="indigo darken-2"
+      dark
+      padless
     >
-      <v-card class="flex"
-              color="indigo darken-2"
-      >
-        <v-card-title class="py-2 white--text text-center">
-          {{ new Date().getFullYear() }} — Eclectic Company
-        </v-card-title>
-        <v-card-text><nuxt-link to="/privacy">
-                       <v-btn text>Privacy Policy</v-btn></nuxt-link>
-          <nuxt-link to="/terms">
-            <v-btn text>Terms of use</v-btn></nuxt-link>
-        </v-card-text>
-      </v-card>
-    </v-footer>
+    <v-card
+      class="indigo lighten-1 white--text text-center"
+      flat
+      tile
+    >
+      <v-card-text>
+        <v-btn
+          v-for="footericon in footericons"
+          :key="footericon"
+          class="mx-4 white--text"
+          icon
+        >
+          <v-icon size="24px">{{ icon }}</v-icon>
+        </v-btn>
+      </v-card-text>
+
+      <v-card-text class="white--text pt-0">
+        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-text class="white--text">
+        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+      </v-card-text>
+    </v-card>
+  </v-footer>
   </v-app>
 </template>
 
@@ -143,6 +168,12 @@ export default {
           title: 'Funeral Service',
           to: '/service',
         },
+      ],
+      footericons: [
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram',
       ],
       miniVariant: false,
       title: 'Remembering Louise',

@@ -1,6 +1,32 @@
 <template>
+  <div>
+    <v-app-bar
+    color="blue-grey darken-4"
+    >
+    <v-spacer></v-spacer>
+    <span class="mr-2">Tags</span>
+    <v-spacer></v-spacer>
+    <v-btn
+      color="green lighten-1"
+      rounded>
+    <v-spacer></v-spacer>
+      <v-badge
+        color="red"
+        content="6"
+      >
+        <v-icon>mdi-comment-multiple-outline</v-icon>
+        </v-badge>
+    </v-btn>
+    <v-spacer></v-spacer>
+    <v-btn
+      color="orange lighten-1 pa-2"
+      rounded>
+        <v-icon>mdi-share-variant</v-icon>
+    </v-btn>
+
+  </v-app-bar>
   <v-container>
-    <v-card id="browse-card" class="mx-auto" max-width="1500">
+    <v-card id="browse-card" class="mx-auto">
       <v-speed-dial v-model="fab" v-bind="speedDialProps" right transition="slide-y-reverse-transition">
         <template v-slot:activator>
           <v-btn v-model="fab" color="orange darken-3" dark fab x-large>
@@ -51,6 +77,7 @@
       </v-container>
     </v-card>
   </v-container>
+  </div>
 </template>
 
 <script>
