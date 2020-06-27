@@ -25,6 +25,22 @@
         Browse by People and Tags
       </v-tooltip>
 
+      <v-tooltip v-if="user && editor_role" bottom>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            v-bind="{ ...toolbarBtnAttrs, ...attrs }"
+            color="green"
+            :disabled="uploading !== false"
+            :loading="uploading == null"
+            v-on="on"
+            @click="upload"
+          >
+            <v-icon>mdi-image-plus</v-icon>
+          </v-btn>
+        </template>
+        Upload photos
+      </v-tooltip>
+
       <v-spacer />
 
       <toolbar-share-button />
@@ -81,10 +97,13 @@ export default {
     return {
       moreloading: false,
       fab: false,
+      uploading: false, // false - no upload, true - dialog opened, null - dialog opening
     };
   },
   computed: {
     ...mapState({
+      user: state => state.user.user,
+      editor_role: state => state.user.editor_role,
       tags: state => state.tags.tags,
       resources: state => state.resources.resources,
       total_count: state => state.resources.total_count,
@@ -109,7 +128,7 @@ export default {
         icon: this.$vuetify.breakpoint.xsOnly,
         outlined: this.$vuetify.breakpoint.xsOnly,
         rounded: this.$vuetify.breakpoint.smAndUp,
-        class: 'mx-2 mx-sm-6',
+        class: 'mx-1 mx-sm-3',
       };
     },
   },
@@ -121,6 +140,63 @@ export default {
     }
   },
   methods: {
+    upload () {
+      const uploadSettings = {
+        cloudName: 'louise',
+        uploadPreset: 'pob2zoec',
+        sources: [
+          'local',
+          'camera',
+          'facebook',
+          'dropbox',
+          'instagram',
+          'google_drive',
+        ],
+        // googleApiKey: '<image_search_google_api_key>',
+        showAdvancedOptions: true,
+        defaultSource: 'local',
+        cropping: false,
+        multiple: true,
+        styles: {
+          palette: {
+            window: '#10173a',
+            sourceBg: '#20304b',
+            windowBorder: '#7171D0',
+            tabIcon: '#79F7FF',
+            inactiveTabIcon: '#8E9FBF',
+            menuIcons: '#CCE8FF',
+            link: '#72F1FF',
+            action: '#5333FF',
+            inProgress: '#00ffcc',
+            complete: '#33ff00',
+            error: '#cc3333',
+            textDark: '#000000',
+            textLight: '#ffffff',
+          },
+          fonts: {
+            default: null,
+            'sans-serif': {
+              url: null,
+              active: true,
+            },
+          },
+        },
+      };
+
+      if (this.uploading !== false) return;
+      this.uploading = null; // loading dialog
+
+      cloudinary.openUploadWidget(uploadSettings, (error, result) => {
+        if (error) {
+          console.error(error);
+          alert(`Uploading error: ${error.statusText || error}`);
+        } else if (result.event === 'display-changed' && result.info === 'shown') {
+          this.uploading = true;
+        } else if (result.event === 'close') {
+          this.uploading = false;
+        }
+      });
+    },
     async init () {
       var { search, type } = this.$route.query;
 

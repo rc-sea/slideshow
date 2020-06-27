@@ -12,6 +12,9 @@ module.exports = {
     'eslint:recommended',
     'plugin:vue/recommended',
   ],
+  globals: {
+    cloudinary: 'readonly',
+  },
   // required to lint *.vue files
   plugins: ['vue', 'vuetify'],
   // add your custom rules here

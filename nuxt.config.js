@@ -26,6 +26,9 @@ module.exports = {
           'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap',
       },
     ],
+    script: [
+      { src: 'https://widget.cloudinary.com/v2.0/global/all.js' },
+    ],
   },
   /*
    ** Customize the progress-bar color
