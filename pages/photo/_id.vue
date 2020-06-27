@@ -24,7 +24,7 @@
                 rounded
                 v-on="{ ...on, ...tooltipOn }"
               >
-                <v-badge :content="resource && resource.tags && resource.tags.length" :value="resource && resource.tags && resource.tags.length">
+                <v-badge :content="resource && resource.tags && resource.tags.length" :value="!!(resource && resource.tags && resource.tags.length)">
                   <v-icon>mdi-tag-multiple-outline</v-icon>
                 </v-badge>
               </v-btn>
