@@ -129,13 +129,7 @@ export default {
 
   methods: {
     capitalizeTag (tag) {
-      const capitalized = tag.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, key => key.toUpperCase());
-
-      if (!this.initial_tags.Couples.includes(tag)) return capitalized;
-
-      const [first, second] = capitalized.split(' ');
-
-      return `${first} and ${second}`;
+      return tag.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, key => key.toUpperCase()).replace(/ And /g, ' and ');
     },
     filterTags (tags) {
       const filterLowercased = (this.tagFilter || '').toLowerCase();

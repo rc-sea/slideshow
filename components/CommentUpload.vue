@@ -1,18 +1,29 @@
 <template>
-  <v-list v-if="user">
-    <v-list-item>
-      <v-textarea
-        v-model="text"
-        label="Comment"
-        no-resize
-        outlined
-        row-height="15"
-      />
-    </v-list-item>
-    <v-list-item>
-      <v-btn class="col-12" color="primary" @click="onComment">Comment</v-btn>
-    </v-list-item>
-  </v-list>
+  <div v-if="user">
+    <v-textarea
+      v-model="text"
+      auto-grow
+      autofocus
+      color="success"
+      :hide-details="$vuetify.breakpoint.xsOnly"
+      :hint="$vuetify.breakpoint.xsOnly ? '' : 'Ctrl-Enter saves the comment'"
+      label="Comment"
+      no-resize
+      outlined
+      persistent-hint
+      placeholder="Write a comment"
+      @keydown.ctrl.enter="saveComment"
+    />
+    <v-btn
+      block
+      color="primary"
+      :loading="saving"
+      @click="saveComment"
+    >
+      <v-icon left>mdi-comment-plus-outline</v-icon> Add comment
+    </v-btn>
+  </div>
+  <v-subheader v-else>Login to comment</v-subheader>
 </template>
 
 <script>
@@ -28,6 +39,7 @@ export default {
   data () {
     return {
       text: '',
+      saving: false,
     };
   },
   computed: {
@@ -37,7 +49,8 @@ export default {
     }),
   },
   methods: {
-    async onComment () {
+    async saveComment () {
+      this.saving = true;
       try {
         if (this.text.length) {
           const { data } = await axios.post('/api/comment', {
@@ -50,8 +63,11 @@ export default {
           await this.$store.dispatch('comments/getComments', { topic_id: data.topic_id });
           this.text = '';
         }
+        this.$emit('save');
       } catch (error) {
         console.log(error);
+      } finally {
+        this.saving = false;
       }
     },
   },

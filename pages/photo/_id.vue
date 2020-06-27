@@ -8,35 +8,107 @@
         rounded
         @click="onBack"
       >
-        <v-icon>mdi-arrow-left</v-icon>
+        <v-icon left>mdi-arrow-left</v-icon>
         Back
       </v-btn>
-      <v-spacer />
-      <v-btn
-        color="orange"
-        rounded
-        text
-      >
-        <v-icon>mdi-tag-plus-outline</v-icon>
-        <span class="mr-2">Add tag</span>
-      </v-btn>
-      <v-spacer />
-      <v-btn
-        color="green lighten-1"
-        rounded
-      >
-        <v-badge bordered color="red" :content="comments.length" overlap :value="comments.length" @click.prevent="$vuetify.goTo('#comment_show')">
-          <v-icon large>mdi-comment-multiple-outline</v-icon>
-        </v-badge>
-      </v-btn>
-      <v-spacer />
-      <v-btn
-        color="orange lighten-1 pa-2"
-        rounded
-      >
-        <v-icon>mdi-share-variant</v-icon>
-      </v-btn>
 
+      <v-spacer />
+
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltipOn }">
+          <v-menu :close-on-content-click="false" max-width="400" offset-y>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                color="orange"
+                rounded
+                v-on="{ ...on, ...tooltipOn }"
+              >
+                <v-badge :content="resource && resource.tags && resource.tags.length" :value="resource && resource.tags && resource.tags.length">
+                  <v-icon>mdi-tag-multiple-outline</v-icon>
+                </v-badge>
+              </v-btn>
+            </template>
+            <template #default="menuData">
+              <v-card v-if="resource && resource.tags">
+                <v-card-text>
+                  <div class="mb-4">
+                    <v-chip v-for="tag in resource.tags" :key="tag" class="ma-1" :close="editor_role" :disabled="removingTags[tag]" small @click:close="removeTag(tag)">
+                      {{ capitalizeTag(tag) }}
+                    </v-chip>
+                  </div>
+                  <v-combobox
+                    v-if="editor_role"
+                    v-model="tagToAdd"
+                    autofocus
+                    color="success"
+                    dense
+                    hide-selected
+                    :hint="addingTag ? 'Adding tag...' : ''"
+                    :items="tagsToAdd"
+                    :loading="addingTag"
+                    outlined
+                    placeholder="Select new tag"
+                    prepend-icon="mdi-tag-plus-outline"
+                    single-line
+                    @change="addNewTag"
+                  />
+                  <v-subheader v-else>
+                    Log in to edit tags
+                  </v-subheader>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn small text @click="menuData.value = false"><v-icon left small>mdi-close</v-icon>Close</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-menu>
+        </template>
+        Tags
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltipOn }">
+          <v-menu :close-on-content-click="false" max-width="300" :min-width="$vuetify.breakpoint.xsOnly ? 240 : 600" offset-y>
+            <template #activator="{ on, attrs }">
+              <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="{ ...on, ...tooltipOn }">
+                <v-badge :content="comments.length" :value="!!comments.length">
+                  <v-icon>mdi-comment-multiple-outline</v-icon>
+                </v-badge>
+              </v-btn>
+            </template>
+            <template #default="menuData">
+              <v-card>
+                <v-card-text :style="`max-height: ${$vuetify.breakpoint.height * 0.8}px; overflow: auto`">
+                  <div
+                    v-if="comments.length<1"
+                    class="caption grey--text text-center pa-7"
+                  >No one commented yet!</div>
+
+                  <div v-for="(comment, index) in comments" :key="index">
+                    <v-divider v-if="index" class="mb-2" />
+                    <div class="text--secondary">
+                      <v-icon class="pr-1 text--secondary">mdi-account-circle</v-icon>
+                      <span class="overline">{{ comment.name }}</span>
+                    </div>
+                    <div class="commentFormat" v-html="comment.cooked" />
+                  </div>
+
+                </v-card-text>
+                <div class="pa-2">
+                  <comment-upload id="comment_upload" :title="public_id" @save="menuData.value = false" />
+                </div>
+              </v-card>
+            </template>
+          </v-menu>
+        </template>
+        Comments
+      </v-tooltip>
+
+      <v-spacer />
+
+      <toolbar-share-button />
     </v-app-bar>
     <v-container class="mb-2" fluid max-width="1200">
       <v-card
@@ -62,68 +134,9 @@
                 <v-icon x-large>mdi-chevron-right </v-icon>
               </v-btn>
             </cld-image>
-            <v-card-actions>
-              <v-row>
-                <v-col cols="8">
-                  <v-chip-group v-if="editor_role">
-                    <v-chip v-for="tag in resource.tags" :key="tag" close @click:close="onClose(tag)">{{ tag }}</v-chip>
-                  </v-chip-group>
-                  <v-chip-group v-else>
-                    <v-chip v-for="tag in resource.tags" :key="tag">{{ tag }}</v-chip>
-                  </v-chip-group>
-                </v-col>
-                <v-col cols="4">
-                  <v-menu
-                    :close-on-click="true"
-                    :close-on-content-click="true"
-                    :offset-y="true"
-                    :open-on-hover="true"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        color="primary"
-                        dark
-                        v-on="on"
-                      >
-                        Share
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item
-                        v-for="icon in icons"
-                        :key="icon"
-                        class="mx-4"
-                        dark
-                        icon
-                        @click="onShare(icon)"
-                      >
-                        <v-icon size="24px">{{ icon }}</v-icon>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                  <v-btn v-if="editor_role" color="primary" @click="dialog = true">Add Tags</v-btn>
-                  <v-spacer />
-                </v-col>
-              </v-row>
-            </v-card-actions>
-            <v-row v-if="!user" align="center" dense justify="center">
-              <v-btn class="mb-3" color="primary" normal @click="login">Login To Comment</v-btn>
-            </v-row>
-            <comments id="comment_show" :title="public_id" />
-            <comment-upload id="comment_upload" :title="public_id" />
           </template>
         </v-skeleton-loader>
       </v-card>
-
-      <v-dialog v-model="dialog" max-width="500">
-        <v-card>
-          <v-card-title class="headline">Add tag for this photo</v-card-title>
-          <v-card-text>
-            <v-text-field v-model="tag_name" dark label="Input Tag Name" outlined />
-            <v-btn class="btn-full" color="primary" @click="onAddTag">Add Tag</v-btn>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -133,8 +146,9 @@ import Vue from 'vue';
 import { mapState } from 'vuex';
 import Cloudinary from 'cloudinary-vue';
 import axios from 'axios';
-import Comments from '~/components/Comments';
+// import Comments from '~/components/Comments';
 import CommentUpload from '~/components/CommentUpload';
+import ToolbarShareButton from '~/components/ToolbarShareButton';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
@@ -142,21 +156,19 @@ Vue.use(Cloudinary, {
 
 export default {
   components: {
-    Comments,
+    // Comments,
     CommentUpload,
+    ToolbarShareButton,
   },
   data () {
     return {
       resource: null,
       loading: true,
-      dialog: false,
       public_id: this.$route.params.id,
       tag_name: '',
-      icons: [
-        'mdi-facebook',
-        'mdi-twitter',
-        'mdi-instagram',
-      ],
+      removingTags: {},
+      tagToAdd: null,
+      addingTag: false,
     };
   },
   computed: {
@@ -168,9 +180,26 @@ export default {
       detailsPage_url: state => state.detailsPage_url,
       search_tag: state => state.search_tag,
       search_type: state => state.search_type,
+      tags: state => state.tags.tags,
+      topic_id: state => state.comments.topic_id,
       just_login: state => state.just_login,
       comments: state => state.comments.posts,
+      toolbarBtnAttrs () {
+        return {
+          icon: this.$vuetify.breakpoint.xsOnly,
+          outlined: this.$vuetify.breakpoint.xsOnly,
+          rounded: this.$vuetify.breakpoint.smAndUp,
+          class: 'mx-2 mx-sm-6',
+        };
+      },
     }),
+    tagsToAdd () {
+      const allTags = this.tags || [];
+
+      return (this.resource && this.resource.tags)
+        ? allTags.filter(tag => !this.resource.tags.includes(tag))
+        : allTags;
+    },
   },
   async mounted () {
     this.loading = true;
@@ -194,12 +223,17 @@ export default {
       this.$store.commit('set_details_state', local_state);
       this.$store.commit('resources/parse', local_resources);
     }
+
+    this.$store.commit('comments/init');
+    await this.$store.dispatch('comments/getTopics');
+    this.$store.commit('comments/settopic_id', { title: this.public_id });
+    if (this.topic_id) {
+      await this.$store.dispatch('comments/getComments', { topic_id: this.topic_id });
+    }
+
     this.loading = false;
   },
   methods: {
-    onShare (icon) {
-      console.log(icon);
-    },
     login () {
       window.localStorage.setItem('redirect_url', this.$route.fullPath);
       window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
@@ -221,6 +255,9 @@ export default {
         }
       }
     },
+    capitalizeTag (tag) {
+      return tag.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, key => key.toUpperCase()).replace(/ And /g, ' and ');
+    },
     onPrev () {
       this.PrevNext(0);
     },
@@ -231,9 +268,43 @@ export default {
       console.log(this.detailsPage_url);
       this.$router.replace({ path: this.detailsPage_url });
     },
-    async onClose (tag) {
-      console.log(tag);
-      this.resource.tags = this.resource.tags.filter(function (value, index, arr) { return value !== tag; });
+    async addNewTag (tag) {
+      if (this.addingTag) {
+        return;
+      }
+
+      tag = tag.trim().replace(/\s\s+/g, ' ').replace(/ /g, '_').toLowerCase();
+      if (!/^[a-z0-9]+[_a-z0-9]+$/.test(tag)) {
+        alert('Tag can contain only letters, numbers, spaces and underscores');
+        return;
+      }
+
+      await this.$nextTick();
+
+      if (!this.resource.tags) {
+        this.resource.tags = [];
+      }
+
+      this.addingTag = true;
+      try {
+        await axios.get('/api/uploadtag', {
+          params: {
+            public_id: this.public_id,
+            tag,
+          },
+        });
+        this.resource.tags.push(tag);
+        this.tagToAdd = null;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.addingTag = false;
+      }
+    },
+    async removeTag (tag) {
+      if (this.removingTags[tag]) return;
+
+      this.$set(this.removingTags, tag, true);
       try {
         await axios.get('/api/removetag', {
           params: {
@@ -241,27 +312,11 @@ export default {
             tag: tag,
           },
         });
+        this.resource.tags = this.resource.tags.filter(function (value, index, arr) { return value !== tag; });
       } catch (error) {
         console.log(error);
-      }
-    },
-    async onAddTag () {
-      if (this.tag_name.length) {
-        if (!this.resource.tags) {
-          this.resource.tags = [];
-        }
-        this.resource.tags.push(this.tag_name);
-        this.dialog = false;
-        try {
-          await axios.get('/api/uploadtag', {
-            params: {
-              public_id: this.public_id,
-              tag: this.tag_name,
-            },
-          });
-        } catch (error) {
-          console.log(error);
-        }
+      } finally {
+        this.$delete(this.removingTags, tag);
       }
     },
     async PrevNext (flag) {
@@ -315,5 +370,9 @@ export default {
 }
 .btn-full {
   width: 100%;
+}
+.commentFormat{
+   white-space: pre-line;
+   padding-left: 32px;
 }
 </style>
