@@ -119,7 +119,7 @@
             class="mx-4 white--text"
             icon
           >
-            <v-icon size="24px">{{ icon }}</v-icon>
+            <v-icon size="24px">{{ footericon }}</v-icon>
           </v-btn>
         </v-card-text>
 
