@@ -14,12 +14,14 @@
         </template>
         <v-list>
           <v-list-item
-            v-for="iconData in icons"
+            v-for="iconData in shareIcons"
             :key="iconData.icon"
             dark
             dense
+            :href="iconData.url"
             icon
-            @click="onShare(iconData)"
+            rel="noopener"
+            target="_blank"
           >
             <v-list-item-content>
               <v-list-item-title class="text-right">
@@ -38,16 +40,16 @@
 </template>
 
 <script>
+import { createShareIcons } from '~/util/share.js';
+
 export default {
   name: 'ToolbarShareButton',
 
-  data: () => ({
-    icons: [
-      { icon: 'mdi-facebook', color: '#3b5998', title: 'Facebook' },
-      { icon: 'mdi-twitter', color: '#00acee', title: 'Twitter' },
-      { icon: 'mdi-instagram', color: '#dd2a7b', title: 'Instagram' },
-    ],
-  }),
+  data () {
+    return {
+      shareIcons: createShareIcons(process.env.BASE_URL.replace(/\/$/, '') + this.$nuxt.$route.fullPath),
+    };
+  },
 
   methods: {
     share (iconData) {
