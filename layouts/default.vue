@@ -174,7 +174,6 @@ export default {
       footericons: [
         'mdi-facebook',
         'mdi-twitter',
-        'mdi-linkedin',
         'mdi-instagram',
       ],
       miniVariant: false,
