@@ -6,19 +6,39 @@
       <v-spacer />
       <span class="mr-2">Tags</span>
       <v-spacer />
-      <v-btn
-        color="green lighten-1"
-        rounded
-      >
-        <v-spacer />
-        <v-badge
-          color="red"
-          content="6"
-        >
-          <v-icon>mdi-comment-multiple-outline</v-icon>
-        </v-badge>
-      </v-btn>
+
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="blue lighten-1" v-on="on" @click="slideshow">
+            <v-icon>mdi-movie-open-outline</v-icon>
+          </v-btn>
+        </template>
+        Start Slide Show
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="info" v-on="on" @click="onTagNav">
+            <v-badge :content="total_count">
+              <v-icon>mdi-image-search</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        Browse by People and Tags
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="on">
+            <v-badge :content="6">
+              <v-icon>mdi-comment-multiple-outline</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        Comments
+      </v-tooltip>
       <v-spacer />
+
       <v-btn
         color="orange lighten-1 pa-2"
         rounded
@@ -29,30 +49,6 @@
     </v-app-bar>
     <v-container>
       <v-card id="browse-card" class="mx-auto">
-        <v-speed-dial v-model="fab" v-bind="speedDialProps" right transition="slide-y-reverse-transition">
-          <template v-slot:activator>
-            <v-btn v-model="fab" color="orange darken-3" dark fab x-large>
-              <v-icon v-if="fab">mdi-close</v-icon>
-              <v-icon v-else>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-          <v-tooltip v-if="total_count" bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn color="green" dark fab x-large v-on="on" @click="slideshow">
-                <v-icon x-large>mdi-movie-open-outline</v-icon>
-              </v-btn>
-            </template>
-            <span>Start Slide Show</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn color="indigo" dark fab x-large v-on="on" @click="onTagNav">
-                <v-icon x-large>mdi-image-search</v-icon>
-              </v-btn>
-            </template>
-            <span>Browse by People and Tags</span>
-          </v-tooltip>
-        </v-speed-dial>
         <v-container fluid>
           <v-row v-if="loading" align="center" class="loading-row" justify="center">
             <v-progress-circular color="gray" indeterminate :size="200" :width="20" />
@@ -118,6 +114,14 @@ export default {
         openOnHover: !mobile,
         fixed: mobile,
         absolute: !mobile,
+      };
+    },
+    toolbarBtnAttrs () {
+      return {
+        icon: this.$vuetify.breakpoint.xsOnly,
+        outlined: this.$vuetify.breakpoint.xsOnly,
+        rounded: this.$vuetify.breakpoint.smAndUp,
+        class: 'mx-2 mx-sm-6',
       };
     },
   },
