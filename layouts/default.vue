@@ -113,14 +113,22 @@
         tile
       >
         <v-card-text>
-          <v-btn
-            v-for="footericon in footericons"
-            :key="footericon"
-            class="mx-4 white--text"
-            icon
-          >
-            <v-icon size="24px">{{ footericon }}</v-icon>
-          </v-btn>
+          <v-tooltip v-for="iconData in shareIcons" :key="iconData.icon" top>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                class="mx-4 white--text"
+                :href="iconData.url"
+                icon
+                rel="noopener"
+                target="_blank"
+                v-on="on"
+              >
+                <v-icon>{{ iconData.icon }}</v-icon>
+              </v-btn>
+            </template>
+            Share on {{ iconData.title }}
+          </v-tooltip>
         </v-card-text>
 
         <v-card-text class="white--text pt-0">
@@ -140,6 +148,7 @@
 <script>
 import { mapState } from 'vuex';
 import SearchDrawer from '@/components/SearchDrawer';
+import { createShareIcons } from '~/util/share.js';
 
 export default {
   components: {
@@ -171,11 +180,7 @@ export default {
           to: '/service',
         },
       ],
-      footericons: [
-        'mdi-facebook',
-        'mdi-twitter',
-        'mdi-instagram',
-      ],
+      shareIcons: createShareIcons(process.env.BASE_URL.replace(/\/$/, '') + this.$nuxt.$route.fullPath),
       miniVariant: false,
       title: 'Remembering Louise',
     };
