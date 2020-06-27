@@ -30,7 +30,7 @@
               </v-btn>
             </template>
             <template #default="menuData">
-              <v-card v-if="resource && resource.tags">
+              <v-card v-if="resource">
                 <v-card-text>
                   <div class="mb-4">
                     <v-chip v-for="tag in resource.tags" :key="tag" class="ma-1" :close="editor_role" :disabled="removingTags[tag]" small @click:close="removeTag(tag)">
