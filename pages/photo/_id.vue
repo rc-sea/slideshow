@@ -12,14 +12,54 @@
         Back
       </v-btn>
       <v-spacer />
-      <v-btn
-        color="orange"
-        rounded
-        text
-      >
-        <v-icon>mdi-tag-plus-outline</v-icon>
-        <span class="mr-2">Add tag</span>
-      </v-btn>
+      <v-menu :close-on-content-click="false" max-width="400" offset-y>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            color="orange"
+            rounded
+            text
+            v-on="on"
+          >
+            <v-icon left>mdi-tag-multiple-outline</v-icon>
+            Tags
+          </v-btn>
+        </template>
+        <template #default="menuData">
+          <v-card v-if="resource && resource.tags">
+            <v-card-text>
+              <div class="mb-4">
+                <v-chip v-for="tag in resource.tags" :key="tag" class="ma-1" :close="editor_role" :disabled="removingTags[tag]" small @click:close="removeTag(tag)">
+                  {{ tag }}
+                </v-chip>
+              </div>
+              <v-autocomplete
+                v-if="editor_role"
+                v-model="tagToAdd"
+                autofocus
+                color="success"
+                dense
+                hide-selected
+                :hint="addingTag ? 'Adding tag...' : ''"
+                :items="tagsToAdd"
+                :loading="addingTag"
+                outlined
+                placeholder="Select new tag"
+                prepend-icon="mdi-tag-plus-outline"
+                single-line
+                @change="addNewTag"
+              />
+              <v-subheader v-else>
+                Log in to edit tags
+              </v-subheader>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn small text @click="menuData.value = false"><v-icon left small>mdi-close</v-icon>Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
+      </v-menu>
       <v-spacer />
       <v-btn
         color="green lighten-1"
@@ -64,14 +104,6 @@
             </cld-image>
             <v-card-actions>
               <v-row>
-                <v-col cols="8">
-                  <v-chip-group v-if="editor_role">
-                    <v-chip v-for="tag in resource.tags" :key="tag" close @click:close="onClose(tag)">{{ tag }}</v-chip>
-                  </v-chip-group>
-                  <v-chip-group v-else>
-                    <v-chip v-for="tag in resource.tags" :key="tag">{{ tag }}</v-chip>
-                  </v-chip-group>
-                </v-col>
                 <v-col cols="4">
                   <v-menu
                     :close-on-click="true"
@@ -101,7 +133,6 @@
                       </v-list-item>
                     </v-list>
                   </v-menu>
-                  <v-btn v-if="editor_role" color="primary" @click="dialog = true">Add Tags</v-btn>
                   <v-spacer />
                 </v-col>
               </v-row>
@@ -114,16 +145,6 @@
           </template>
         </v-skeleton-loader>
       </v-card>
-
-      <v-dialog v-model="dialog" max-width="500">
-        <v-card>
-          <v-card-title class="headline">Add tag for this photo</v-card-title>
-          <v-card-text>
-            <v-text-field v-model="tag_name" dark label="Input Tag Name" outlined />
-            <v-btn class="btn-full" color="primary" @click="onAddTag">Add Tag</v-btn>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -149,7 +170,6 @@ export default {
     return {
       resource: null,
       loading: true,
-      dialog: false,
       public_id: this.$route.params.id,
       tag_name: '',
       icons: [
@@ -157,6 +177,9 @@ export default {
         'mdi-twitter',
         'mdi-instagram',
       ],
+      removingTags: {},
+      tagToAdd: null,
+      addingTag: false,
     };
   },
   computed: {
@@ -168,9 +191,17 @@ export default {
       detailsPage_url: state => state.detailsPage_url,
       search_tag: state => state.search_tag,
       search_type: state => state.search_type,
+      tags: state => state.tags.tags,
       just_login: state => state.just_login,
       comments: state => state.comments.posts,
     }),
+    tagsToAdd () {
+      const allTags = this.tags || [];
+
+      return (this.resource && this.resource.tags)
+        ? allTags.filter(tag => !this.resource.tags.includes(tag))
+        : allTags;
+    },
   },
   async mounted () {
     this.loading = true;
@@ -231,9 +262,37 @@ export default {
       console.log(this.detailsPage_url);
       this.$router.replace({ path: this.detailsPage_url });
     },
-    async onClose (tag) {
-      console.log(tag);
-      this.resource.tags = this.resource.tags.filter(function (value, index, arr) { return value !== tag; });
+    async addNewTag (tag) {
+      if (this.addingTag) {
+        return;
+      }
+
+      await this.$nextTick();
+
+      if (!this.resource.tags) {
+        this.resource.tags = [];
+      }
+
+      this.addingTag = true;
+      try {
+        await axios.get('/api/uploadtag', {
+          params: {
+            public_id: this.public_id,
+            tag,
+          },
+        });
+        this.resource.tags.push(tag);
+        this.tagToAdd = null;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.addingTag = false;
+      }
+    },
+    async removeTag (tag) {
+      if (this.removingTags[tag]) return;
+
+      this.$set(this.removingTags, tag, true);
       try {
         await axios.get('/api/removetag', {
           params: {
@@ -241,27 +300,11 @@ export default {
             tag: tag,
           },
         });
+        this.resource.tags = this.resource.tags.filter(function (value, index, arr) { return value !== tag; });
       } catch (error) {
         console.log(error);
-      }
-    },
-    async onAddTag () {
-      if (this.tag_name.length) {
-        if (!this.resource.tags) {
-          this.resource.tags = [];
-        }
-        this.resource.tags.push(this.tag_name);
-        this.dialog = false;
-        try {
-          await axios.get('/api/uploadtag', {
-            params: {
-              public_id: this.public_id,
-              tag: this.tag_name,
-            },
-          });
-        } catch (error) {
-          console.log(error);
-        }
+      } finally {
+        this.$delete(this.removingTags, tag);
       }
     },
     async PrevNext (flag) {
