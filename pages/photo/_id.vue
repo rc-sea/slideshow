@@ -11,7 +11,9 @@
         <v-icon>mdi-arrow-left</v-icon>
         Back
       </v-btn>
+
       <v-spacer />
+
       <v-menu :close-on-content-click="false" max-width="400" offset-y>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -60,15 +62,42 @@
           </v-card>
         </template>
       </v-menu>
+
       <v-spacer />
-      <v-btn
-        color="green lighten-1"
-        rounded
-      >
-        <v-badge bordered color="red" :content="comments.length" overlap :value="comments.length" @click.prevent="$vuetify.goTo('#comment_show')">
-          <v-icon large>mdi-comment-multiple-outline</v-icon>
-        </v-badge>
-      </v-btn>
+
+      <v-menu :close-on-content-click="false" max-width="300" :min-width="$vuetify.breakpoint.xsOnly ? 240 : 600" offset-y>
+        <template #activator="{ on, attrs }">
+          <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="on">
+            <v-badge :content="comments.length">
+              <v-icon>mdi-comment-multiple-outline</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        <template #default="menuData">
+          <v-card>
+            <v-card-text :style="`max-height: ${$vuetify.breakpoint.height * 0.8}px; overflow: auto`">
+              <div
+                v-if="comments.length<1"
+                class="caption grey--text text-center pa-7"
+              >No one commented yet!</div>
+
+              <div v-for="(comment, index) in comments" :key="index">
+                <v-divider v-if="index" class="mb-2" />
+                <div class="text--secondary">
+                  <v-icon class="pr-1 text--secondary">mdi-account-circle</v-icon>
+                  <span class="overline">{{ comment.name }}</span>
+                </div>
+                <div class="commentFormat" v-html="comment.cooked" />
+              </div>
+
+            </v-card-text>
+            <div class="pa-2">
+              <comment-upload id="comment_upload" :title="public_id" @save="menuData.value = false" />
+            </div>
+          </v-card>
+        </template>
+      </v-menu>
+
       <v-spacer />
 
       <toolbar-share-button />
@@ -97,11 +126,6 @@
                 <v-icon x-large>mdi-chevron-right </v-icon>
               </v-btn>
             </cld-image>
-            <v-row v-if="!user" align="center" dense justify="center">
-              <v-btn class="mb-3" color="primary" normal @click="login">Login To Comment</v-btn>
-            </v-row>
-            <comments id="comment_show" :title="public_id" />
-            <comment-upload id="comment_upload" :title="public_id" />
           </template>
         </v-skeleton-loader>
       </v-card>
@@ -114,7 +138,7 @@ import Vue from 'vue';
 import { mapState } from 'vuex';
 import Cloudinary from 'cloudinary-vue';
 import axios from 'axios';
-import Comments from '~/components/Comments';
+// import Comments from '~/components/Comments';
 import CommentUpload from '~/components/CommentUpload';
 import ToolbarShareButton from '~/components/ToolbarShareButton';
 
@@ -124,7 +148,7 @@ Vue.use(Cloudinary, {
 
 export default {
   components: {
-    Comments,
+    // Comments,
     CommentUpload,
     ToolbarShareButton,
   },
@@ -149,8 +173,17 @@ export default {
       search_tag: state => state.search_tag,
       search_type: state => state.search_type,
       tags: state => state.tags.tags,
+      topic_id: state => state.comments.topic_id,
       just_login: state => state.just_login,
       comments: state => state.comments.posts,
+      toolbarBtnAttrs () {
+        return {
+          icon: this.$vuetify.breakpoint.xsOnly,
+          outlined: this.$vuetify.breakpoint.xsOnly,
+          rounded: this.$vuetify.breakpoint.smAndUp,
+          class: 'mx-2 mx-sm-6',
+        };
+      },
     }),
     tagsToAdd () {
       const allTags = this.tags || [];
@@ -182,6 +215,14 @@ export default {
       this.$store.commit('set_details_state', local_state);
       this.$store.commit('resources/parse', local_resources);
     }
+
+    this.$store.commit('comments/init');
+    await this.$store.dispatch('comments/getTopics');
+    this.$store.commit('comments/settopic_id', { title: this.public_id });
+    if (this.topic_id) {
+      await this.$store.dispatch('comments/getComments', { topic_id: this.topic_id });
+    }
+
     this.loading = false;
   },
   methods: {
@@ -312,5 +353,9 @@ export default {
 }
 .btn-full {
   width: 100%;
+}
+.commentFormat{
+   white-space: pre-line;
+   padding-left: 32px;
 }
 </style>

@@ -15,7 +15,9 @@
         <v-row v-if="!user" align="center" dense justify="center">
           <v-btn class="mb-3" color="orange darken-2" normal @click="login">Add a remembrance</v-btn>
         </v-row>
-        <comment-upload id="comment_upload" title="Remembrances" />
+        <div class="pa-2">
+          <comment-upload id="comment_upload" title="Remembrances" />
+        </div>
       </v-card>
     </v-container>
   </v-container>

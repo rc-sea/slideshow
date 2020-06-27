@@ -3,10 +3,6 @@
     <v-app-bar
       color="blue-grey darken-4"
     >
-      <v-spacer />
-      <span class="mr-2">Tags</span>
-      <v-spacer />
-
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="blue lighten-1" v-on="on" @click="slideshow">
@@ -15,6 +11,8 @@
         </template>
         Start Slide Show
       </v-tooltip>
+
+      <v-spacer />
 
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
@@ -27,16 +25,6 @@
         Browse by People and Tags
       </v-tooltip>
 
-      <v-tooltip bottom>
-        <template #activator="{ on, attrs }">
-          <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="on">
-            <v-badge :content="6">
-              <v-icon>mdi-comment-multiple-outline</v-icon>
-            </v-badge>
-          </v-btn>
-        </template>
-        Comments
-      </v-tooltip>
       <v-spacer />
 
       <toolbar-share-button />
