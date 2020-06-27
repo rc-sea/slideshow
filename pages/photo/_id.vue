@@ -6,35 +6,36 @@
       <v-btn
         color="orange lighten-1"
         rounded
-        @click="onBack">
+        @click="onBack"
+      >
         <v-icon>mdi-arrow-left</v-icon>
         Back
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         color="orange"
         rounded
         text
       >
-        <v-icon >mdi-tag-plus-outline</v-icon>
+        <v-icon>mdi-tag-plus-outline</v-icon>
         <span class="mr-2">Add tag</span>
       </v-btn>
-    <v-spacer></v-spacer>
-    <v-btn
-      color="green lighten-1"
-      rounded
-    >
-      <v-badge bordered color="red" :content="comments.length" overlap :value="comments.length" @click.prevent="$vuetify.goTo('#comment_show')">
-        <v-icon large>mdi-comment-multiple-outline</v-icon>
-      </v-badge>
+      <v-spacer />
+      <v-btn
+        color="green lighten-1"
+        rounded
+      >
+        <v-badge bordered color="red" :content="comments.length" overlap :value="comments.length" @click.prevent="$vuetify.goTo('#comment_show')">
+          <v-icon large>mdi-comment-multiple-outline</v-icon>
+        </v-badge>
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn
         color="orange lighten-1 pa-2"
         rounded
       >
         <v-icon>mdi-share-variant</v-icon>
-    </v-btn>
+      </v-btn>
 
     </v-app-bar>
     <v-container class="mb-2" fluid max-width="1200">

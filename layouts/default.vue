@@ -46,7 +46,8 @@
       <div>
         <v-btn
           color="purple lighten-4"
-          rounded>
+          rounded
+        >
           <nuxt-link to="/photo-browse">
             <v-icon large>mdi-image-search</v-icon>
             <span class="hidden-sm-and-down">View Photos</span>
@@ -75,20 +76,21 @@
               <v-list-item-title>Upload photos</v-list-item-title>
             </v-list-item>
             <v-list-item @click="onLogout">
-               <v-icon class="pr-3" large>mdi-account-circle-outline</v-icon>
+              <v-icon class="pr-3" large>mdi-account-circle-outline</v-icon>
               <v-list-item-title>Log Out</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
         <v-btn v-else color="green lighten-4"
-          rounded text @click="login">
+               rounded text @click="login"
+        >
           <v-icon large>mdi-account-circle-outline</v-icon>
           <span class="hidden-sm-and-down">Log in</span>
         </v-btn>
       </v-card-actions>
     </v-app-bar>
     <v-content>
-    <nuxt />
+      <nuxt />
       <v-navigation-drawer
         v-if="hasSearchDrawer"
         app
@@ -105,33 +107,33 @@
       dark
       padless
     >
-    <v-card
-      class="indigo lighten-1 white--text text-center"
-      flat
-      tile
-    >
-      <v-card-text>
-        <v-btn
-          v-for="footericon in footericons"
-          :key="footericon"
-          class="mx-4 white--text"
-          icon
-        >
-          <v-icon size="24px">{{ icon }}</v-icon>
-        </v-btn>
-      </v-card-text>
+      <v-card
+        class="indigo lighten-1 white--text text-center"
+        flat
+        tile
+      >
+        <v-card-text>
+          <v-btn
+            v-for="footericon in footericons"
+            :key="footericon"
+            class="mx-4 white--text"
+            icon
+          >
+            <v-icon size="24px">{{ icon }}</v-icon>
+          </v-btn>
+        </v-card-text>
 
-      <v-card-text class="white--text pt-0">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      </v-card-text>
+        <v-card-text class="white--text pt-0">
+          Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+        </v-card-text>
 
-      <v-divider></v-divider>
+        <v-divider />
 
-      <v-card-text class="white--text">
-        {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
-      </v-card-text>
-    </v-card>
-  </v-footer>
+        <v-card-text class="white--text">
+          {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 

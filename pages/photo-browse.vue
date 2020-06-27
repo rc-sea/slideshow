@@ -1,82 +1,84 @@
 <template>
   <div>
     <v-app-bar
-    color="blue-grey darken-4"
+      color="blue-grey darken-4"
     >
-    <v-spacer></v-spacer>
-    <span class="mr-2">Tags</span>
-    <v-spacer></v-spacer>
-    <v-btn
-      color="green lighten-1"
-      rounded>
-    <v-spacer></v-spacer>
-      <v-badge
-        color="red"
-        content="6"
+      <v-spacer />
+      <span class="mr-2">Tags</span>
+      <v-spacer />
+      <v-btn
+        color="green lighten-1"
+        rounded
       >
-        <v-icon>mdi-comment-multiple-outline</v-icon>
+        <v-spacer />
+        <v-badge
+          color="red"
+          content="6"
+        >
+          <v-icon>mdi-comment-multiple-outline</v-icon>
         </v-badge>
-    </v-btn>
-    <v-spacer></v-spacer>
-    <v-btn
-      color="orange lighten-1 pa-2"
-      rounded>
+      </v-btn>
+      <v-spacer />
+      <v-btn
+        color="orange lighten-1 pa-2"
+        rounded
+      >
         <v-icon>mdi-share-variant</v-icon>
-    </v-btn>
+      </v-btn>
 
-  </v-app-bar>
-  <v-container>
-    <v-card id="browse-card" class="mx-auto">
-      <v-speed-dial v-model="fab" v-bind="speedDialProps" right transition="slide-y-reverse-transition">
-        <template v-slot:activator>
-          <v-btn v-model="fab" color="orange darken-3" dark fab x-large>
-            <v-icon v-if="fab">mdi-close</v-icon>
-            <v-icon v-else>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <v-tooltip v-if="total_count" bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn color="green" dark fab x-large v-on="on" @click="slideshow">
-              <v-icon x-large>mdi-movie-open-outline</v-icon>
+    </v-app-bar>
+    <v-container>
+      <v-card id="browse-card" class="mx-auto">
+        <v-speed-dial v-model="fab" v-bind="speedDialProps" right transition="slide-y-reverse-transition">
+          <template v-slot:activator>
+            <v-btn v-model="fab" color="orange darken-3" dark fab x-large>
+              <v-icon v-if="fab">mdi-close</v-icon>
+              <v-icon v-else>mdi-plus</v-icon>
             </v-btn>
           </template>
-          <span>Start Slide Show</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-btn color="indigo" dark fab x-large v-on="on" @click="onTagNav">
-              <v-icon x-large>mdi-image-search</v-icon>
-            </v-btn>
-          </template>
-          <span>Browse by People and Tags</span>
-        </v-tooltip>
-      </v-speed-dial>
-      <v-container fluid>
-        <v-row v-if="loading" align="center" class="loading-row" justify="center">
-          <v-progress-circular color="gray" indeterminate :size="200" :width="20" />
-        </v-row>
-        <v-row v-else dense>
-          <v-col v-for="resource in resources" :key="resource.public_id" :cols="12" lg="4" md="6" sm="6">
-            <v-card>
-              <nuxt-link :to="{ path: `photo/${resource.public_id}`}">
-                <cld-image :public-id="resource.public_id" secure="true">
-                  <cld-transformation crop="fill" gravity="faces" height="350" width="350" />
-                </cld-image>
-              </nuxt-link>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row dense justify="center">
-          <div v-intersect="loadmore" class="text-center my-12">
-            <template v-if="moreloading">
-              Loading more...
-              <v-progress-circular indeterminate />
+          <v-tooltip v-if="total_count" bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn color="green" dark fab x-large v-on="on" @click="slideshow">
+                <v-icon x-large>mdi-movie-open-outline</v-icon>
+              </v-btn>
             </template>
-          </div>
-        </v-row>
-      </v-container>
-    </v-card>
-  </v-container>
+            <span>Start Slide Show</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn color="indigo" dark fab x-large v-on="on" @click="onTagNav">
+                <v-icon x-large>mdi-image-search</v-icon>
+              </v-btn>
+            </template>
+            <span>Browse by People and Tags</span>
+          </v-tooltip>
+        </v-speed-dial>
+        <v-container fluid>
+          <v-row v-if="loading" align="center" class="loading-row" justify="center">
+            <v-progress-circular color="gray" indeterminate :size="200" :width="20" />
+          </v-row>
+          <v-row v-else dense>
+            <v-col v-for="resource in resources" :key="resource.public_id" :cols="12" lg="4" md="6" sm="6">
+              <v-card>
+                <nuxt-link :to="{ path: `photo/${resource.public_id}`}">
+                  <cld-image :public-id="resource.public_id" secure="true">
+                    <cld-transformation crop="fill" gravity="faces" height="350" width="350" />
+                  </cld-image>
+                </nuxt-link>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row dense justify="center">
+            <div v-intersect="loadmore" class="text-center my-12">
+              <template v-if="moreloading">
+                Loading more...
+                <v-progress-circular indeterminate />
+              </template>
+            </div>
+          </v-row>
+        </v-container>
+      </v-card>
+    </v-container>
   </div>
 </template>
 
