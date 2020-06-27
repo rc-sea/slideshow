@@ -71,10 +71,6 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item v-if="user && editor_role" to="photo-upload">
-              <v-icon class="pr-3" large>mdi-image-plus</v-icon>
-              <v-list-item-title>Upload photos</v-list-item-title>
-            </v-list-item>
             <v-list-item @click="onLogout">
               <v-icon class="pr-3" large>mdi-account-circle-outline</v-icon>
               <v-list-item-title>Log Out</v-list-item-title>

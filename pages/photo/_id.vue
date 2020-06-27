@@ -19,7 +19,7 @@
           <v-menu :close-on-content-click="false" max-width="400" offset-y>
             <template #activator="{ on, attrs }">
               <v-btn
-                v-bind="attrs"
+                v-bind="{ ...toolbarBtnAttrs, ...attrs }"
                 color="orange"
                 rounded
                 v-on="{ ...on, ...tooltipOn }"
@@ -189,7 +189,7 @@ export default {
           icon: this.$vuetify.breakpoint.xsOnly,
           outlined: this.$vuetify.breakpoint.xsOnly,
           rounded: this.$vuetify.breakpoint.smAndUp,
-          class: 'mx-2 mx-sm-6',
+          class: 'mx-1 mx-sm-3',
         };
       },
     }),
