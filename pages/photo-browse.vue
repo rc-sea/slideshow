@@ -17,7 +17,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="info" v-on="on" @click="onTagNav">
-            <v-badge :content="total_count">
+            <v-badge :content="total_count" :value="!!total_count">
               <v-icon>mdi-image-search</v-icon>
             </v-badge>
           </v-btn>

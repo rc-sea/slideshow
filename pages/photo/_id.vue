@@ -8,7 +8,7 @@
         rounded
         @click="onBack"
       >
-        <v-icon>mdi-arrow-left</v-icon>
+        <v-icon left>mdi-arrow-left</v-icon>
         Back
       </v-btn>
 
@@ -20,11 +20,12 @@
             v-bind="attrs"
             color="orange"
             rounded
-            text
             v-on="on"
           >
-            <v-icon left>mdi-tag-multiple-outline</v-icon>
-            Tags
+            <v-badge :content="resource && resource.tags && resource.tags.length" :value="resource && resource.tags && resource.tags.length">
+              <v-icon left>mdi-tag-multiple-outline</v-icon>
+              Tags
+            </v-badge>
           </v-btn>
         </template>
         <template #default="menuData">
@@ -32,10 +33,10 @@
             <v-card-text>
               <div class="mb-4">
                 <v-chip v-for="tag in resource.tags" :key="tag" class="ma-1" :close="editor_role" :disabled="removingTags[tag]" small @click:close="removeTag(tag)">
-                  {{ tag }}
+                  {{ capitalizeTag(tag) }}
                 </v-chip>
               </div>
-              <v-autocomplete
+              <v-combobox
                 v-if="editor_role"
                 v-model="tagToAdd"
                 autofocus
@@ -68,7 +69,7 @@
       <v-menu :close-on-content-click="false" max-width="300" :min-width="$vuetify.breakpoint.xsOnly ? 240 : 600" offset-y>
         <template #activator="{ on, attrs }">
           <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="on">
-            <v-badge :content="comments.length">
+            <v-badge :content="comments.length" :value="!!comments.length">
               <v-icon>mdi-comment-multiple-outline</v-icon>
             </v-badge>
           </v-btn>
@@ -247,6 +248,9 @@ export default {
         }
       }
     },
+    capitalizeTag (tag) {
+      return tag.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, key => key.toUpperCase()).replace(/ And /g, ' and ');
+    },
     onPrev () {
       this.PrevNext(0);
     },
@@ -259,6 +263,12 @@ export default {
     },
     async addNewTag (tag) {
       if (this.addingTag) {
+        return;
+      }
+
+      tag = tag.trim().replace(/\s\s+/g, ' ').replace(/ /g, '_').toLowerCase();
+      if (!/^[a-z0-9]+[_a-z0-9]+$/.test(tag)) {
+        alert('Tag can contain only letters, numbers, spaces and underscores');
         return;
       }
 

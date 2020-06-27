@@ -1,12 +1,21 @@
 <template>
-  <v-container>
-    <v-container fluid>
-      <v-row dense justify="end">
-        <v-btn class="mr-1 mb-2" primary @click="onBack">Back</v-btn>
-      </v-row>
+  <div>
+    <v-app-bar
+      color="blue-grey darken-4"
+    >
+      <v-btn
+        color="orange lighten-1"
+        rounded
+        @click="onBack"
+      >
+        <v-icon left>mdi-arrow-left</v-icon>
+        Back
+      </v-btn>
+    </v-app-bar>
+    <v-container>
       <slide-show />
     </v-container>
-  </v-container>
+  </div>
 </template>
 
 <script>
