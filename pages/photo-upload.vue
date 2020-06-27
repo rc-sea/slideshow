@@ -18,6 +18,48 @@ export default {
     }),
   },
   head () {
+    const uploadSettings = {
+      cloudName: 'louise',
+      uploadPreset: 'unsigned',
+      sources: [
+        'local',
+        'camera',
+        'facebook',
+        'dropbox',
+        'instagram',
+        'google_drive',
+      ],
+      googleApiKey: '<image_search_google_api_key>',
+      showAdvancedOptions: true,
+      defaultSource: 'local',
+      cropping: false,
+      multiple: true,
+      styles: {
+        palette: {
+          window: '#10173a',
+          sourceBg: '#20304b',
+          windowBorder: '#7171D0',
+          tabIcon: '#79F7FF',
+          inactiveTabIcon: '#8E9FBF',
+          menuIcons: '#CCE8FF',
+          link: '#72F1FF',
+          action: '#5333FF',
+          inProgress: '#00ffcc',
+          complete: '#33ff00',
+          error: '#cc3333',
+          textDark: '#000000',
+          textLight: '#ffffff',
+        },
+        fonts: {
+          default: null,
+          'sans-serif': {
+            url: null,
+            active: true,
+          },
+        },
+      },
+    };
+
     return {
       script: [
         {
@@ -28,10 +70,7 @@ export default {
             console.log('CDN loaded');
             this.cloudinary = cloudinary; // eslint-disable-line no-undef
             if (this.user && this.editor_role) {
-              cloudinary.openUploadWidget({ // eslint-disable-line no-undef
-                cloudName: 'louise',
-                uploadPreset: 'pob2zoec',
-              }, (error, result) => {
+              cloudinary.openUploadWidget(uploadSettings, (error, result) => { // eslint-disable-line no-undef
                 if (!error && result && result.event === 'success') {
                   console.log('Done! Here is the image info: ', result.info);
                   this.$router.push({ path: '/photo-browse' });
