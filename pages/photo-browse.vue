@@ -3,6 +3,8 @@
     <v-app-bar
       color="blue-grey darken-4"
     >
+      <v-spacer />
+
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="blue lighten-1" v-on="on" @click="slideshow">
@@ -11,8 +13,6 @@
         </template>
         Start Slide Show
       </v-tooltip>
-
-      <v-spacer />
 
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">

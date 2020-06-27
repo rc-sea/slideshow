@@ -14,90 +14,97 @@
 
       <v-spacer />
 
-      <v-menu :close-on-content-click="false" max-width="400" offset-y>
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            color="orange"
-            rounded
-            v-on="on"
-          >
-            <v-badge :content="resource && resource.tags && resource.tags.length" :value="resource && resource.tags && resource.tags.length">
-              <v-icon left>mdi-tag-multiple-outline</v-icon>
-              Tags
-            </v-badge>
-          </v-btn>
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltipOn }">
+          <v-menu :close-on-content-click="false" max-width="400" offset-y>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                color="orange"
+                rounded
+                v-on="{ ...on, ...tooltipOn }"
+              >
+                <v-badge :content="resource && resource.tags && resource.tags.length" :value="resource && resource.tags && resource.tags.length">
+                  <v-icon>mdi-tag-multiple-outline</v-icon>
+                </v-badge>
+              </v-btn>
+            </template>
+            <template #default="menuData">
+              <v-card v-if="resource && resource.tags">
+                <v-card-text>
+                  <div class="mb-4">
+                    <v-chip v-for="tag in resource.tags" :key="tag" class="ma-1" :close="editor_role" :disabled="removingTags[tag]" small @click:close="removeTag(tag)">
+                      {{ capitalizeTag(tag) }}
+                    </v-chip>
+                  </div>
+                  <v-combobox
+                    v-if="editor_role"
+                    v-model="tagToAdd"
+                    autofocus
+                    color="success"
+                    dense
+                    hide-selected
+                    :hint="addingTag ? 'Adding tag...' : ''"
+                    :items="tagsToAdd"
+                    :loading="addingTag"
+                    outlined
+                    placeholder="Select new tag"
+                    prepend-icon="mdi-tag-plus-outline"
+                    single-line
+                    @change="addNewTag"
+                  />
+                  <v-subheader v-else>
+                    Log in to edit tags
+                  </v-subheader>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn small text @click="menuData.value = false"><v-icon left small>mdi-close</v-icon>Close</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-menu>
         </template>
-        <template #default="menuData">
-          <v-card v-if="resource && resource.tags">
-            <v-card-text>
-              <div class="mb-4">
-                <v-chip v-for="tag in resource.tags" :key="tag" class="ma-1" :close="editor_role" :disabled="removingTags[tag]" small @click:close="removeTag(tag)">
-                  {{ capitalizeTag(tag) }}
-                </v-chip>
-              </div>
-              <v-combobox
-                v-if="editor_role"
-                v-model="tagToAdd"
-                autofocus
-                color="success"
-                dense
-                hide-selected
-                :hint="addingTag ? 'Adding tag...' : ''"
-                :items="tagsToAdd"
-                :loading="addingTag"
-                outlined
-                placeholder="Select new tag"
-                prepend-icon="mdi-tag-plus-outline"
-                single-line
-                @change="addNewTag"
-              />
-              <v-subheader v-else>
-                Log in to edit tags
-              </v-subheader>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn small text @click="menuData.value = false"><v-icon left small>mdi-close</v-icon>Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-menu>
+        Tags
+      </v-tooltip>
 
-      <v-spacer />
+      <v-tooltip bottom>
+        <template #activator="{ on: tooltipOn }">
+          <v-menu :close-on-content-click="false" max-width="300" :min-width="$vuetify.breakpoint.xsOnly ? 240 : 600" offset-y>
+            <template #activator="{ on, attrs }">
+              <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="{ ...on, ...tooltipOn }">
+                <v-badge :content="comments.length" :value="!!comments.length">
+                  <v-icon>mdi-comment-multiple-outline</v-icon>
+                </v-badge>
+              </v-btn>
+            </template>
+            <template #default="menuData">
+              <v-card>
+                <v-card-text :style="`max-height: ${$vuetify.breakpoint.height * 0.8}px; overflow: auto`">
+                  <div
+                    v-if="comments.length<1"
+                    class="caption grey--text text-center pa-7"
+                  >No one commented yet!</div>
 
-      <v-menu :close-on-content-click="false" max-width="300" :min-width="$vuetify.breakpoint.xsOnly ? 240 : 600" offset-y>
-        <template #activator="{ on, attrs }">
-          <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="on">
-            <v-badge :content="comments.length" :value="!!comments.length">
-              <v-icon>mdi-comment-multiple-outline</v-icon>
-            </v-badge>
-          </v-btn>
-        </template>
-        <template #default="menuData">
-          <v-card>
-            <v-card-text :style="`max-height: ${$vuetify.breakpoint.height * 0.8}px; overflow: auto`">
-              <div
-                v-if="comments.length<1"
-                class="caption grey--text text-center pa-7"
-              >No one commented yet!</div>
+                  <div v-for="(comment, index) in comments" :key="index">
+                    <v-divider v-if="index" class="mb-2" />
+                    <div class="text--secondary">
+                      <v-icon class="pr-1 text--secondary">mdi-account-circle</v-icon>
+                      <span class="overline">{{ comment.name }}</span>
+                    </div>
+                    <div class="commentFormat" v-html="comment.cooked" />
+                  </div>
 
-              <div v-for="(comment, index) in comments" :key="index">
-                <v-divider v-if="index" class="mb-2" />
-                <div class="text--secondary">
-                  <v-icon class="pr-1 text--secondary">mdi-account-circle</v-icon>
-                  <span class="overline">{{ comment.name }}</span>
+                </v-card-text>
+                <div class="pa-2">
+                  <comment-upload id="comment_upload" :title="public_id" @save="menuData.value = false" />
                 </div>
-                <div class="commentFormat" v-html="comment.cooked" />
-              </div>
-
-            </v-card-text>
-            <div class="pa-2">
-              <comment-upload id="comment_upload" :title="public_id" @save="menuData.value = false" />
-            </div>
-          </v-card>
+              </v-card>
+            </template>
+          </v-menu>
         </template>
-      </v-menu>
+        Comments
+      </v-tooltip>
 
       <v-spacer />
 
