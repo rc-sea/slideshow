@@ -39,13 +39,7 @@
       </v-tooltip>
       <v-spacer />
 
-      <v-btn
-        color="orange lighten-1 pa-2"
-        rounded
-      >
-        <v-icon>mdi-share-variant</v-icon>
-      </v-btn>
-
+      <toolbar-share-button />
     </v-app-bar>
     <v-container>
       <v-card id="browse-card" class="mx-auto">
@@ -82,13 +76,19 @@
 import Vue from 'vue';
 import { mapState } from 'vuex';
 import Cloudinary from 'cloudinary-vue';
+import ToolbarShareButton from '~/components/ToolbarShareButton';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
 });
 
 export default {
+
+  components: {
+    ToolbarShareButton,
+  },
   async asyncData ({ $axios, store, error }) {},
+
   data () {
     return {
       moreloading: false,

@@ -70,13 +70,8 @@
         </v-badge>
       </v-btn>
       <v-spacer />
-      <v-btn
-        color="orange lighten-1 pa-2"
-        rounded
-      >
-        <v-icon>mdi-share-variant</v-icon>
-      </v-btn>
 
+      <toolbar-share-button />
     </v-app-bar>
     <v-container class="mb-2" fluid max-width="1200">
       <v-card
@@ -102,41 +97,6 @@
                 <v-icon x-large>mdi-chevron-right </v-icon>
               </v-btn>
             </cld-image>
-            <v-card-actions>
-              <v-row>
-                <v-col cols="4">
-                  <v-menu
-                    :close-on-click="true"
-                    :close-on-content-click="true"
-                    :offset-y="true"
-                    :open-on-hover="true"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        color="primary"
-                        dark
-                        v-on="on"
-                      >
-                        Share
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item
-                        v-for="icon in icons"
-                        :key="icon"
-                        class="mx-4"
-                        dark
-                        icon
-                        @click="onShare(icon)"
-                      >
-                        <v-icon size="24px">{{ icon }}</v-icon>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                  <v-spacer />
-                </v-col>
-              </v-row>
-            </v-card-actions>
             <v-row v-if="!user" align="center" dense justify="center">
               <v-btn class="mb-3" color="primary" normal @click="login">Login To Comment</v-btn>
             </v-row>
@@ -156,6 +116,7 @@ import Cloudinary from 'cloudinary-vue';
 import axios from 'axios';
 import Comments from '~/components/Comments';
 import CommentUpload from '~/components/CommentUpload';
+import ToolbarShareButton from '~/components/ToolbarShareButton';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
@@ -165,6 +126,7 @@ export default {
   components: {
     Comments,
     CommentUpload,
+    ToolbarShareButton,
   },
   data () {
     return {
@@ -172,11 +134,6 @@ export default {
       loading: true,
       public_id: this.$route.params.id,
       tag_name: '',
-      icons: [
-        'mdi-facebook',
-        'mdi-twitter',
-        'mdi-instagram',
-      ],
       removingTags: {},
       tagToAdd: null,
       addingTag: false,
@@ -228,9 +185,6 @@ export default {
     this.loading = false;
   },
   methods: {
-    onShare (icon) {
-      console.log(icon);
-    },
     login () {
       window.localStorage.setItem('redirect_url', this.$route.fullPath);
       window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
