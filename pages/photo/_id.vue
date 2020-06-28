@@ -1,8 +1,6 @@
 <template>
   <div>
-    <v-app-bar
-      color="blue-grey darken-4"
-    >
+    <default-app-bar #extension>
       <v-btn
         color="orange lighten-1"
         rounded
@@ -109,7 +107,7 @@
       <v-spacer />
 
       <toolbar-share-button />
-    </v-app-bar>
+    </default-app-bar>
     <v-container class="mb-2" fluid max-width="1200">
       <v-card
         class="mx-auto"
@@ -149,6 +147,7 @@ import axios from 'axios';
 // import Comments from '~/components/Comments';
 import CommentUpload from '~/components/CommentUpload';
 import ToolbarShareButton from '~/components/ToolbarShareButton';
+import DefaultAppBar from '~/components/DefaultAppBar';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
@@ -158,6 +157,7 @@ export default {
   components: {
     // Comments,
     CommentUpload,
+    DefaultAppBar,
     ToolbarShareButton,
   },
   data () {
