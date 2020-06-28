@@ -23,36 +23,25 @@
       </v-col>
     </v-row>
 
-    <template v-for="(tag_group, tag_type) in selectedTags">
-      <div v-if="filteredTags[tag_type].length" :key="tag_type" class="mb-4">
-        <v-subheader class="caption">
-          {{ tag_type }}
-          <span v-if="selectedTags[tag_type].length" style="text-transform: none">&nbsp;({{ selectedTags[tag_type].length }}/{{ allTags[tag_type].length }} selected)</span>
-        </v-subheader>
-        <v-chip-group v-model="selectedTags[tag_type]" active-class="success--text text--lighten-2" class="mx-4" column multiple>
-          <v-chip v-for="tag in filteredTags[tag_type]" :key="tag" filter>{{ capitalizeTag(tag) }} </v-chip>
-        </v-chip-group>
-      </div>
-    </template>
+    <groupped-tags :filter="tagFilter" :selected-tags.sync="selectedTags" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { popularTags } from '~/util/tags';
+import GrouppedTags from '~/components/GrouppedTags';
 
 export default {
+  components: {
+    GrouppedTags,
+  },
+
   data () {
     return {
       tagFilter: '',
-      initial_tags: {
-        Favorites: ['louise', 'bob', 'best'],
-        Couples: ['frank_mary', 'eleanor_bill', 'bob_louise'],
-        'Other Folk': ['robert_c', 'john', 'brian', 'ellen', 'paul', 'robert_d', 'jane', 'susan', 'janet'],
-      },
       selectedTags: {
-        Favorites: [],
-        Couples: [],
-        'Other Folk': [],
+        ...Object.keys(popularTags).reduce((tags, group) => Object.assign(tags, { [group]: [] }), {}),
         All: [],
       },
     };
@@ -65,16 +54,11 @@ export default {
     }),
     allTags () {
       return {
-        ...this.initial_tags,
+        ...popularTags,
         All: this.tags.filter(tag => {
-          return !Object.keys(this.initial_tags).some(group => this.initial_tags[group].includes(tag));
+          return !Object.keys(popularTags).some(group => popularTags[group].includes(tag));
         }),
       };
-    },
-    filteredTags: function () {
-      return Object.keys(this.allTags).reduce((filtered, group) => {
-        return Object.assign(filtered, { [group]: this.filterTags(this.allTags[group]) });
-      }, {});
     },
     searchType () {
       return this.$route.query.type === '1' ? 1 : 0;
@@ -129,14 +113,6 @@ export default {
   },
 
   methods: {
-    capitalizeTag (tag) {
-      return tag.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, key => key.toUpperCase()).replace(/ And /g, ' and ');
-    },
-    filterTags (tags) {
-      const filterLowercased = (this.tagFilter || '').toLowerCase();
-
-      return tags.filter(tag => tag.toLowerCase().includes(filterLowercased));
-    },
     changeSearchType () {
       this.$router.push({
         path: `/photo-browse?search=${this.search}&type=${1 - this.searchType}`,

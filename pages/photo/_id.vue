@@ -31,26 +31,71 @@
               <v-card v-if="resource">
                 <v-card-text>
                   <div class="mb-4">
-                    <v-chip v-for="tag in resource.tags" :key="tag" class="ma-1" :close="editor_role" :disabled="removingTags[tag]" small @click:close="removeTag(tag)">
+                    <v-chip
+                      v-for="tag in resource.tags"
+                      :key="tag"
+                      class="ma-1"
+                      :close="editor_role"
+                      :disabled="togglingTags[tag]"
+                      label
+                      small
+                      @click:close="removeTag(tag)"
+                    >
                       {{ capitalizeTag(tag) }}
                     </v-chip>
                   </div>
-                  <v-combobox
-                    v-if="editor_role"
-                    v-model="tagToAdd"
-                    autofocus
-                    color="success"
-                    dense
-                    hide-selected
-                    :hint="addingTag ? 'Adding tag...' : ''"
-                    :items="tagsToAdd"
-                    :loading="addingTag"
-                    outlined
-                    placeholder="Select new tag"
-                    prepend-icon="mdi-tag-plus-outline"
-                    single-line
-                    @change="addNewTag"
-                  />
+
+                  <template v-if="editor_role">
+                    <v-text-field
+                      v-model="tagsFilter"
+                      autocomplete="off"
+                      autofocus
+                      color="success"
+                      dense
+                      hide-details
+                      label="Filter tags"
+                      name="tagsFilter"
+                      outlined
+                      placeholder="Filter tags"
+                      prepend-inner-icon="mdi-magnify"
+                      single-line
+                    >
+                      <template #append-outer>
+                        <v-progress-circular v-if="addingNewTag" color="success" indeterminate size="24" />
+                        <v-tooltip v-else bottom>
+                          <template #activator="{ on, attrs }">
+                            <v-icon v-bind="attrs" color="success" :disabled="!canAddNewTag || addingNewTag" v-on="on" @click="addNewTag">mdi-plus</v-icon>
+                          </template>
+                          Create a new tag
+                        </v-tooltip>
+                      </template>
+                    </v-text-field>
+
+                    <v-list v-if="filteredTags.length" dense>
+                      <v-virtual-scroll
+                        v-if="isMounted"
+                        #default="{ item: tag }"
+                        height="300"
+                        :item-height="40"
+                        :items="filteredTags"
+                      >
+                        <v-list-item @click="toggleTag(tag)">
+                          <v-list-item-action>
+                            <v-progress-circular v-if="togglingTags[tag]" indeterminate size="24" />
+                            <v-simple-checkbox v-else :value="resource.tags.includes(tag)" />
+                          </v-list-item-action>
+                          <v-list-item-content>
+                            <v-list-item-title>{{ capitalizeTag(tag) }}</v-list-item-title>
+                          </v-list-item-content>
+                          <v-list-item-action v-if="isPopular(tag)">
+                            <v-icon color="green" small>mdi-star</v-icon>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </v-virtual-scroll>
+                    </v-list>
+                    <v-subheader v-else>Sorry, not tags found</v-subheader>
+                  </template>
+
                   <v-subheader v-else>
                     Log in to edit tags
                   </v-subheader>
@@ -149,6 +194,7 @@ import CommentUpload from '~/components/CommentUpload';
 import ToolbarShareButton from '~/components/ToolbarShareButton';
 import DefaultAppBar from '~/components/DefaultAppBar';
 import { getLocalStorageValue, setLocalStorageValue } from '~/util/localStorage';
+import { capitalizeTag, filterTags, popularTags } from '~/util/tags';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
@@ -163,13 +209,18 @@ export default {
   },
   data () {
     return {
+      isMounted: false,
+      tagsFilter: '',
+      selectedTags: {
+        ...Object.keys(popularTags).reduce((tags, group) => Object.assign(tags, { [group]: [] }), {}),
+        All: [],
+      },
       resource: null,
       loading: true,
       public_id: this.$route.params.id,
       tag_name: '',
-      removingTags: {},
-      tagToAdd: null,
-      addingTag: false,
+      togglingTags: {},
+      addingNewTag: false,
     };
   },
   computed: {
@@ -193,6 +244,11 @@ export default {
           class: 'mx-1 mx-sm-3',
         };
       },
+      canAddNewTag () {
+        const tag = this.sanitizeTag(this.tagsFilter || '');
+
+        return tag.trim() !== '' && !this.tags.includes(tag);
+      },
     }),
     tagsToAdd () {
       const allTags = this.tags || [];
@@ -201,8 +257,16 @@ export default {
         ? allTags.filter(tag => !this.resource.tags.includes(tag))
         : allTags;
     },
+    filteredTags () {
+      const filteredTags = [...filterTags(this.tags, this.tagsFilter)];
+
+      filteredTags.sort((a, b) => (this.isPopular(b) - this.isPopular(a)) || capitalizeTag(a).localeCompare(capitalizeTag(b)));
+
+      return filteredTags;
+    },
   },
   async mounted () {
+    this.isMounted = true;
     this.loading = true;
     try {
       const { data } = await axios.get('/api/detail', {
@@ -253,9 +317,8 @@ export default {
         }
       }
     },
-    capitalizeTag (tag) {
-      return tag.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, key => key.toUpperCase()).replace(/ And /g, ' and ');
-    },
+    capitalizeTag,
+    isPopular: tag => popularTags.Favorites.includes(tag) || popularTags.Couples.includes(tag),
     onPrev () {
       this.PrevNext(0);
     },
@@ -266,56 +329,64 @@ export default {
       console.log(this.detailsPage_url);
       this.$router.replace({ path: this.detailsPage_url });
     },
-    async addNewTag (tag) {
-      if (this.addingTag) {
-        return;
-      }
+    sanitizeTag (tag) {
+      return tag.trim().replace(/\s\s+/g, ' ').replace(/ /g, '_').toLowerCase();
+    },
+    async addNewTag () {
+      const tag = this.sanitizeTag(this.tagsFilter);
 
-      tag = tag.trim().replace(/\s\s+/g, ' ').replace(/ /g, '_').toLowerCase();
       if (!/^[a-z0-9]+[_a-z0-9]+$/.test(tag)) {
         alert('Tag can contain only letters, numbers, spaces and underscores');
+      }
+
+      try {
+        this.addingNewTag = true;
+        await this.toggleTag(tag);
+      } finally {
+        this.addingNewTag = false;
+      }
+    },
+    async toggleTag (tag) {
+      if (this.togglingTags[tag]) {
         return;
       }
 
-      await this.$nextTick();
+      try {
+        this.$set(this.togglingTags, tag, true);
 
+        if (this.resource.tags.includes(tag)) {
+          await this.removeTag(tag);
+        } else {
+          await this.addTag(tag);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.$delete(this.togglingTags, tag);
+      }
+      await this.$store.dispatch('tags/gettags');
+    },
+    async addTag (tag) {
       if (!this.resource.tags) {
         this.resource.tags = [];
       }
 
-      this.addingTag = true;
-      try {
-        await axios.get('/api/uploadtag', {
-          params: {
-            public_id: this.public_id,
-            tag,
-          },
-        });
-        this.resource.tags.push(tag);
-        this.tagToAdd = null;
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.addingTag = false;
-      }
+      await axios.get('/api/uploadtag', {
+        params: {
+          public_id: this.public_id,
+          tag,
+        },
+      });
+      this.resource.tags.push(tag);
     },
     async removeTag (tag) {
-      if (this.removingTags[tag]) return;
-
-      this.$set(this.removingTags, tag, true);
-      try {
-        await axios.get('/api/removetag', {
-          params: {
-            public_id: this.public_id,
-            tag: tag,
-          },
-        });
-        this.resource.tags = this.resource.tags.filter(function (value, index, arr) { return value !== tag; });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.$delete(this.removingTags, tag);
-      }
+      await axios.get('/api/removetag', {
+        params: {
+          public_id: this.public_id,
+          tag,
+        },
+      });
+      this.resource.tags = this.resource.tags.filter(function (value, index, arr) { return value !== tag; });
     },
     async PrevNext (flag) {
       for (let i = 0; i < this.resources.length; i++) {
@@ -372,5 +443,25 @@ export default {
 .commentFormat{
    white-space: pre-line;
    padding-left: 32px;
+}
+.v-virtual-scroll {
+  scrollbar-width: thin;
+}
+
+.v-virtual-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.v-virtual-scroll::-webkit-scrollbar-thumb,
+.v-virtual-scroll::-webkit-scrollbar-track {
+  border-radius: 4px;
+}
+
+.v-virtual-scroll::-webkit-scrollbar-thumb {
+  background: #666;
+}
+
+.v-virtual-scroll::-webkit-scrollbar-track {
+  background: #ccc;
 }
 </style>

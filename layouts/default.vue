@@ -32,15 +32,15 @@
       app
       clipped
       fixed
-      :mobile-break-point="0"
+      :mobile-breakpoint="0"
       right
       :width="tagNavWidth"
     >
       <search-drawer />
     </v-navigation-drawer>
-    <v-content>
+    <v-main>
       <nuxt />
-    </v-content>
+    </v-main>
     <v-footer
       dark
       padless
