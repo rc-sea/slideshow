@@ -37,7 +37,7 @@
     <template v-if="user && $auth.user">
       <v-btn id="user-button" fab text>
         <v-avatar :size="35">
-          <img alt="$auth.user.name" :src="$auth.user.picture">
+          <img :alt="$auth.user.name" :src="$auth.user.picture">
         </v-avatar>
       </v-btn>
       <v-menu activator="#user-button" offset-y>
