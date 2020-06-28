@@ -219,7 +219,7 @@ export default {
       this.$store.commit('set_just_login', false);
 
       this.$store.commit('set_details_state', getLocalStorageValue('state'));
-      this.$store.commit('resources/parse', getLocalStorageValue('resources'));
+      this.$store.commit('resources/parse', getLocalStorageValue('resources') || {});
     }
 
     this.$store.commit('comments/init');
