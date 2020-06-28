@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setLocalStorageValue } from '~/util/localStorage';
 
 export const state = () => ({
   user: null,
@@ -17,7 +18,7 @@ export const mutations = {
         }
       });
     }
-    window.localStorage.setItem('rememberinglouise_user', data);
+    setLocalStorageValue('rememberinglouise_user', data);
   },
 };
 

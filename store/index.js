@@ -2,6 +2,7 @@
 export const state = () => ({
   detailsPage_url: null,
   tag_nav: false,
+  main_nav: null,
   browse_loading: true,
   search_tag: null,
   search_type: null,
@@ -21,5 +22,8 @@ export const mutations = {
   },
   set_just_login (state, flag) {
     state.just_login = flag;
+  },
+  set_main_nav (state, value) {
+    state.main_nav = value;
   },
 };

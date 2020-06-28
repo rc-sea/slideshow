@@ -1,8 +1,6 @@
 <template>
   <div>
-    <v-app-bar
-      color="blue-grey darken-4"
-    >
+    <default-app-bar #extension>
       <v-spacer />
 
       <v-tooltip bottom>
@@ -44,7 +42,7 @@
       <v-spacer />
 
       <toolbar-share-button />
-    </v-app-bar>
+    </default-app-bar>
     <v-container>
       <v-card id="browse-card" class="mx-auto">
         <v-container fluid>
@@ -81,16 +79,18 @@ import Vue from 'vue';
 import { mapState } from 'vuex';
 import Cloudinary from 'cloudinary-vue';
 import ToolbarShareButton from '~/components/ToolbarShareButton';
+import DefaultAppBar from '~/components/DefaultAppBar';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
 });
 
 export default {
-
   components: {
+    DefaultAppBar,
     ToolbarShareButton,
   },
+
   async asyncData ({ $axios, store, error }) {},
 
   data () {
@@ -100,6 +100,7 @@ export default {
       uploading: false, // false - no upload, true - dialog opened, null - dialog opening
     };
   },
+
   computed: {
     ...mapState({
       user: state => state.user.user,
@@ -221,8 +222,7 @@ export default {
       });
     },
     onTagNav () {
-      this.$store.commit('set_tag_nav', true);
-      console.log(this.tag_nav);
+      this.$store.commit('set_tag_nav', !this.tag_nav);
     },
     setloading (flag) {
       this.$store.commit('set_browse_loading', flag);

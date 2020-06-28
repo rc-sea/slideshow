@@ -5,7 +5,7 @@
       app
       clipped
       fixed
-      :mini-variant="miniVariant"
+      :mini-variant.sync="miniVariant"
     >
       <v-list>
         <v-list-item
@@ -27,77 +27,19 @@
         </v-list-item> -->
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
+    <v-navigation-drawer
+      v-if="hasSearchDrawer"
       app
-      clipped-left
-      clipped-right
-      color="indigo"
+      clipped
       fixed
-      :hide-on-scroll="true"
+      :mobile-break-point="0"
+      right
+      :width="tagNavWidth"
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <div class="hidden-sm-and-down">
-        <v-toolbar-title class="new-headline" v-text="title" />
-      </div>
-      <div class="hidden-md-and-up">
-        <v-toolbar-title class="md-headline" v-text="title" />
-      </div>
-      <v-spacer />
-      <div>
-        <v-btn
-          color="purple lighten-4"
-          rounded
-        >
-          <nuxt-link to="/photo-browse">
-            <v-icon large>mdi-image-search</v-icon>
-            <span class="hidden-sm-and-down">View Photos</span>
-          </nuxt-link>
-        </v-btn>
-      </div>
-      <v-spacer />
-      <v-card-actions>
-        <div class="hidden-md-and-down">
-          <nuxt-link to="/service">
-            <v-btn text>Funeral Service</v-btn></nuxt-link>
-          <nuxt-link to="/remembrances">
-            <v-btn text>Remembrances</v-btn></nuxt-link>
-        </div>
-        <v-menu v-if="user && $auth.user" offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn fab text v-on="on">
-              <v-avatar :size="35">
-                <v-img alt="$auth.user.name" :src="$auth.user.picture" />
-              </v-avatar>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item @click="onLogout">
-              <v-icon class="pr-3" large>mdi-account-circle-outline</v-icon>
-              <v-list-item-title>Log Out</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-btn v-else color="green lighten-4"
-               rounded text @click="login"
-        >
-          <v-icon large>mdi-account-circle-outline</v-icon>
-          <span class="hidden-sm-and-down">Log in</span>
-        </v-btn>
-      </v-card-actions>
-    </v-app-bar>
+      <search-drawer />
+    </v-navigation-drawer>
     <v-content>
       <nuxt />
-      <v-navigation-drawer
-        v-if="hasSearchDrawer"
-        app
-        clipped
-        fixed
-        :mobile-break-point="0"
-        right
-        :width="tagNavWidth"
-      >
-        <search-drawer />
-      </v-navigation-drawer>
     </v-content>
     <v-footer
       dark
@@ -145,6 +87,7 @@
 import { mapState } from 'vuex';
 import SearchDrawer from '@/components/SearchDrawer';
 import { createShareIcons } from '~/util/share.js';
+import { getLocalStorageValue } from '~/util/localStorage';
 
 export default {
   components: {
@@ -153,7 +96,6 @@ export default {
 
   data () {
     return {
-      drawer: false,
       items: [
         {
           icon: 'mdi-apps',
@@ -178,7 +120,6 @@ export default {
       ],
       shareIcons: createShareIcons(process.env.BASE_URL.replace(/\/$/, '') + this.$nuxt.$route.fullPath),
       miniVariant: false,
-      title: 'Remembering Louise',
     };
   },
 
@@ -198,28 +139,20 @@ export default {
     tagNavWidth: function () {
       return this.$vuetify.breakpoint.smAndDown ? 300 : 360;
     },
+    drawer: {
+      get () {
+        return this.$store.state.main_nav;
+      },
+      set (value) {
+        this.$store.commit('set_main_nav', value);
+      },
+    },
   },
   async mounted () {
     if (this.$auth && this.$auth.user && !this.user) {
-      await this.$store.commit('user/SET_USER', JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
+      await this.$store.commit('user/SET_USER', getLocalStorageValue('rememberinglouise_user'));
     }
     await this.$store.dispatch('tags/gettags');
-  },
-  methods: {
-    onLogout () {
-      this.$auth.logout();
-      this.$store.commit('user/SET_USER', null);
-    },
-    login () {
-      window.localStorage.setItem('redirect_url', this.$route.fullPath);
-      window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
-      window.localStorage.setItem('state', JSON.stringify({
-        search_tag: this.search_tag,
-        search_type: this.search_type,
-        detailsPage_url: this.detailsPage_url,
-      }));
-      this.$auth.loginWith('auth0');
-    },
   },
   head () {
     return {
@@ -230,17 +163,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.new-headline {
-  font-family: 'Pinyon Script', cursive;
-  font-size:48px;
-}
-.md-headline  {
-  font-family: 'Pinyon Script', cursive;
-  font-size:30px;
-}
-a {
-  text-decoration: none;
-}
-</style>
