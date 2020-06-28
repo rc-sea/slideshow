@@ -87,6 +87,7 @@
 import { mapState } from 'vuex';
 import SearchDrawer from '@/components/SearchDrawer';
 import { createShareIcons } from '~/util/share.js';
+import { getLocalStorageValue } from '~/util/localStorage';
 
 export default {
   components: {
@@ -149,7 +150,7 @@ export default {
   },
   async mounted () {
     if (this.$auth && this.$auth.user && !this.user) {
-      await this.$store.commit('user/SET_USER', JSON.parse(window.localStorage.getItem('rememberinglouise_user')));
+      await this.$store.commit('user/SET_USER', getLocalStorageValue('rememberinglouise_user'));
     }
     await this.$store.dispatch('tags/gettags');
   },

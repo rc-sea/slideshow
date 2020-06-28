@@ -10,6 +10,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { getLocalStorageValue } from '~/util/localStorage';
 
 export default {
   computed: {
@@ -24,7 +25,7 @@ export default {
     console.log(this.user);
     if (process.browser) {
       this.$router.replace({
-        path: window.localStorage.getItem('redirect_url'),
+        path: getLocalStorageValue('redirect_url'),
       });
     }
   },

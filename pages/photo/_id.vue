@@ -148,6 +148,7 @@ import axios from 'axios';
 import CommentUpload from '~/components/CommentUpload';
 import ToolbarShareButton from '~/components/ToolbarShareButton';
 import DefaultAppBar from '~/components/DefaultAppBar';
+import { getLocalStorageValue, setLocalStorageValue } from '~/util/localStorage';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
@@ -216,12 +217,9 @@ export default {
     }
     if (this.just_login) {
       this.$store.commit('set_just_login', false);
-      const local_state = JSON.parse(window.localStorage.getItem('state'));
 
-      const local_resources = JSON.parse(window.localStorage.getItem('resources'));
-
-      this.$store.commit('set_details_state', local_state);
-      this.$store.commit('resources/parse', local_resources);
+      this.$store.commit('set_details_state', getLocalStorageValue('state'));
+      this.$store.commit('resources/parse', getLocalStorageValue('resources'));
     }
 
     this.$store.commit('comments/init');
@@ -235,13 +233,13 @@ export default {
   },
   methods: {
     login () {
-      window.localStorage.setItem('redirect_url', this.$route.fullPath);
-      window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
-      window.localStorage.setItem('state', JSON.stringify({
+      setLocalStorageValue('redirect_url', this.$route.fullPath);
+      setLocalStorageValue('resources', this.resources_wrap);
+      setLocalStorageValue('state', {
         search_tag: this.search_tag,
         search_type: this.search_type,
         detailsPage_url: this.detailsPage_url,
-      }));
+      });
       this.$auth.loginWith('auth0');
     },
     onCommentIcon () {

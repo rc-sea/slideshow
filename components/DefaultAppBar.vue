@@ -70,6 +70,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { setLocalStorageValue } from '~/util/localStorage';
 
 export default {
   name: 'DefaultAppBar',
@@ -86,13 +87,13 @@ export default {
       this.$store.commit('user/SET_USER', null);
     },
     login () {
-      window.localStorage.setItem('redirect_url', this.$route.fullPath);
-      window.localStorage.setItem('resources', JSON.stringify(this.resources_wrap));
-      window.localStorage.setItem('state', JSON.stringify({
+      setLocalStorageValue('redirect_url', this.$route.fullPath);
+      setLocalStorageValue('resources', this.resources_wrap);
+      setLocalStorageValue('state', {
         search_tag: this.search_tag,
         search_type: this.search_type,
         detailsPage_url: this.detailsPage_url,
-      }));
+      });
       this.$auth.loginWith('auth0');
     },
     toggleMainDrawer () {
