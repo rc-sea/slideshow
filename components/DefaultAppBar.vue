@@ -29,20 +29,18 @@
 
     <v-spacer />
 
-    <v-card-actions>
-      <div class="hidden-md-and-down">
-        <v-btn nuxt rounded text to="/service">Funeral Service</v-btn>
-        <v-btn nuxt rounded text to="/remembrances">Remembrances</v-btn>
-      </div>
+    <div class="hidden-md-and-down">
+      <v-btn nuxt rounded text to="/service">Funeral Service</v-btn>
+      <v-btn nuxt rounded text to="/remembrances">Remembrances</v-btn>
+    </div>
 
-      <v-menu v-if="user && $auth.user" offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn fab text v-on="on">
-            <v-avatar :size="35">
-              <v-img alt="$auth.user.name" :src="$auth.user.picture" />
-            </v-avatar>
-          </v-btn>
-        </template>
+    <template v-if="user && $auth.user">
+      <v-btn id="user-button" fab text>
+        <v-avatar :size="35">
+          <img alt="$auth.user.name" :src="$auth.user.picture">
+        </v-avatar>
+      </v-btn>
+      <v-menu activator="#user-button" offset-y>
         <v-list>
           <v-list-item @click="logout">
             <v-icon class="pr-3" large>mdi-account-circle-outline</v-icon>
@@ -50,17 +48,17 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-btn
-        v-else
-        color="green lighten-4"
-        rounded
-        text
-        @click="login"
-      >
-        <v-icon class="mx-1" large>mdi-account-circle-outline</v-icon>
-        <span class="hidden-sm-and-down">Log in</span>
-      </v-btn>
-    </v-card-actions>
+    </template>
+    <v-btn
+      v-else
+      color="green lighten-4"
+      rounded
+      text
+      @click="login"
+    >
+      <v-icon class="mx-1" large>mdi-account-circle-outline</v-icon>
+      <span class="hidden-sm-and-down">Log in</span>
+    </v-btn>
 
     <template v-if="$slots.extension" #extension>
       <slot name="extension" />

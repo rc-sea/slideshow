@@ -222,8 +222,7 @@ export default {
       });
     },
     onTagNav () {
-      this.$store.commit('set_tag_nav', true);
-      console.log(this.tag_nav);
+      this.$store.commit('set_tag_nav', !this.tag_nav);
     },
     setloading (flag) {
       this.$store.commit('set_browse_loading', flag);

@@ -82,13 +82,14 @@ export default {
     search () {
       return this.$route.query.search || '';
     },
+    queryJson () {
+      return JSON.stringify(this.$route.query);
+    },
   },
 
   watch: {
-    '$route.query': {
-      immediate: true,
-      deep: true,
-      async handler (query) {
+    queryJson: {
+      async handler () {
         const searchTags = this.search.split('-');
 
         if (this.search) {

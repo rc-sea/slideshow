@@ -27,19 +27,19 @@
         </v-list-item> -->
       </v-list>
     </v-navigation-drawer>
+    <v-navigation-drawer
+      v-if="hasSearchDrawer"
+      app
+      clipped
+      fixed
+      :mobile-break-point="0"
+      right
+      :width="tagNavWidth"
+    >
+      <search-drawer />
+    </v-navigation-drawer>
     <v-content>
       <nuxt />
-      <v-navigation-drawer
-        v-if="hasSearchDrawer"
-        app
-        clipped
-        fixed
-        :mobile-break-point="0"
-        right
-        :width="tagNavWidth"
-      >
-        <search-drawer />
-      </v-navigation-drawer>
     </v-content>
     <v-footer
       dark
