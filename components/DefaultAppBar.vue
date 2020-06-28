@@ -117,6 +117,7 @@ export default {
 </style>
 
 <style>
+/* https://github.com/vuetifyjs/vuetify/issues/7856 */
 .v-app-bar .v-toolbar__extension {
   background: #263238; /* blue-grey darken-4 */
 }
