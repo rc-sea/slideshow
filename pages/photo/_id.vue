@@ -49,7 +49,7 @@
                     <v-text-field
                       v-model="tagsFilter"
                       autocomplete="off"
-                      autofocus
+                      :autofocus="$vuetify.breakpoint.mdAndUp"
                       color="success"
                       dense
                       hide-details
@@ -140,7 +140,7 @@
 
                 </v-card-text>
                 <div class="pa-2">
-                  <comment-upload id="comment_upload" :title="public_id" @save="menuData.value = false" />
+                  <comment-upload id="comment_upload" autofocus :title="public_id" @save="menuData.value = false" />
                 </div>
               </v-card>
             </template>

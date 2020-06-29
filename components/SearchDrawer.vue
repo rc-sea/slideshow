@@ -3,7 +3,14 @@
     <div class="ma-2">
       <v-row align="center" dense>
         <v-col>
-          <v-text-field v-model="tagFilter" autocomplete="off" autofocus hide-details label="Filter tags" solo-inverted />
+          <v-text-field
+            v-model="tagFilter"
+            autocomplete="off"
+            :autofocus="$vuetify.breakpoint.mdAndUp"
+            hide-details
+            label="Filter tags"
+            solo-inverted
+          />
         </v-col>
         <v-col cols="auto">
           <v-btn icon outlined @click="onHideNav"><v-icon small>mdi-chevron-double-right</v-icon></v-btn>
