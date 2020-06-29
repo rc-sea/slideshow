@@ -3,7 +3,7 @@
     <v-textarea
       v-model="text"
       auto-grow
-      autofocus
+      :autofocus="autofocus && $vuetify.breakpoint.mdAndUp"
       color="success"
       :hide-details="$vuetify.breakpoint.xsOnly"
       :hint="$vuetify.breakpoint.xsOnly ? '' : 'Ctrl-Enter saves the comment'"
@@ -34,6 +34,10 @@ import axios from 'axios';
 
 export default {
   props: {
+    autofocus: {
+      type: Boolean,
+      default: false,
+    },
     title: String,
   },
   data () {
