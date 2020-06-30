@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="(groupTags, group) in selectedTags">
+    <template v-for="(_, group) in allTags">
       <div v-if="filteredTags[group].length" :key="group" class="mb-4">
         <v-subheader class="caption">
           {{ group }}
