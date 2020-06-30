@@ -80,26 +80,12 @@ export default {
 
   watch: {
     queryJson: {
-      async handler () {
-        const searchTags = this.search.split('-');
-
-        if (this.search) {
-          for (const group in this.selectedTags) {
-            searchTags.forEach(tag => {
-              const index = this.allTags[group].indexOf(tag);
-
-              if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
-                this.selectedTags[group].push(index);
-              }
-            });
-          }
-        } else {
-          for (const group in this.selectedTags) {
-            this.selectedTags[group] = [];
-          }
+      immediate: true,
+      async handler (newQuery, oldQuery) {
+        this.setSelectedTags();
+        if (oldQuery !== undefined) {
+          await this.fetchPhotos();
         }
-
-        await this.fetchPhotos();
       },
     },
     selectedTags: {
@@ -120,6 +106,25 @@ export default {
   },
 
   methods: {
+    setSelectedTags () {
+      const searchTags = this.search.split('-');
+
+      if (this.search) {
+        for (const group in this.selectedTags) {
+          searchTags.forEach(tag => {
+            const index = this.allTags[group].indexOf(tag);
+
+            if (index !== -1 && this.selectedTags[group].indexOf(index) === -1) {
+              this.selectedTags[group].push(index);
+            }
+          });
+        }
+      } else {
+        for (const group in this.selectedTags) {
+          this.selectedTags[group] = [];
+        }
+      }
+    },
     changeSearchType () {
       this.$router.push({
         path: `/photo-browse?search=${this.search}&type=${1 - this.searchType}`,
