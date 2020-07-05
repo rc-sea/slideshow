@@ -5,11 +5,12 @@
         <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            color="orange lighten-1 pa-2"
+            color="light-blue accent-2 pa-2"
             rounded
             v-on="{ ...on, ...tooltipOn }"
           >
             <v-icon>mdi-share-variant</v-icon>
+            <span class="hidden-sm-and-down">Share</span>
           </v-btn>
         </template>
         <v-list>

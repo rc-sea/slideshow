@@ -156,6 +156,8 @@ export default {
   },
   head () {
     return {
+      title: 'Home page -- Remembering Louise',
+      meta: [],
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' },
       ],

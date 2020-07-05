@@ -2,12 +2,12 @@
   <div>
     <default-app-bar #extension>
       <v-btn
-        color="orange lighten-1"
+        color="indigo lighten-2"
         rounded
         @click="onBack"
       >
         <v-icon left>mdi-arrow-left</v-icon>
-        Back
+        <span class="hidden-sm-and-down">Back</span>
       </v-btn>
 
       <v-spacer />
@@ -18,12 +18,13 @@
             <template #activator="{ on, attrs }">
               <v-btn
                 v-bind="{ ...toolbarBtnAttrs, ...attrs }"
-                color="orange"
+                color="deep-purple lighten-2"
                 rounded
                 v-on="{ ...on, ...tooltipOn }"
               >
                 <v-badge :content="resource && resource.tags && resource.tags.length" :value="!!(resource && resource.tags && resource.tags.length)">
                   <v-icon>mdi-tag-multiple-outline</v-icon>
+                  <span class="hidden-sm-and-down">Tags</span>
                 </v-badge>
               </v-btn>
             </template>
@@ -115,9 +116,10 @@
         <template #activator="{ on: tooltipOn }">
           <v-menu :close-on-content-click="false" max-width="300" :min-width="$vuetify.breakpoint.xsOnly ? 240 : 600" offset-y>
             <template #activator="{ on, attrs }">
-              <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" v-on="{ ...on, ...tooltipOn }">
+              <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="teal lighten-1" v-on="{ ...on, ...tooltipOn }">
                 <v-badge :content="comments.length" :value="!!comments.length">
                   <v-icon>mdi-comment-multiple-outline</v-icon>
+                  <span class="hidden-sm-and-down">Comments</span>
                 </v-badge>
               </v-btn>
             </template>
@@ -415,6 +417,12 @@ export default {
         }
       }
     },
+  },
+  head () {
+    return {
+      title: 'Photo detail -- Remembering Louise',
+      meta: [],
+    };
   },
 };
 </script>

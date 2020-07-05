@@ -7,6 +7,7 @@
         <template #activator="{ on, attrs }">
           <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="blue lighten-1" v-on="on" @click="slideshow">
             <v-icon>mdi-movie-open-outline</v-icon>
+            <span class="hidden-sm-and-down">Play Slideshow</span>
           </v-btn>
         </template>
         Start Slide Show
@@ -17,6 +18,7 @@
           <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="info" v-on="on" @click="onTagNav">
             <v-badge :content="total_count" :value="!!total_count">
               <v-icon>mdi-image-search</v-icon>
+            <span class="hidden-sm-and-down">Find people</span>
             </v-badge>
           </v-btn>
         </template>
@@ -27,7 +29,7 @@
         <template #activator="{ on, attrs }">
           <v-btn
             v-bind="{ ...toolbarBtnAttrs, ...attrs }"
-            color="green"
+            color="purple darken-3"
             :disabled="uploading !== false"
             :loading="uploading == null"
             v-on="on"
@@ -160,19 +162,19 @@ export default {
         multiple: true,
         styles: {
           palette: {
-            window: '#10173a',
-            sourceBg: '#20304b',
-            windowBorder: '#7171D0',
-            tabIcon: '#79F7FF',
-            inactiveTabIcon: '#8E9FBF',
-            menuIcons: '#CCE8FF',
-            link: '#72F1FF',
-            action: '#5333FF',
-            inProgress: '#00ffcc',
-            complete: '#33ff00',
-            error: '#cc3333',
+            window: '#7986CB',
+            windowBorder: '#90A0B3',
+            tabIcon: '#263238',
+            menuIcons: '#5A616A',
             textDark: '#000000',
-            textLight: '#ffffff',
+            textLight: '#FFFFFF',
+            link: '#1A237E',
+            action: '#FF620C',
+            inactiveTabIcon: '#1A237E',
+            error: '#F44235',
+            inProgress: '#0078FF',
+            complete: '#20B832',
+            sourceBg: '#E4EBF1',
           },
           fonts: {
             default: null,
@@ -245,7 +247,8 @@ export default {
   },
   head () {
     return {
-      title: 'Photo Listing',
+      title: 'Browse Photos -- Remembering Louise',
+      meta: [],
     };
   },
 };
