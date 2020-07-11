@@ -18,7 +18,7 @@
           <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="info" v-on="on" @click="onTagNav">
             <v-badge :content="total_count" :value="!!total_count">
               <v-icon>mdi-image-search</v-icon>
-            <span class="hidden-sm-and-down">Find people</span>
+              <span class="hidden-sm-and-down">Find people</span>
             </v-badge>
           </v-btn>
         </template>
@@ -29,17 +29,24 @@
         <template #activator="{ on, attrs }">
           <v-btn
             v-bind="{ ...toolbarBtnAttrs, ...attrs }"
-            color="purple darken-3"
+            color="purple lighten-2"
             :disabled="uploading !== false"
             :loading="uploading == null"
             v-on="on"
             @click="upload"
           >
             <v-icon>mdi-image-plus</v-icon>
+            <span class="hidden-sm-and-down">Upload photos</span>
           </v-btn>
         </template>
         Upload photos
       </v-tooltip>
+      <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red">
+        <v-badge :content="227" :value="227">
+          <v-icon>mdi-image-search</v-icon>
+          <span class="hidden-sm-and-down">Tag photos</span>
+        </v-badge>
+      </v-btn>
 
       <v-spacer />
 
