@@ -83,7 +83,7 @@
                         <v-list-item @click="toggleTag(tag)">
                           <v-list-item-action>
                             <v-progress-circular v-if="togglingTags[tag]" indeterminate size="24" />
-                            <v-simple-checkbox v-else :value="resource.tags.includes(tag)" />
+                            <v-simple-checkbox v-else :value="(resource.tags || []).includes(tag)" />
                           </v-list-item-action>
                           <v-list-item-content>
                             <v-list-item-title>{{ capitalizeTag(tag) }}</v-list-item-title>
@@ -356,7 +356,7 @@ export default {
       try {
         this.$set(this.togglingTags, tag, true);
 
-        if (this.resource.tags.includes(tag)) {
+        if ((this.resource.tags || []).includes(tag)) {
           await this.removeTag(tag);
         } else {
           await this.addTag(tag);

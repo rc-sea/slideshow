@@ -41,21 +41,28 @@
         </template>
         Upload photos
       </v-tooltip>
-      <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red">
-        <v-badge :content="227" :value="227">
-          <v-icon>mdi-image-search</v-icon>
-          <span class="hidden-sm-and-down">Tag photos</span>
-        </v-badge>
-      </v-btn>
+
+      <v-tooltip v-if="showUntagged" bottom>
+        <template #activator="{ on, attrs }">
+          <v-btn v-bind="{ ...toolbarBtnAttrs, ...attrs }" color="red" :disabled="!untagged_count" :loading="untagged_loading" v-on="on" @click="toggleUntagged(true)">
+            <v-badge :content="untagged_count" :value="!!untagged_count">
+              <v-icon>mdi-tag-plus-outline</v-icon>
+              <span class="hidden-sm-and-down">Untagged</span>
+            </v-badge>
+          </v-btn>
+        </template>
+        Show untagged photos
+      </v-tooltip>
 
       <v-spacer />
 
       <toolbar-share-button />
     </default-app-bar>
+
     <v-container>
       <v-card id="browse-card" class="mx-auto">
         <v-container fluid>
-          <v-row v-if="loading" align="center" class="loading-row" justify="center">
+          <v-row v-if="resources_loading" align="center" class="loading-row" justify="center">
             <v-progress-circular color="gray" indeterminate :size="200" :width="20" />
           </v-row>
           <v-row v-else dense>
@@ -119,7 +126,9 @@ export default {
       total_count: state => state.resources.total_count,
       detailsPage_url: state => state.detailsPage_url,
       tag_nav: state => state.tag_nav,
-      loading: state => state.browse_loading,
+      resources_loading: state => state.resources.resources_loading,
+      untagged_count: state => state.resources.untagged_count,
+      untagged_loading: state => state.resources.untagged_loading,
     }),
     speedDialProps () {
       const mobile = this.$vuetify.breakpoint.smAndDown;
@@ -141,15 +150,50 @@ export default {
         class: 'mx-1 mx-sm-3',
       };
     },
+    showUntagged () {
+      return !!this.user && this.editor_role;
+    },
+    queryJson () {
+      return JSON.stringify(this.$route.query);
+    },
+    searchType () {
+      return this.$route.query.type === '1' ? 1 : 0;
+    },
+    search () {
+      return this.$route.query.search || '';
+    },
   },
-  async created () {
+
+  watch: {
+    '$route.fullPath': 'fetchPhotos',
+    showUntagged: {
+      immediate: true,
+      async handler () {
+        if (this.showUntagged) {
+          await this.$store.dispatch('resources/untagged');
+        }
+      },
+    },
+  },
+
+  mounted () {
     if (process.browser) {
-      console.log(this.$route.fullPath);
-      console.log(this.$route.query);
-      await this.init();
+      this.fetchPhotos();
     }
   },
+
   methods: {
+    async fetchPhotos () {
+      if (this.search === '-' || this.$route.fullPath !== this.detailsPage_url) {
+        this.$store.commit('set_details_state', {
+          detailsPage_url: this.$route.fullPath,
+          search_tag: this.search,
+          search_type: this.searchType,
+        });
+
+        await this.$store.dispatch('resources/search', { searchtag: this.search, type: this.searchType });
+      }
+    },
     upload () {
       const uploadSettings = {
         cloudName: 'louise',
@@ -207,37 +251,13 @@ export default {
         }
       });
     },
-    async init () {
-      var { search, type } = this.$route.query;
-
-      if (this.detailsPage_url !== this.$route.fullPath) {
-        this.setloading(true);
-        if (search) {
-          await this.$store.dispatch('resources/search', {
-            searchtag: search,
-            type: type,
-          });
-        } else {
-          await this.$store.dispatch('resources/getresources');
-        }
-        this.setloading(false);
-      } else {
-        this.setloading(false);
-      }
-      this.$store.commit('set_details_state', {
-        detailsPage_url: this.$route.fullPath,
-        search_tag: search,
-        search_type: type,
-      });
-    },
     onTagNav () {
       this.$store.commit('set_tag_nav', !this.tag_nav);
     },
-    setloading (flag) {
-      this.$store.commit('set_browse_loading', flag);
-    },
     async loadmore () {
       const { search, type } = this.$route.query;
+
+      if (search === '-') return;
 
       this.moreloading = true;
       await this.$store.dispatch('resources/searchmore', {
@@ -249,6 +269,12 @@ export default {
     slideshow () {
       this.$router.replace({
         path: '/slideshow',
+      });
+    },
+    toggleUntagged () {
+      this.$store.commit('set_tag_nav', false);
+      this.$router.push({
+        path: `/photo-browse?search=-&type=${this.searchType}`,
       });
     },
   },
