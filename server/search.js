@@ -11,15 +11,17 @@ export default async function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
-  if (searchtag === '-') {
-    query = cloudinary.search.expression('').with_field('tags');
-  } else if (searchtag) {
-    const expression = searchtag.split('-').map(tag => `tags=${tag}`).join(type === 0 ? ' || ' : ' && ');
+  if (searchtag) {
+    const expression = searchtag === '-'
+      ? ''
+      : searchtag.split('-').map(tag => `tags=${tag}`).join(type === 0 ? ' || ' : ' && ');
 
     query = cloudinary.search
       .expression(expression)
       .next_cursor(next_cursor)
       .max_results(48);
+
+    if (searchtag === '-') query = query.with_field('tags');
   } else {
     query = cloudinary.search.next_cursor(next_cursor).max_results(48);
   }

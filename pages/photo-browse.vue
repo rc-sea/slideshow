@@ -170,7 +170,7 @@ export default {
       immediate: true,
       async handler () {
         if (this.showUntagged) {
-          await this.$store.dispatch('resources/untagged');
+          await this.$store.dispatch('resources/untaggedCount');
         }
       },
     },
@@ -257,14 +257,17 @@ export default {
     async loadmore () {
       const { search, type } = this.$route.query;
 
-      if (search === '-') return;
-
       this.moreloading = true;
-      await this.$store.dispatch('resources/searchmore', {
-        searchtag: search,
-        type: type,
-      });
-      this.moreloading = false;
+      try {
+        await this.$store.dispatch('resources/searchmore', {
+          searchtag: search,
+          type: type,
+        });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.moreloading = false;
+      }
     },
     slideshow () {
       this.$router.replace({

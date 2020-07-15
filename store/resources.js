@@ -82,4 +82,16 @@ export const actions = {
       commit('set_untagged_loading', false);
     }
   },
+  async untaggedCount ({ commit, state }) {
+    try {
+      commit('set_untagged_loading', true);
+      const { data } = await axios.get('/api/untagged');
+
+      commit('set_untagged_count', data.count);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      commit('set_untagged_loading', false);
+    }
+  },
 };
