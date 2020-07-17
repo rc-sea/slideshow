@@ -73,19 +73,13 @@ export default {
     search () {
       return this.$route.query.search || '';
     },
-    queryJson () {
-      return JSON.stringify(this.$route.query);
-    },
   },
 
   watch: {
-    queryJson: {
+    '$route.fullPath': {
       immediate: true,
-      async handler (newQuery, oldQuery) {
+      handler () {
         this.setSelectedTags();
-        if (oldQuery !== undefined) {
-          await this.fetchPhotos();
-        }
       },
     },
     selectedTags: {
@@ -93,11 +87,6 @@ export default {
       handler () {
         const searchtag = this.generateSearchTag();
 
-        this.$store.commit('set_details_state', {
-          detailsPage_url: `/photo-browse?search=${searchtag}&type=${this.searchType}`,
-          search_tag: searchtag,
-          search_type: this.searchType,
-        });
         this.$router.push({
           path: `/photo-browse?search=${searchtag}&type=${this.searchType}`,
         });
@@ -129,19 +118,6 @@ export default {
       this.$router.push({
         path: `/photo-browse?search=${this.search}&type=${1 - this.searchType}`,
       });
-    },
-    async fetchPhotos () {
-      this.$store.commit('set_browse_loading', true);
-
-      try {
-        if (this.search) {
-          await this.$store.dispatch('resources/search', { searchtag: this.search, type: this.searchType });
-        } else {
-          await this.$store.dispatch('resources/getresources');
-        }
-      } finally {
-        this.$store.commit('set_browse_loading', false);
-      }
     },
     generateSearchTag () {
       const searchTagsArray = [];

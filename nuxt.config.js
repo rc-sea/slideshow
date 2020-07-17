@@ -145,5 +145,6 @@ module.exports = {
     { path: '/api/role', handler: '~/server/role.js' },
     { path: '/api/uploadtag', handler: '~/server/uploadtag.js' },
     { path: '/api/removetag', handler: '~/server/removetag.js' },
+    { path: '/api/untagged', handler: '~/server/untagged.js' },
   ],
 };

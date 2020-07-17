@@ -1,37 +1,55 @@
+import e from 'express';
+
 const cloudinary = require('./cloudinary').cloudinary;
 
-export default function (req, res, next) {
-  const searchtag = req.query.searchtag;
-  const type = req.query.type | 0;
-  const next_cursor = req.query.next_cursor;
+const LIMIT = 48;
 
-  let tags;
+async function fetchPhotos (searchtag, type, next_cursor) {
+  let query;
 
-  console.log('SearchTag: ', searchtag);
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   if (searchtag) {
-    tags = searchtag.split('-');
-    let expression = `tags=${tags[0]}`;
+    const expression = searchtag === '-'
+      ? ''
+      : searchtag.split('-').map(tag => `tags=${tag}`).join(type === 0 ? ' || ' : ' && ');
 
-    for (let i = 1; i < tags.length; i++) {
-      if (type === 0) {
-        expression += ` || tags=${tags[i]}`;
-      } else {
-        expression += ` && tags=${tags[i]}`;
-      }
-    }
-    cloudinary.search
+    query = cloudinary.search
       .expression(expression)
       .next_cursor(next_cursor)
-      .max_results(48)
-      .execute()
-      .then(result => res.json(result));
+      .max_results(LIMIT);
+
+    if (searchtag === '-') query = query.with_field('tags');
   } else {
-    cloudinary.search
-      .next_cursor(next_cursor)
-      .max_results(48)
-      .execute()
-      .then(result => res.json(result));
+    query = cloudinary.search.next_cursor(next_cursor).max_results(48);
   }
+
+  const result = await query.execute();
+
+  if (searchtag === '-') {
+    result.resources = result.resources.filter(image => !image.tags.length);
+  }
+
+  return result;
+}
+
+export default async function (req, res, next) {
+  const searchtag = req.query.searchtag;
+  const type = req.query.type | 0;
+
+  let next_cursor = req.query.next_cursor;
+
+  let result = null;
+
+  do {
+    const localResult = await fetchPhotos(searchtag, type, next_cursor);
+
+    if (result) {
+      localResult.resources = result.resources.concat(localResult.resources);
+    }
+    result = localResult;
+    next_cursor = result.next_cursor;
+  } while (searchtag === '-' && next_cursor && result.resources.length <= LIMIT); // eslint-disable-line no-unmodified-loop-condition
+
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.json(result);
 }

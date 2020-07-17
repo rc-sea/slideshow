@@ -94,3 +94,5 @@ sw.*
 
 # cloudinary config
 *.cloudinary
+
+/static/untagged.json
