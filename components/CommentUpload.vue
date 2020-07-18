@@ -4,6 +4,7 @@
       v-model="text"
       auto-grow
       :autofocus="autofocus && $vuetify.breakpoint.mdAndUp"
+      class="ma-2"
       color="success"
       :hide-details="$vuetify.breakpoint.xsOnly"
       :hint="$vuetify.breakpoint.xsOnly ? '' : 'Ctrl-Enter saves the comment'"
@@ -12,16 +13,17 @@
       outlined
       persistent-hint
       placeholder="Write a comment"
+      style="font-size: 1.3rem"
       @keydown.ctrl.enter="saveComment"
     />
-    <v-btn
-      block
-      color="primary"
+    <card-actions
+      :disabled="!(text || '').trim()"
+      icon="mdi-comment-plus"
+      label="Add comment"
       :loading="saving"
+      main
       @click="saveComment"
-    >
-      <v-icon left>mdi-comment-plus-outline</v-icon> Add comment
-    </v-btn>
+    />
   </div>
   <v-subheader v-else>Login to comment</v-subheader>
 </template>
@@ -29,10 +31,15 @@
 <script>
 import { mapState } from 'vuex';
 import axios from 'axios';
+import CardActions from '~/components/CardActions';
 
 // const baseUrl = process.env.BASE_URL;
 
 export default {
+  components: {
+    CardActions,
+  },
+
   props: {
     autofocus: {
       type: Boolean,
@@ -40,12 +47,14 @@ export default {
     },
     title: String,
   },
+
   data () {
     return {
       text: '',
       saving: false,
     };
   },
+
   computed: {
     ...mapState({
       topic_id: state => state.comments.topic_id,
@@ -77,3 +86,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-textarea >>> .v-label.v-label--active {
+  font-size: 1.3rem;
+}
+
+.v-textarea >>> textarea {
+  padding-top: .5rem;
+}
+</style>

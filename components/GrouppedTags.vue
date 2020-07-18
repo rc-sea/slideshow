@@ -14,7 +14,7 @@
           :value="selectedTags[group]"
           @change="groupTags => updateSelectedTags(group, groupTags)"
         >
-          <v-chip v-for="tag in filteredTags[group]" :key="tag" filter>{{ capitalizeTag(tag) }} </v-chip>
+          <v-chip v-for="tag in filteredTags[group]" :key="tag" filter large>{{ capitalizeTag(tag) }} </v-chip>
         </v-chip-group>
       </div>
     </template>
@@ -67,3 +67,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-chip {
+  height: 36px;
+}
+</style>

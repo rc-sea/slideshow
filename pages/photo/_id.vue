@@ -35,11 +35,11 @@
                     <v-chip
                       v-for="tag in resource.tags"
                       :key="tag"
+                      active-class="success--text text--lighten-3"
                       class="ma-1"
                       :close="editor_role"
                       :disabled="togglingTags[tag]"
-                      label
-                      small
+                      :input-value="true"
                       @click:close="removeTag(tag)"
                     >
                       {{ capitalizeTag(tag) }}
@@ -52,14 +52,15 @@
                       autocomplete="off"
                       :autofocus="$vuetify.breakpoint.mdAndUp"
                       color="success"
-                      dense
                       hide-details
                       label="Filter tags"
+                      large
                       name="tagsFilter"
                       outlined
                       placeholder="Filter tags"
                       prepend-inner-icon="mdi-magnify"
                       single-line
+                      style="font-size: 1.5rem"
                     >
                       <template #append-outer>
                         <v-progress-circular v-if="addingNewTag" color="success" indeterminate size="24" />
@@ -72,7 +73,7 @@
                       </template>
                     </v-text-field>
 
-                    <v-list v-if="filteredTags.length" dense>
+                    <v-list v-if="filteredTags.length">
                       <v-virtual-scroll
                         v-if="isMounted"
                         #default="{ item: tag }"
@@ -101,10 +102,7 @@
                     Log in to edit tags
                   </v-subheader>
                 </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <v-btn small text @click="menuData.value = false"><v-icon left small>mdi-close</v-icon>Close</v-btn>
-                </v-card-actions>
+                <card-actions icon="mdi-close" label="Close" @click="menuData.value = false" />
               </v-card>
             </template>
           </v-menu>
@@ -128,7 +126,7 @@
                 <v-card-text :style="`max-height: ${$vuetify.breakpoint.height * 0.8}px; overflow: auto`">
                   <div
                     v-if="comments.length<1"
-                    class="caption grey--text text-center pa-7"
+                    class="body-1 text-center pa-7"
                   >No one commented yet!</div>
 
                   <div v-for="(comment, index) in comments" :key="index">
@@ -141,9 +139,7 @@
                   </div>
 
                 </v-card-text>
-                <div class="pa-2">
-                  <comment-upload id="comment_upload" autofocus :title="public_id" @save="menuData.value = false" />
-                </div>
+                <comment-upload id="comment_upload" autofocus :title="public_id" @save="menuData.value = false" />
               </v-card>
             </template>
           </v-menu>
@@ -195,6 +191,7 @@ import ToolbarShareButton from '~/components/ToolbarShareButton';
 import DefaultAppBar from '~/components/DefaultAppBar';
 import { getLocalStorageValue, setLocalStorageValue } from '~/util/localStorage';
 import { capitalizeTag, filterTags, popularTags } from '~/util/tags';
+import CardActions from '~/components/CardActions';
 
 Vue.use(Cloudinary, {
   configuration: { cloudName: 'louise' },
@@ -206,6 +203,7 @@ export default {
     CommentUpload,
     DefaultAppBar,
     ToolbarShareButton,
+    CardActions,
   },
   data () {
     return {
@@ -455,6 +453,7 @@ export default {
 .commentFormat{
    white-space: pre-line;
    padding-left: 32px;
+   font-size: 1.1rem;
 }
 .v-virtual-scroll {
   scrollbar-width: thin;

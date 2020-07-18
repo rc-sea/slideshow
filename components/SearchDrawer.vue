@@ -8,8 +8,9 @@
             autocomplete="off"
             :autofocus="$vuetify.breakpoint.mdAndUp"
             hide-details
-            label="Filter tags"
+            placeholder="Filter tags"
             solo-inverted
+            style="font-size: 1.5rem"
           />
         </v-col>
         <v-col cols="auto">
