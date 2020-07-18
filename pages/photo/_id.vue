@@ -170,15 +170,13 @@
             <div />
           </template>
           <template v-else>
-            <cld-image align="center" class="photo-container" :public-id="resource.public_id" secure="true">
-              <cld-transformation crop="fit" height="700" width="800" />
-              <v-btn class="prev-btn prev-next-btn" @click="onPrev">
-                <v-icon x-large>mdi-chevron-left </v-icon>
-              </v-btn>
-              <v-btn class="next-btn prev-next-btn" @click="onNext">
-                <v-icon x-large>mdi-chevron-right </v-icon>
-              </v-btn>
-            </cld-image>
+            <v-img :src="imgUrl" />
+            <v-btn class="prev-btn prev-next-btn" color="primary" fab @click="onPrev">
+              <v-icon x-large>mdi-chevron-left </v-icon>
+            </v-btn>
+            <v-btn class="next-btn prev-next-btn" color="primary" fab @click="onNext">
+              <v-icon x-large>mdi-chevron-right </v-icon>
+            </v-btn>
           </template>
         </v-skeleton-loader>
       </v-card>
@@ -250,6 +248,13 @@ export default {
         const tag = this.sanitizeTag(this.tagsFilter || '');
 
         return tag.trim() !== '' && !this.tags.includes(tag);
+      },
+      imgUrl () {
+        if (!this.resource) return null;
+
+        const transformation = 'c_fit,h_800,w_1000';
+
+        return `https://res.cloudinary.com/louise/image/upload/${transformation}/v${this.resource.version}/${this.resource.public_id}`;
       },
     }),
     tagsToAdd () {
@@ -434,7 +439,6 @@ export default {
 .prev-next-btn {
   position: absolute;
   top: 45%;
-  background: none !important;
   border: none;
   padding: 0 !important;
   border-radius: 50px;
