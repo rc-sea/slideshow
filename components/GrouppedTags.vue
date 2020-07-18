@@ -2,13 +2,13 @@
   <div>
     <template v-for="(_, group) in allTags">
       <div v-if="filteredTags[group].length" :key="group" class="mb-4">
-        <v-subheader class="caption">
+        <v-subheader class="headline">
           {{ group }}
           <span v-if="selectedTags[group].length" style="text-transform: none">&nbsp;({{ selectedTags[group].length }}/{{ allTags[group].length }} selected)</span>
         </v-subheader>
         <v-chip-group
           active-class="success--text text--lighten-2"
-          class="mx-4"
+          class="headline mx-4"
           column
           multiple
           :value="selectedTags[group]"

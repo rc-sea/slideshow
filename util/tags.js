@@ -1,7 +1,7 @@
 export const popularTags = Object.freeze({
   Favorites: ['louise', 'bob', 'best'],
   Couples: ['frank_mary', 'eleanor_bill', 'bob_louise'],
-  'Other Folk': ['robert_c', 'john', 'brian', 'ellen', 'paul', 'robert_d', 'jane', 'susan', 'janet'],
+  'Other Folk': ['robert_c', 'john', 'brian', 'ellen', 'paul', 'Jane', 'Susan', 'janet'],
 });
 
 export function capitalizeTag (tag) {
