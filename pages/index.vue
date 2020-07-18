@@ -32,27 +32,8 @@
                   <v-carousel-item
                     v-for="(image, i) in images"
                     :key="i"
-                  >
-                    <v-sheet
-                      color="black"
-                      height="100%"
-                    >
-                      <v-row
-                        align="center"
-                        class="fill-height"
-                        justify="center"
-                      >
-                        <v-col
-                          align="center"
-                          md="12"
-                        >
-                          <cld-image :public-id="images[i]" secure="true">
-                            <cld-transformation crop="fill" gravity="faces" height="550" width="550" />
-                          </cld-image>
-                        </v-col>
-                      </v-row>
-                    </v-sheet>
-                  </v-carousel-item>
+                    :src="image"
+                  />
                 </v-carousel>
               </v-card>
             </v-col>
@@ -64,13 +45,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import Cloudinary from 'cloudinary-vue';
 import DefaultAppBar from '~/components/DefaultAppBar';
-
-Vue.use(Cloudinary, {
-  configuration: { cloudName: 'louise' },
-});
 
 export default {
   components: {
@@ -85,7 +60,7 @@ export default {
         'photos--448',
         'Slide_scans_801_fqbveb',
         'slides--86',
-      ],
+      ].map(src => `https://res.cloudinary.com/louise/image/upload/c_fill,g_faces,h_550,w_550/${src}`),
     };
   },
 };
