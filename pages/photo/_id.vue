@@ -171,10 +171,10 @@
           </template>
           <template v-else>
             <v-img :src="imgUrl" />
-            <v-btn class="prev-btn prev-next-btn" color="primary" fab @click="onPrev">
+            <v-btn class="prev-btn prev-next-btn" color="transparent" fab @click="onPrev">
               <v-icon x-large>mdi-chevron-left </v-icon>
             </v-btn>
-            <v-btn class="next-btn prev-next-btn" color="primary" fab @click="onNext">
+            <v-btn class="next-btn prev-next-btn" color="transparent" fab @click="onNext">
               <v-icon x-large>mdi-chevron-right </v-icon>
             </v-btn>
           </template>
