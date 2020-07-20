@@ -166,7 +166,11 @@
             <div />
           </template>
           <template v-else>
-            <v-img :src="imgUrl" />
+            <photo
+              v-if="resource"
+              :resource="resource"
+              :transformation="{ crop: 'fit', width: 1000, height: 800 }"
+            />
             <v-btn class="prev-btn prev-next-btn" color="transparent" fab @click="onPrev">
               <v-icon x-large>mdi-chevron-left </v-icon>
             </v-btn>
@@ -181,9 +185,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapState } from 'vuex';
-import Cloudinary from 'cloudinary-vue';
 import axios from 'axios';
 // import Comments from '~/components/Comments';
 import CommentUpload from '~/components/CommentUpload';
@@ -192,10 +194,7 @@ import DefaultAppBar from '~/components/DefaultAppBar';
 import { getLocalStorageValue, setLocalStorageValue } from '~/util/localStorage';
 import { capitalizeTag, filterTags, popularTags } from '~/util/tags';
 import CardActions from '~/components/CardActions';
-
-Vue.use(Cloudinary, {
-  configuration: { cloudName: 'louise' },
-});
+import Photo from '~/components/Photo';
 
 export default {
   components: {
@@ -204,6 +203,7 @@ export default {
     DefaultAppBar,
     ToolbarShareButton,
     CardActions,
+    Photo,
   },
   data () {
     return {
@@ -246,13 +246,6 @@ export default {
         const tag = this.sanitizeTag(this.tagsFilter || '');
 
         return tag.trim() !== '' && !this.tags.includes(tag);
-      },
-      imgUrl () {
-        if (!this.resource) return null;
-
-        const transformation = 'c_fit,h_800,w_1000';
-
-        return `https://res.cloudinary.com/louise/image/upload/${transformation}/v${this.resource.version}/${this.resource.public_id}`;
       },
     }),
     tagsToAdd () {

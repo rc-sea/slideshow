@@ -69,7 +69,11 @@
             <v-col v-for="resource in resources" :key="resource.public_id" :cols="12" lg="4" md="6" sm="6">
               <v-card>
                 <nuxt-link :to="{ path: `photo/${resource.public_id}`}">
-                  <v-img class="ma-1" :src="imgUrl(resource)" />
+                  <photo
+                    class="ma-1"
+                    :resource="resource"
+                    :transformation="{ crop: 'fill', gravity: 'faces', height: 350, width: 350 }"
+                  />
                 </nuxt-link>
               </v-card>
             </v-col>
@@ -89,20 +93,16 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapState } from 'vuex';
-import Cloudinary from 'cloudinary-vue';
 import ToolbarShareButton from '~/components/ToolbarShareButton';
 import DefaultAppBar from '~/components/DefaultAppBar';
-
-Vue.use(Cloudinary, {
-  configuration: { cloudName: 'louise' },
-});
+import Photo from '~/components/Photo';
 
 export default {
   components: {
     DefaultAppBar,
     ToolbarShareButton,
+    Photo,
   },
 
   async asyncData ({ $axios, store, error }) {},
@@ -181,11 +181,6 @@ export default {
   },
 
   methods: {
-    imgUrl (resource) {
-      const transformation = 'c_fill,g_faces,h_350,w_350';
-
-      return `https://res.cloudinary.com/louise/image/upload/${transformation}/v${resource.version}/${resource.public_id}`;
-    },
     async fetchPhotos () {
       if (this.search === '-' || this.$route.fullPath !== this.detailsPage_url) {
         this.$store.commit('set_details_state', {

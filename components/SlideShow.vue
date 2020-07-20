@@ -38,6 +38,7 @@ import {
 } from 'vue-flux/dist-ssr/vue-flux.umd.min.js';
 import 'vue-flux/dist-ssr/vue-flux.css';
 import { mapState } from 'vuex';
+import cloudinaryUrl from '~/util/cloudinaryUrl';
 // let VueFlux, FluxCaption, FluxControls, FluxIndex, FluxPagination, FluxPreloader;
 
 // if (process.browser) {
@@ -75,12 +76,12 @@ export default {
       resources: state => state.resources.resources,
     }),
     vfImages: function () {
-      var images = [];
-
-      this.resources.forEach(resource => {
-        images.push(`http://res.cloudinary.com/louise/image/upload/w_1600,h_1200,c_pad,b_black/${resource.public_id}.jpg`);
-      });
-      return images;
+      return this.resources.map(resource => cloudinaryUrl(resource, {
+        width: 1600,
+        height: 1200,
+        crop: 'pad',
+        background: 'black',
+      }));
     },
   },
 };

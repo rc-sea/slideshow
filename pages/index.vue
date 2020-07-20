@@ -46,22 +46,30 @@
 
 <script>
 import DefaultAppBar from '~/components/DefaultAppBar';
+import cloudinaryUrl from '~/util/cloudinaryUrl';
 
 export default {
   components: {
     DefaultAppBar,
   },
 
-  data () {
-    return {
-      images: [
+  computed: {
+    images () {
+      return [
         'Slide_scans_801_ylfkeu',
         'Slide_scans_755_lx1mhv',
         'photos--448',
         'Slide_scans_801_fqbveb',
         'slides--86',
-      ].map(src => `https://res.cloudinary.com/louise/image/upload/c_fill,g_faces,h_550,w_550/${src}`),
-    };
+      ].map(publicId => cloudinaryUrl(publicId, {
+        crop: 'fill',
+        gravity: 'faces',
+        width: 550,
+        height: 550,
+        fetch_format: 'auto',
+        quality: 'auto',
+      }));
+    },
   },
 };
 </script>

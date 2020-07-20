@@ -19,7 +19,6 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "cloudinary": "^1.21.0",
     "cloudinary-cli": "^1.1.1",
-    "cloudinary-vue": "^1.0.0",
     "cors": "^2.8.5",
     "cross-env": "^5.2.0",
     "current-script-polyfill": "^1.0.0",
