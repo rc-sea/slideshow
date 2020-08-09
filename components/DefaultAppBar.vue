@@ -24,7 +24,7 @@
       to="/photo-browse"
     >
       <v-icon large>mdi-image-search</v-icon>
-      <span class="hidden-sm-and-down">Moods</span>
+      <span class="hidden-sm-and-down">Mood boards</span>
     </v-btn>
 
     <v-spacer />
