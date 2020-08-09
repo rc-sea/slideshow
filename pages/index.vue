@@ -14,27 +14,8 @@
             >
               <v-card>
                 <v-card-subtitle class="headline font-italic">
-                  Dedicated to Louise Carter, amazing mom, wife, friend, and photo archivist
+                  Coming soon
                 </v-card-subtitle>
-                <v-btn color="green" href="https://us02web.zoom.us/j/85836340855" x-large>Join Funeral Service</v-btn>
-                <v-card-text class="title">
-                  Please click the button above to join the virtual funeral we're holding for Louise today at 1 PM EDT.
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col>
-              <v-card align="center">
-                <v-carousel
-                  cycle
-                  height="550"
-                  hide-delimiters
-                >
-                  <v-carousel-item
-                    v-for="(image, i) in images"
-                    :key="i"
-                    :src="image"
-                  />
-                </v-carousel>
               </v-card>
             </v-col>
           </v-row>
@@ -50,18 +31,6 @@ import DefaultAppBar from '~/components/DefaultAppBar';
 export default {
   components: {
     DefaultAppBar,
-  },
-
-  data () {
-    return {
-      images: [
-        'Slide_scans_801_ylfkeu',
-        'Slide_scans_755_lx1mhv',
-        'photos--448',
-        'Slide_scans_801_fqbveb',
-        'slides--86',
-      ].map(src => `https://res.cloudinary.com/louise/image/upload/c_fill,g_faces,h_550,w_550/${src}`),
-    };
   },
 };
 </script>

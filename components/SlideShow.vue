@@ -78,7 +78,7 @@ export default {
       var images = [];
 
       this.resources.forEach(resource => {
-        images.push(`http://res.cloudinary.com/louise/image/upload/w_1600,h_1200,c_pad,b_black/${resource.public_id}.jpg`);
+        images.push(`http://res.cloudinary.com/eclectic-company/image/upload/w_1600,h_1200,c_pad,b_black/${resource.public_id}.jpg`);
       });
       return images;
     },

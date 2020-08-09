@@ -96,7 +96,7 @@ import ToolbarShareButton from '~/components/ToolbarShareButton';
 import DefaultAppBar from '~/components/DefaultAppBar';
 
 Vue.use(Cloudinary, {
-  configuration: { cloudName: 'louise' },
+  configuration: { cloudName: 'eclectic-company' },
 });
 
 export default {
@@ -184,7 +184,7 @@ export default {
     imgUrl (resource) {
       const transformation = 'c_fill,g_faces,h_350,w_350';
 
-      return `https://res.cloudinary.com/louise/image/upload/${transformation}/v${resource.version}/${resource.public_id}`;
+      return `https://res.cloudinary.com/eclectic-company/image/upload/${transformation}/v${resource.version}/${resource.public_id}`;
     },
     async fetchPhotos () {
       if (this.search === '-' || this.$route.fullPath !== this.detailsPage_url) {
@@ -199,41 +199,44 @@ export default {
     },
     upload () {
       const uploadSettings = {
-        cloudName: 'louise',
-        uploadPreset: 'pob2zoec',
+        cloudName: 'eclectic-company',
+        uploadPreset: 'xhgpyj90',
         sources: [
           'local',
+          'url',
           'camera',
           'facebook',
           'dropbox',
           'instagram',
           'google_drive',
+          'shutterstock',
+          'image_search',
         ],
-        // googleApiKey: '<image_search_google_api_key>',
+        googleApiKey: 'AIzaSyA0xy_hSPPQADqXcokTL9KYtylK-YUz5ko',
         showAdvancedOptions: true,
         defaultSource: 'local',
         cropping: false,
         multiple: true,
         styles: {
           palette: {
-            window: '#7986CB',
-            windowBorder: '#90A0B3',
-            tabIcon: '#263238',
-            menuIcons: '#5A616A',
+            window: '#F5F5F5',
+            sourceBg: '#FFFFFF',
+            windowBorder: '#90a0b3',
+            tabIcon: '#0094c7',
+            inactiveTabIcon: '#69778A',
+            menuIcons: '#0094C7',
+            link: '#53ad9d',
+            action: '#8F5DA5',
+            inProgress: '#0194c7',
+            complete: '#53ad9d',
+            error: '#c43737',
             textDark: '#000000',
             textLight: '#FFFFFF',
-            link: '#1A237E',
-            action: '#FF620C',
-            inactiveTabIcon: '#1A237E',
-            error: '#F44235',
-            inProgress: '#0078FF',
-            complete: '#20B832',
-            sourceBg: '#E4EBF1',
           },
           fonts: {
             default: null,
-            'sans-serif': {
-              url: null,
+            "'Fira Sans', sans-serif": {
+              url: 'https://fonts.googleapis.com/css?family=Fira+Sans',
               active: true,
             },
           },
@@ -286,7 +289,7 @@ export default {
   },
   head () {
     return {
-      title: 'Browse Photos -- Remembering Louise',
+      title: 'Browse Moods -- Eclectic Company',
       meta: [],
     };
   },

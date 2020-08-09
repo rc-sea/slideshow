@@ -10,8 +10,8 @@
   >
     <v-app-bar-nav-icon @click="toggleMainDrawer" />
 
-    <v-toolbar-title class="hidden-sm-and-down new-headline">Remembering Louise</v-toolbar-title>
-    <v-toolbar-title class="hidden-md-and-up md-headline">Remembering Louise</v-toolbar-title>
+    <v-toolbar-title class="hidden-sm-and-down new-headline">eclectic company</v-toolbar-title>
+    <v-toolbar-title class="hidden-md-and-up md-headline">eclectic company</v-toolbar-title>
 
     <v-spacer />
 
@@ -24,16 +24,10 @@
       to="/photo-browse"
     >
       <v-icon large>mdi-image-search</v-icon>
-      <span class="hidden-sm-and-down">View Photos</span>
+      <span class="hidden-sm-and-down">Moods</span>
     </v-btn>
 
     <v-spacer />
-
-    <div class="hidden-md-and-down">
-      <v-btn nuxt rounded text to="/service">Funeral Service</v-btn>
-      <v-btn nuxt rounded text to="/remembrances">Remembrances</v-btn>
-    </div>
-
     <template v-if="user && $auth.user">
       <v-btn id="user-button" fab text>
         <v-avatar :size="35">
@@ -103,11 +97,11 @@ export default {
 
 <style lang="scss" scoped>
 .new-headline {
-  font-family: 'Pinyon Script', cursive;
+  font-family: 'Poiret One', cursive;
   font-size:48px;
 }
 .md-headline  {
-  font-family: 'Pinyon Script', cursive;
+  font-family: 'Poiret One', cursive;
   font-size:30px;
 }
 /* https://github.com/vuetifyjs/vuetify/issues/11149 */

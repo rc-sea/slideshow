@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -104,18 +104,8 @@ export default {
         },
         {
           icon: 'mdi-camera',
-          title: 'View Photos',
+          title: 'Mood boards',
           to: '/photo-browse',
-        },
-        {
-          icon: 'mdi-comment-text',
-          title: 'Remembrances',
-          to: '/remembrances',
-        },
-        {
-          icon: 'mdi-camera',
-          title: 'Funeral Service',
-          to: '/service',
         },
       ],
       shareIcons: createShareIcons(process.env.BASE_URL.replace(/\/$/, '') + this.$nuxt.$route.fullPath),
@@ -156,10 +146,10 @@ export default {
   },
   head () {
     return {
-      title: 'Home page -- Remembering Louise',
+      title: 'Home page -- Eclectic Company Mood Boards',
       meta: [],
       link: [
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poiret+One&display=swap' },
       ],
     };
   },

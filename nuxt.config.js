@@ -26,7 +26,7 @@ module.exports = {
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap',
+          'https://fonts.googleapis.com/css2?family=Poiret+One&display=swap',
       },
     ],
     script: [
