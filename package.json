@@ -24,7 +24,7 @@
     "current-script-polyfill": "^1.0.0",
     "dotenv": "^8.2.0",
     "eslint-utils": "^2.1.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "form-data": "^3.0.0",
     "nuxt": "^2.0.0",
     "nuxt-webfontloader": "^1.1.0",
