@@ -26,7 +26,7 @@
     "eslint-utils": "^2.1.0",
     "express": "^4.16.4",
     "form-data": "^3.0.0",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.15.8",
     "nuxt-webfontloader": "^1.1.0",
     "vue-cli": "^2.9.6",
     "vue-eslint-parser": "^7.1.0",
